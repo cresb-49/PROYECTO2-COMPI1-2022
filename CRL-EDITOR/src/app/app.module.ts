@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import {MatTabsModule} from '@angular/material/tabs';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
+import {MatInputModule} from '@angular/material/input';
 
 import { AppComponent } from './app.component';
 import { EditorCrlComponent } from './editor-crl/editor-crl.component';
@@ -19,7 +20,7 @@ import { ContenedorEditorComponent } from './contenedor-editor/contenedor-editor
     ContenedorEditorComponent,
   ],
   imports: [
-    BrowserModule,MatTabsModule, BrowserAnimationsModule,MatFormFieldModule,MatCheckboxModule
+    BrowserModule, MatTabsModule, BrowserAnimationsModule, MatFormFieldModule, MatCheckboxModule, FormsModule,MatInputModule,ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
