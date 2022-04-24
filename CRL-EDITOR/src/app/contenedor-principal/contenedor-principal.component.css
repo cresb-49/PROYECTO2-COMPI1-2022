@@ -1,0 +1,46 @@
+.btn-acciones{
+    background-color: #455a64;
+    height: 43.5px;
+    color: white;
+}
+
+.label-file{
+    background-color: #455a64;
+    height: 43.5px;
+    margin-right: -5px;
+    color: white;
+}
+.label-file:hover{
+    background-color: #b0bec5;
+}
+.input-acctions{
+    background-color: #455a64;
+    color: white;
+}
+.input-acctions:hover{
+    background-color: #b0bec5;
+}
+
+.btn-acciones:hover{
+    background-color: #b0bec5;
+}
+
+.btn-descarga{
+    background-color: aqua;
+    margin-left: 10px;
+}
+
+.btn-descarga:hover{
+    background-color: aqua;
+    margin-left: 10px;
+}
+
+.btn-ejecutar{
+    background-color: aqua;
+    margin-left: 10px;
+}
+
+.btn-ejecutar:hover{
+    background-color: aqua;
+    margin-left: 10px;
+}

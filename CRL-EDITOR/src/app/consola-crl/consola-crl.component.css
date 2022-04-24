@@ -1,4 +1,5 @@
 .console{
+    overflow-y: scroll;
     font-style: italic;
     font-size: 14;
     color: white;
