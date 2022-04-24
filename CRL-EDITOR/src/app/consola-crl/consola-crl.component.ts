@@ -6,10 +6,27 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./consola-crl.component.css']
 })
 export class ConsolaCRLComponent implements OnInit {
+  errores: any[] = [
+    {
+      "error": "Douglas  Pace"
+    },
+    {
+      "error": "Mcleod  Mueller"
+    },
+    {
+      "error": "Day  Meyers"
+    },
+    {
+      "error": "Aguirre  Ellis"
+    },
+    {
+      "error": "Cook  Tyson"
+    }
+  ];
 
-  constructor() { }
+constructor() { }
 
-  ngOnInit(): void {
-  }
+ngOnInit(): void {
+}
 
 }
