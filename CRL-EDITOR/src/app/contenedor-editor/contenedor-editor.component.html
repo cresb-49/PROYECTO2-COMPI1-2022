@@ -1,36 +1,32 @@
-<div class="">
-    <h2>Dynamic Tabs Example</h2>
-    <div>
+<div class="container">
+    <div class="estilo-letras">
         <mat-form-field style="width:100%">
             <table class="example-full-width" cellspacing="0">
                 <tr>
                     <td>
-                        <mat-label>Tab Name</mat-label>
+                        <mat-label>Nombre del Archivo</mat-label>
                         <input matInput [(ngModel)]="tabtitle">
                     </td>
                     <td>
-                        <button mat-raised-button class="example-add-tab-button"
+                        <button mat-raised-button class="btn btn-primary example-add-tab-button"
                             (click)="addTab(selectAfterAdding.checked)">
-                            Add new tab
+                            Crear Archivo
                         </button>
                     </td>
                     <td>
-                        <mat-checkbox #selectAfterAdding> Select tab after adding </mat-checkbox>
-
+                        <mat-checkbox #selectAfterAdding> Selccionar despues de crear</mat-checkbox>
                     </td>
                 </tr>
             </table>
         </mat-form-field>
     </div>
-    <mat-tab-group [selectedIndex]="selected.value" (selectedIndexChange)="selected.setValue($event)">
+    <mat-tab-group [selectedIndex]="selected.value" (selectedIndexChange)="selected.setValue($event)" style="color: white;">
         <mat-tab *ngFor="let tab of tabs; let index = index" [label]="tab">
-            <br> <br>
-            Contents for {{tab}} tab
-            <button mat-raised-button class="example-delete-tab-button" [disabled]="tabs.length === 1"
+            <button mat-raised-button class="btn btn-warning" [disabled]="tabs.length === 0"
                 (click)="removeTab(index)">
-                Delete Tab
+                Cerrar Pestaña {{tab}}
             </button>
-            <br> <br> <br>
+            <app-editor-crl></app-editor-crl>
         </mat-tab>
     </mat-tab-group>
 </div>

@@ -12,7 +12,7 @@ import { FormControl } from '@angular/forms';
 })
 export class ContenedorEditorComponent {
 
-  tabs = ['Tab 1', 'Tab 2', 'Tab 3'];
+  tabs = ['main'];
   selected = new FormControl(0);
   tabtitle: string = '';
 
@@ -25,7 +25,7 @@ export class ContenedorEditorComponent {
     }
 
     this.tabtitle = '';
-    
+
     if (selectAfterAdding) {
       this.selected.setValue(this.tabs.length - 1);
     }
