@@ -11,6 +11,8 @@ import { EditorCrlComponent } from './editor-crl/editor-crl.component';
 import { HeaderCrlEditorComponent } from './header-crl-editor/header-crl-editor.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ContenedorEditorComponent } from './contenedor-editor/contenedor-editor.component';
+import { ContenedorPrincipalComponent } from './contenedor-principal/contenedor-principal.component';
+import { ConsolaCRLComponent } from './consola-crl/consola-crl.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +20,8 @@ import { ContenedorEditorComponent } from './contenedor-editor/contenedor-editor
     EditorCrlComponent,
     HeaderCrlEditorComponent,
     ContenedorEditorComponent,
+    ContenedorPrincipalComponent,
+    ConsolaCRLComponent,
   ],
   imports: [
     BrowserModule, MatTabsModule, BrowserAnimationsModule, MatFormFieldModule, MatCheckboxModule, FormsModule,MatInputModule,ReactiveFormsModule
