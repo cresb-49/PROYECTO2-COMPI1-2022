@@ -1,25 +1,36 @@
-<div class="container">
-    <mat-form-field appearance="fill">
-        <mat-label>Selected tab index</mat-label>
-        <input matInput type="number" [formControl]="selected">
-    </mat-form-field>
-
+<div class="">
+    <h2>Dynamic Tabs Example</h2>
     <div>
-        <button mat-raised-button class="example-add-tab-button" (click)="addTab(selectAfterAdding.checked)">
-            Add new tab
-        </button>
-        <mat-checkbox #selectAfterAdding> Select tab after adding </mat-checkbox>
-    </div>
+        <mat-form-field style="width:100%">
+            <table class="example-full-width" cellspacing="0">
+                <tr>
+                    <td>
+                        <mat-label>Tab Name</mat-label>
+                        <input matInput [(ngModel)]="tabtitle">
+                    </td>
+                    <td>
+                        <button mat-raised-button class="example-add-tab-button"
+                            (click)="addTab(selectAfterAdding.checked)">
+                            Add new tab
+                        </button>
+                    </td>
+                    <td>
+                        <mat-checkbox #selectAfterAdding> Select tab after adding </mat-checkbox>
 
+                    </td>
+                </tr>
+            </table>
+        </mat-form-field>
+    </div>
     <mat-tab-group [selectedIndex]="selected.value" (selectedIndexChange)="selected.setValue($event)">
         <mat-tab *ngFor="let tab of tabs; let index = index" [label]="tab">
+            <br> <br>
             Contents for {{tab}} tab
-            <button mat-raised-button class="btn btn-warning" [disabled]="tabs.length === 1"
+            <button mat-raised-button class="example-delete-tab-button" [disabled]="tabs.length === 1"
                 (click)="removeTab(index)">
                 Delete Tab
             </button>
-            <br>
-            <app-editor-crl></app-editor-crl>
+            <br> <br> <br>
         </mat-tab>
     </mat-tab-group>
 </div>
