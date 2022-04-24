@@ -14,7 +14,6 @@ export class EditorCrlComponent implements AfterViewInit {
     ace.config.set("fontSize", "14px");
     ace.config.set('basePath', 'https://unpkg.com/ace-builds@1.4.12/src-noconflict');
     const aceEditor = ace.edit(this.editor.nativeElement);
-    aceEditor.session.setValue("<h1>Ace Editor works great in Angular!</h1>");
     aceEditor.setTheme('ace/theme/twilight');
   }
 }
