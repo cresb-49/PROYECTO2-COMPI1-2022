@@ -5,11 +5,12 @@
     color: white;
     height: 200px;
     width: 100%;
-    transform: translate(0px,11px);
+    transform: translate(0px,12px);
 }
 
 .console-externo{
-    height: 224px;
+    height: 228px;
+    border:solid 2px white;
 }
 
 .console-color{

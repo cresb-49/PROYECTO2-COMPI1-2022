@@ -1,12 +1,21 @@
 <br>
 <div class="container">
-    <div class="">
-        <label class="btn label-file" for="btnCargarCRL">Cargar Archivo</label>
-        <input type="file" class="btn input-acctions" id="btnCargarCRL" name="btnCargarCRL" accept=".crl">
-        <button class="btn btn-acciones" style="margin-left: 10px;">Descargar Proyecto Completo</button>
-        <button class="btn btn-acciones" style="margin-left: 10px;">Ejecutar Proyecto</button>
+    <div class="input-group">
+        <div class="input-acctions" style="margin-top: 10px; border-radius: 4px;">
+            <button class="btn btn-acciones2" style="margin-left: 10px;">Cargar Archivo</button>
+            <input type="file" class="btn" id="btnCargarCRL" name="btnCargarCRL" accept=".crl">
+        </div>
+        <div style="margin-top: 10px;">
+        </div>
+        <div style="margin-top: 10px;">
+            <button class="btn btn-acciones" style="margin-left: 10px;">Descargar Proyecto Completo</button>
+        </div>
+        <div style="margin-top: 10px;">
+            <button class="btn btn-acciones" style="margin-left: 10px;">Ejecutar Proyecto</button>
+        </div>
     </div>
 </div>
+
 <br>
 <app-contenedor-editor></app-contenedor-editor>
 <app-consola-crl></app-consola-crl>

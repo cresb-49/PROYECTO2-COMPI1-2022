@@ -12,22 +12,19 @@ import { FormControl } from '@angular/forms';
 })
 export class ContenedorEditorComponent {
 
-  tabs = ['main'];
+  tabs = ['main.crl'];
   selected = new FormControl(0);
   tabtitle: string = '';
 
   addTab(selectAfterAdding: boolean) {
-
     if (this.tabtitle != '') {
-      this.tabs.push(this.tabtitle);
-    } else {
-      this.tabs.push('New');
-    }
+      this.tabs.push(this.tabtitle + '.crl');
 
-    this.tabtitle = '';
+      this.tabtitle = '';
 
-    if (selectAfterAdding) {
-      this.selected.setValue(this.tabs.length - 1);
+      if (selectAfterAdding) {
+        this.selected.setValue(this.tabs.length - 1);
+      }
     }
   }
   removeTab(index: number) {
