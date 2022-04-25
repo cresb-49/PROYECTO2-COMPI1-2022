@@ -10,14 +10,20 @@ import * as ace from "ace-builds";
 
 export class EditorCrlComponent implements AfterViewInit {
   @ViewChild("editor") private editor: ElementRef<HTMLElement>;
+
+  codeCRL: String = "";
+
   ngAfterViewInit(): void {
     ace.config.set("fontSize", "14px");
     ace.config.set('basePath', 'https://unpkg.com/ace-builds@1.4.12/src-noconflict');
     const aceEditor = ace.edit(this.editor.nativeElement);
     aceEditor.setTheme('ace/theme/twilight');
+    aceEditor.on("change", () => {
+      this.codeCRL = aceEditor.getValue();
+    });
   }
-
-  descargarCodigoEditor(){
-    alert("Descargando el codigo");
+  descargarCodigoEditor() {
+    //alert("Descargando el codigo");
+    console.log(this.codeCRL);
   }
 }
