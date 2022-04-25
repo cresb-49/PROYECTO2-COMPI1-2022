@@ -16,4 +16,8 @@ export class EditorCrlComponent implements AfterViewInit {
     const aceEditor = ace.edit(this.editor.nativeElement);
     aceEditor.setTheme('ace/theme/twilight');
   }
+
+  descargarCodigoEditor(){
+    alert("Descargando el codigo");
+  }
 }
