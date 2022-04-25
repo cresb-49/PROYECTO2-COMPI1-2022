@@ -4,7 +4,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
-import {MatInputModule} from '@angular/material/input';
+import { MatInputModule } from '@angular/material/input';
 
 import { AppComponent } from './app.component';
 import { EditorCrlComponent } from './editor-crl/editor-crl.component';
@@ -13,6 +13,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ContenedorEditorComponent } from './contenedor-editor/contenedor-editor.component';
 import { ContenedorPrincipalComponent } from './contenedor-principal/contenedor-principal.component';
 import { ConsolaCRLComponent } from './consola-crl/consola-crl.component';
+
 
 @NgModule({
   declarations: [

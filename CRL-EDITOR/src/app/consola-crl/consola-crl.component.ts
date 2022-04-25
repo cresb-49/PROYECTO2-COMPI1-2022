@@ -8,19 +8,19 @@ import { Component, OnInit } from '@angular/core';
 export class ConsolaCRLComponent implements OnInit {
   errores: any[] = [
     {
-      "error": "Douglas  Pace"
+      "error": "Erroe en linea 1"
     },
     {
-      "error": "Mcleod  Mueller"
+      "error": "Erroe en linea 2"
     },
     {
-      "error": "Day  Meyers"
+      "error": "Erroe en linea 3"
     },
     {
-      "error": "Aguirre  Ellis"
+      "error": "Erroe en linea 4"
     },
     {
-      "error": "Cook  Tyson"
+      "error": "Erroe en linea 5"
     }
   ];
 

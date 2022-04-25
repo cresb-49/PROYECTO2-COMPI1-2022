@@ -12,4 +12,12 @@ export class ContenedorPrincipalComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  obtenerCodigo(){
+    alert("Recuperando el codigo CRL");
+  }
+
+  obtenerProyectoCompleto(){
+    alert("Descargando el proyecto completo");
+  }
+
 }

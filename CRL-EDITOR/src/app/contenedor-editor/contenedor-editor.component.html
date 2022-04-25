@@ -1,6 +1,6 @@
 <div class="container">
     <div class="estilo-letras">
-        <mat-form-field style="width:100%" color="accent" backgroundColor="accent" >
+        <mat-form-field style="width:100%" color="accent" backgroundColor="accent">
             <table class="example-full-width" cellspacing="0">
                 <tr>
                     <td>
@@ -9,28 +9,58 @@
                     </td>
                     <td>
                         <button mat-raised-button class="btn btn-primary example-add-tab-button"
-                            (click)="addTab(selectAfterAdding.checked)">
+                            (click)="addTab(false)">
                             Crear Archivo
                         </button>
                     </td>
-                    <td>
+                    <!-- <td>
+                        <button mat-raised-button class="btn btn-primary example-add-tab-button"
+                            (click)="addTab(selectAfterAdding.checked)">
+                            Crear Archivo
+                        </button>
+                    </td> -->
+                    <!-- <td>
                         <mat-checkbox #selectAfterAdding> Selccionar despues de crear</mat-checkbox>
-                    </td>
+                    </td> -->
                 </tr>
             </table>
         </mat-form-field>
     </div>
-    <mat-tab-group [selectedIndex]="selected.value" (selectedIndexChange)="selected.setValue($event)" color="accent" backgroundColor="accent">
+    <!-- <mat-tab-group [selectedIndex]="selected.value" (selectedIndexChange)="selected.setValue($event)" color="accent"
+        backgroundColor="accent">
         <mat-tab *ngFor="let tab of tabs; let index = index" [label]="tab">
-            <div class="btn div-close">
-                {{tab}}
+            <div>
+                <div class="btn div-close">
+                    {{tab}}
+                </div>
+                <button mat-raised-button class="btn btn-close-custom" [disabled]="tabs.length === 0"
+                    (click)="removeTab(index)">
+                    ✕
+                </button>
             </div>
-
-            <button mat-raised-button class="btn btn-close-custom" [disabled]="tabs.length === 0"
-                (click)="removeTab(index)">
-                ✕
-            </button>
-            <app-editor-crl id="{{tab}}"></app-editor-crl>
+            <app-editor-crl initCode=""></app-editor-crl>
         </mat-tab>
     </mat-tab-group>
+    <button class="btn" (click)="getAllCode()">Recupera Aqui</button> -->
+    <div style="background-color: #1e1e1e; border-radius: 7px 7px 0px 0px;">
+        <div>
+            <ul class="nav">
+                <ng-container *ngFor="let tab of tabs; let index = index">
+                    <li class="nav-item">
+                        <div>
+                            <button class="btn div-close">{{tab}}</button>
+                            <button class="btn btn-close-custom" [disabled]="tabs.length === 0"
+                                (click)="removeTab(index)">
+                                ✕
+                            </button>
+                        </div>
+                    </li>
+                </ng-container>
+            </ul>
+        </div>
+        <div>
+            <app-editor-crl></app-editor-crl>
+        </div>
+    </div>
+    <br>
 </div>
