@@ -22,10 +22,13 @@
     </div>
     <mat-tab-group [selectedIndex]="selected.value" (selectedIndexChange)="selected.setValue($event)" color="accent" backgroundColor="accent">
         <mat-tab *ngFor="let tab of tabs; let index = index" [label]="tab">
-            <br>
-            <button mat-raised-button class="btn btn-warning" [disabled]="tabs.length === 0"
+            <div class="btn div-close">
+                {{tab}}
+            </div>
+
+            <button mat-raised-button class="btn btn-close-custom" [disabled]="tabs.length === 0"
                 (click)="removeTab(index)">
-                Cerrar Pestaña {{tab}}
+                ✕
             </button>
             <app-editor-crl id="{{tab}}"></app-editor-crl>
         </mat-tab>

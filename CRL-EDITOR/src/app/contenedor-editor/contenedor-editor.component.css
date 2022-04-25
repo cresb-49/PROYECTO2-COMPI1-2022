@@ -7,3 +7,17 @@
 .estilo-letras{
   color: white;
 }
+
+.btn-close-custom{
+  background-color: #ff4747;
+  border-radius: 0px 0px 7px 0px;
+}
+
+.btn-close-custom:hover{
+  background-color: #ff6868;
+}
+
+.div-close{
+  background-color: #b0bec5;
+  border-radius: 0px 0px 0px 0px;
+}
