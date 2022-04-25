@@ -3,3 +3,18 @@
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
     padding: 10px,10px;
 }
+.btn-descargar{
+    background-color: white;
+    padding-bottom: 1px;
+    padding-top: 1px;
+    border-radius: 7px 7px 0px 0px;
+    color: darkcyan;
+}
+
+.btn-descargar:hover{
+    background-color: darkcyan;
+    padding-bottom: 1px;
+    padding-top: 1px;
+    border-radius: 7px 7px 0px 0px;
+    color: white;
+}

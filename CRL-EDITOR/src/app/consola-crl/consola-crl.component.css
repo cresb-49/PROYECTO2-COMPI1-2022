@@ -20,3 +20,26 @@
 .console-border{
     background-color: #141414;
 }
+
+.btn-reset{
+    background-color: darkorange;
+    margin-left: 5px;
+    padding-bottom: 9px;
+    color: white;
+    border-radius: 7px 7px 0px 0px;
+}
+
+.btn-reset:hover{
+    background-color: tomato;
+}
+
+.tab-console{
+    background-color: white;
+    color: #232323;
+    padding-bottom: 9px;
+    padding-top: 9px;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    border-radius: 7px 7px 0px 0px;
+}
