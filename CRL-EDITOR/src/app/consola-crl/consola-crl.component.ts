@@ -24,9 +24,13 @@ export class ConsolaCRLComponent implements OnInit {
     }
   ];
 
-constructor() { }
+  constructor() { }
 
-ngOnInit(): void {
-}
+  ngOnInit(): void {
+  }
+
+  clearConsole() {
+    this.errores = [];
+  }
 
 }
