@@ -15,37 +15,41 @@ import { CodigoCRL } from '../models/codeCRL';
 })
 export class ContenedorEditorComponent implements AfterViewInit{
   @ViewChild(DynamicComponentDirective) dynamic:DynamicComponentDirective;
-  tabs:string[]=['main'];
-  editors: EditorCrlComponent[];
+  tabs:string[]=['main.crl'];
+  editors: EditorCrlComponent[]=[];
   selected = new FormControl(0);
   tabtitle: string = '';
   tipedCode: CodigoCRL[]=[];
 
   ngAfterViewInit(): void {
-      this.generateComponent();
-      interval(3000).subscribe(()=>{this.generateComponent()})
+    this.generateComponent();
   }
 
   generateComponent(){
-    this.editors .push(new EditorCrlComponent);
-    this.editors[0].codeCRL;
-
     const viewContainerRef = this.dynamic.viewContainerRef;
-    const componentRef = viewContainerRef.createComponent<any>(EditorCrlComponent);
+    const componentRef = viewContainerRef.createComponent<EditorCrlComponent>(EditorCrlComponent);
+    this.editors.push(componentRef.instance)
   }
 
-  addTab(selectAfterAdding: boolean) {
+
+  addTab() {
     if (this.tabtitle != '') {
       this.tabs.push(this.tabtitle + '.crl');
+      this.generateComponent();
       this.tabtitle = '';
-
-      if (selectAfterAdding) {
-        this.selected.setValue(this.tabs.length - 1);
-      }
     }
   }
   removeTab(index: number) {
     this.tabs.splice(index, 1);
+    const viewContainerRef = this.dynamic.viewContainerRef;
+    viewContainerRef.remove(index);
+    this.editors.splice(index,1);
+  }
+
+  getAllCode(){
+    this.editors.forEach((edit:EditorCrlComponent)=>{
+      console.log(edit.getCodeCRL());
+    });
   }
 
 }

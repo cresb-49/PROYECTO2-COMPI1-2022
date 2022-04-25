@@ -9,7 +9,7 @@
                     </td>
                     <td>
                         <button mat-raised-button class="btn btn-primary example-add-tab-button"
-                            (click)="addTab(false)">
+                            (click)="addTab()">
                             Crear Archivo
                         </button>
                     </td>
@@ -40,8 +40,7 @@
             </div>
             <app-editor-crl initCode=""></app-editor-crl>
         </mat-tab>
-    </mat-tab-group>
-    <button class="btn" (click)="getAllCode()">Recupera Aqui</button> -->
+    </mat-tab-group>-->
     <div style="background-color: #1e1e1e; border-radius: 7px 7px 0px 0px;">
         <div>
             <ul class="nav">
@@ -60,9 +59,9 @@
         </div>
         <div>
             <ng-template appDynamicComponent>
-                
             </ng-template>
         </div>
     </div>
+    <button class="btn" (click)="getAllCode()">Recupera Aqui</button> 
     <br>
 </div>
