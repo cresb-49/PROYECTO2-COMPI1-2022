@@ -13,6 +13,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ContenedorEditorComponent } from './contenedor-editor/contenedor-editor.component';
 import { ContenedorPrincipalComponent } from './contenedor-principal/contenedor-principal.component';
 import { ConsolaCRLComponent } from './consola-crl/consola-crl.component';
+import { DynamicComponentDirective } from './directives/dynamic-component.directive';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { ConsolaCRLComponent } from './consola-crl/consola-crl.component';
     ContenedorEditorComponent,
     ContenedorPrincipalComponent,
     ConsolaCRLComponent,
+    DynamicComponentDirective,
   ],
   imports: [
     BrowserModule, MatTabsModule, BrowserAnimationsModule, MatFormFieldModule, MatCheckboxModule, FormsModule,MatInputModule,ReactiveFormsModule

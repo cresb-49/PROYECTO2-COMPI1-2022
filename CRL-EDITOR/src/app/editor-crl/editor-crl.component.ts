@@ -1,6 +1,7 @@
 import { AfterViewInit,Component, ElementRef,ViewChild,Output, EventEmitter, Input } from "@angular/core";
 
 import * as ace from "ace-builds";
+import {CodigoCRL} from "../models/codeCRL";
 
 @Component({
   selector: 'app-editor-crl',
@@ -11,15 +12,11 @@ import * as ace from "ace-builds";
 export class EditorCrlComponent implements AfterViewInit {
   
   @ViewChild("editor") private editor: ElementRef<HTMLElement>;
-  @Input () initCode:string;
+  @Input() initCode:string;
+  @Input() object:CodigoCRL;
   
   codeCRL: string = "";
-
   ngAfterViewInit(): void {
-    this.codeCRL = this.initCode;
-    this.editor.nativeElement.innerHTML=this.codeCRL;
-
-
     ace.config.set("fontSize", "14px");
     ace.config.set('basePath', 'https://unpkg.com/ace-builds@1.4.12/src-noconflict');
     const aceEditor = ace.edit(this.editor.nativeElement);
