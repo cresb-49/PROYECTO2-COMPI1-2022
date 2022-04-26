@@ -47,7 +47,7 @@
                 <ng-container *ngFor="let tab of tabs; let index = index">
                     <li class="nav-item">
                         <div>
-                            <button class="btn div-close">{{tab}}</button>
+                            <button class="btn div-close" (click)="enabledEditor(index)" >{{tab}} </button>
                             <button class="btn btn-close-custom" [disabled]="tabs.length === 0"
                                 (click)="removeTab(index)">
                                 ✕

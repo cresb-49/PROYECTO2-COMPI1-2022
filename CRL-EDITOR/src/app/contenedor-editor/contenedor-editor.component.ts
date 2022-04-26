@@ -28,6 +28,7 @@ export class ContenedorEditorComponent implements AfterViewInit{
   generateComponent(){
     const viewContainerRef = this.dynamic.viewContainerRef;
     const componentRef = viewContainerRef.createComponent<EditorCrlComponent>(EditorCrlComponent);
+    componentRef.instance.hide=true;
     this.editors.push(componentRef.instance)
   }
 
@@ -52,4 +53,10 @@ export class ContenedorEditorComponent implements AfterViewInit{
     });
   }
 
+  enabledEditor(index:number){
+    this.editors.forEach((edit:EditorCrlComponent)=>{
+      edit.visibilidad(false);
+    });
+    this.editors[index].visibilidad(true);
+  }
 }

@@ -18,3 +18,7 @@
     border-radius: 7px 7px 0px 0px;
     color: white;
 }
+
+.display-false{
+    display: none;
+}

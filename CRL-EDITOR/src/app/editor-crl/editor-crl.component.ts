@@ -13,9 +13,11 @@ export class EditorCrlComponent implements AfterViewInit {
   
   @ViewChild("editor") private editor: ElementRef<HTMLElement>;
   @Input() initCode:string;
-  @Input() object:CodigoCRL;
-  
+  @Input() hide:boolean;
+
   codeCRL: string = "";
+  divContainer: HTMLElement;
+
   ngAfterViewInit(): void {
     ace.config.set("fontSize", "14px");
     ace.config.set('basePath', 'https://unpkg.com/ace-builds@1.4.12/src-noconflict');
@@ -32,6 +34,17 @@ export class EditorCrlComponent implements AfterViewInit {
 
   public getCodeCRL(){
     return this.codeCRL;
+  }
+
+  public visibilidad(estado:boolean){
+    this.divContainer = <HTMLElement>document.getElementById('contenedorPrincipal');
+    if(estado===true){
+      console.log("visualizar");
+      this.divContainer.classList.remove('display-false');
+    }else{
+      this.divContainer.classList.add('display-false');
+      console.log("ocultar");
+    }
   }
 
 }
