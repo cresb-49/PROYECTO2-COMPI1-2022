@@ -13,7 +13,9 @@ export class EditorCrlComponent implements AfterViewInit {
   
   @ViewChild("editor") private editor: ElementRef<HTMLElement>;
   @ViewChild("contenedor") private contenedor: ElementRef<HTMLElement>;
-  @Input() initCode:string;
+  
+
+  codigoRef:string='';
   mostrar:boolean = true;
   codeCRL: string = "";
 
@@ -41,6 +43,10 @@ export class EditorCrlComponent implements AfterViewInit {
     }else{
       this.contenedor.nativeElement.classList.add('display-false');
     }
+  }
+
+  public setCodeRef(nombre:string){
+    this.codigoRef = nombre;
   }
 
 }
