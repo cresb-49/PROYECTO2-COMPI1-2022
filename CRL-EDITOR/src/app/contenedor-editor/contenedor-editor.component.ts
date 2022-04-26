@@ -28,7 +28,6 @@ export class ContenedorEditorComponent implements AfterViewInit{
   generateComponent(){
     const viewContainerRef = this.dynamic.viewContainerRef;
     const componentRef = viewContainerRef.createComponent<EditorCrlComponent>(EditorCrlComponent);
-    componentRef.instance.hide=true;
     this.editors.push(componentRef.instance)
   }
 

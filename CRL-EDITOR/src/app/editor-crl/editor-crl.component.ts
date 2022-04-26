@@ -12,11 +12,10 @@ import {CodigoCRL} from "../models/codeCRL";
 export class EditorCrlComponent implements AfterViewInit {
   
   @ViewChild("editor") private editor: ElementRef<HTMLElement>;
+  @ViewChild("contenedor") private contenedor: ElementRef<HTMLElement>;
   @Input() initCode:string;
-  @Input() hide:boolean;
-
+  mostrar:boolean = true;
   codeCRL: string = "";
-  divContainer: HTMLElement;
 
   ngAfterViewInit(): void {
     ace.config.set("fontSize", "14px");
@@ -37,13 +36,10 @@ export class EditorCrlComponent implements AfterViewInit {
   }
 
   public visibilidad(estado:boolean){
-    this.divContainer = <HTMLElement>document.getElementById('contenedorPrincipal');
-    if(estado===true){
-      console.log("visualizar");
-      this.divContainer.classList.remove('display-false');
+    if(estado){
+      this.contenedor.nativeElement.classList.remove('display-false');
     }else{
-      this.divContainer.classList.add('display-false');
-      console.log("ocultar");
+      this.contenedor.nativeElement.classList.add('display-false');
     }
   }
 
