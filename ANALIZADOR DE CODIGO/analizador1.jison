@@ -1,3 +1,7 @@
+%{
+    //codigo insertado
+%}
+
 %lex
 number [0-9]+       //Exprecion para la repecentacion de numeros
 decimal {number}"." {number}
@@ -86,9 +90,19 @@ identificador ([a-zA-Z_$][a-zA-Z\\d_$]*)
 
 %%
 
-Init : instrucciones EOF;
+Init : inicioCode EOF;
 
-encabezado  :   IMPORTAR ID EXTENCION_CRL
+inicioCode  :   listaImportacion defIncerteza instrucciones
+            |   listaImportacion instrucciones
+            |   defIncerteza instrucciones
+            |   instrucciones
+            ;
+
+listaImportacion    :   listaImportacion importacion
+                    |   importacion
+                    ;
+
+importacion :   IMPORTAR ID EXTENCION_CRL
             ;
 
 defIncerteza    :   INCERTEZA DECIMAL
