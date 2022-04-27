@@ -7,7 +7,7 @@ identificador ([a-zA-Z_$][a-zA-Z\\d_$]*)
 
 {number}        return 'ENTERO'
 {decimal}       return 'DECIMAL'
-{string}        return 'STRING'
+{string}        return 'CADENA'
 
 
 //Operadores Artimeticos
@@ -88,162 +88,106 @@ identificador ([a-zA-Z_$][a-zA-Z\\d_$]*)
 
 Init : instrucciones EOF;
 
-instrucciones 
-    :   instrucciones intruccion{
+encabezado  :   IMPORTAR ID EXTENCION_CRL
+            ;
 
-    }
-    |   intruccion{
-        
-    }
-;
+defIncerteza    :   INCERTEZA DECIMAL
+                ;
 
-intruccion
-    :   InsMostrar  {
-        $$ = $1;
-    }
-    |   InsFuncion{
-        $$ = $1;
-    }
-    |   InsPrincipal{
-        $$ = $1;
-    }
-    |   InsLlamar{
-        $$ = $1;
-    }
-    |   InsRetorno{
-        $$ = $1;
-    }
-    |   InsSi{
-        $$ = $1;
-    }
-    |   InsPara{
-        $$ = $1;
-    }
-    |   InsMientras{
-        $$ = $1;
-    }
-    |   DIBUJAR_AST{
-        $$ = $1;
-    }
-    |   DrawExp{
-        $$ = $1;
-    }
-    |   DIBUJAR_TS{
-        $$ = $1;
-    }
-    |   error
-;
+instrucciones   :   instrucciones instruction
+                |   instruction
+                ;
 
-intruccionEspecialCiclo
-    :   DETENER
-    :   CONTINUAR
-;
+instruction     :   instructionGlobal
+                |   instruccionFuncionMetodo
+                |   VOID PRINCIPAL '(' ')' ':'
+                |   error
+                ;
 
-InsMostrar
-    :   MOSTRAR '(' Exp ')'{
-        console.log("Intruccion Mostrar");
-    }
-;
+instructionGlobal   :   instruccionDeclarar
+                    |   instruccionAsignar
+                    |   llamarFuncion
+                    |   instruccionRetorno
+                    |   sentenciaSi
+                    |   sentenciaPara
+                    |   sentenciaMientras
+                    |   sentenciaDetener
+                    |   sentenciaContinuar
+                    |   funcionMostrar
+                    |   funcionDibujarAST
+                    |   funcionDibujarExp
+                    |   funcionDibujarTs
+                    ;
 
-InsFuncion
-    :   TipoDatoFuncion ID '(' ')' ':'{
-        console.log("Declaracion de Funcion");
-    }
-;
+funcionDibujarTs    :   DIBUJAR_TS '('')'
+                    ;
 
-InsPrincipal
-    :   VOID PRINCIPAL '(' ')' ':'{
+funcionDibujarExp   :   DIBUJAR_EXP '(' exprecion ')'
+                    ;
 
-    }
-;
+funcionDibujarAST   :   DIBUJAR_AST '(' identificador ')'
+                    ;
 
-InsLlamar
-    :   ID '(' ')'{
+funcionMostrar  :   MOSTRAR '(' CADENA ',' parametrosEnviar ')'
+                |   MOSTRAR '(' CADENA ')'
+                ;
 
-    }
-;
+sentenciaContinuar  :   CONTINUAR
+                    ;
 
-InsRetorno
-    :   RETORNO{
+sentenciaDetener    :   DETENER
+                    ;
 
-    }
-;
+sentenciaMientras   :   MIENTRAS '(' exprecion ')' ':'
+                    ;
 
-InsSi
-    :   SI '(' Exp ')' ':'{
-        console.log("Instruccion Si");
-    }
-    |   SINO ':'{
-        console.log("Instruccion Si");
-    }
-;
+sentenciaPara   :   PARA '('INT ID '=' exprecion ';' exprecion ';' opPara ')' ':'
+                ;
 
-InsPara
-    :   PARA '(' INT ID '=' Exp ';' Exp ; Op ')' ':'{
+opPara  :   '++'
+        |   '--'
+        ;
 
-    }
-;
+sentenciaSi :   SI '(' exprecion ')' ':'
+            |   SINO ':'
+            ;
 
-Op
-    :   '++'{
+instruccionRetorno  :   RETORNO exprecion
+                    ;
 
-    }
-    |   '--'{
+llamarFuncion   :   ID '(' parametrosEnviar ')'
+                ;
 
-    }
-;
+parametrosEnviar    :   parametrosEnviar ',' exprecion
+                    |   exprecion
+                    ;
 
-InsMientras
-    :   MIENTRAS '(' Exp ')' ':'{
+instruccionFuncionMetodo    :   tipoDato ID '(' parametros ')' ':'
+                            ;
 
-    }
-;
+parametros  :   parametros ',' tipoDato ID
+            |   tipoDato ID 
+            ;
 
-DrawExp
-    :   DIBUJAR_EXP '(' ')'
-;
+instruccionAsignar  :   ID '=' exprecion
+                    ;
 
-TipoDato
-    :   INT{
-        $$ = $1;
-    }
-    |   STRING{
-        $$ = $1;
-    }
-    |   CHAR{
-        $$ = $1;
-    }
-    |   DOUBLE{
-        $$ = $1;
-    }
-    |   BOOLEAN{
-        $$ = $1;
-    }
-;
+instruccionDeclarar :   tipoDato listaIds '=' exprecion
+                    ;
+                
+tipoDato    :   INT
+            |   STRING
+            |   CHAR
+            |   DOUBLE
+            |   BOOLEAN
+            |   VOID
+            ;
 
-TipoDatoFuncion
-    :   VOID{
-        $$ = $1;
-    }
-    |   TipoDato{
-        $$ = $1;
-    }
-;
+listaIds    :   listaIds ID
+            |   ID
+            ;
 
-Exp
-    :   ENTERO{
-        $$ = $1;
-    }
-    |   DECIMAL{
-        $$ = $1;
-    }
-    |   TRUE{
-        $$ = $1;
-    }
-    |   FALSE{
-        $$ = $1;
-    }
-    |   ID{
-        $$ = $1;
-    }
-;
+exprecion   :   DECIMAL
+            |   ENTERO
+            |   CADENA
+            ;
