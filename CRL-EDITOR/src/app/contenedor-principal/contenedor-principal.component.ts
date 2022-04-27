@@ -2,6 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ConsolaCRLComponent } from '../consola-crl/consola-crl.component';
 import { ContenedorEditorComponent } from '../contenedor-editor/contenedor-editor.component';
 import { DynamicComponentDirective } from '../directives/dynamic-component.directive';
+import { Ejecutor } from '../logicCode/Ejecutor';
 
 @Component({
   selector: 'app-contenedor-principal',
@@ -23,7 +24,9 @@ export class ContenedorPrincipalComponent implements AfterViewInit {
   }
 
   obtenerCodigo(){
-    alert("Recuperando el codigo CRL");
+    let execution= new Ejecutor();
+    execution.ejecucion();
+    //alert("Recuperando el codigo CRL");
   }
 
   obtenerProyectoCompleto(){
