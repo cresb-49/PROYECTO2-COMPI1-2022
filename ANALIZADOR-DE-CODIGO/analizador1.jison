@@ -1,18 +1,48 @@
 %{
     //codigo insertado
+    const {StringBuilder} = require('../StringBuilder');
+    let RESULT_STRING_LEC = new StringBuilder();
 %}
+
 
 %lex
 number [0-9]+       //Exprecion para la repecentacion de numeros
 decimal {number}"." {number}
 string (\"[^"]*\")
 identificador ([a-zA-Z_$][a-zA-Z\\d_$]*)
+%s  INITIAL STRING_STATE
 %%
 
 {number}        return 'ENTERO'
 {decimal}       return 'DECIMAL'
-{string}        return 'CADENA'
+//{string}        return 'CADENA'
 
+
+
+["]                         %{ this.begin('STRING_STATE'); %}
+<STRING_STATE>(\")          %{ 
+                                yytext = RESULT_STRING_LEC.toString();
+                                this.popState();
+                                return 'CADENA';
+                            %}
+<STRING_STATE>[^\n\r\"\\]+  %{ 
+                                RESULT_STRING_LEC.appedend(yytext);
+                            %}
+<STRING_STATE>(\\t)         %{ 
+                                RESULT_STRING_LEC.append('\t');
+                            %}
+<STRING_STATE>(\\n)         %{ 
+                                RESULT_STRING_LEC.append('\n');
+                            %}
+<STRING_STATE>(\\r)         %{
+                                RESULT_STRING_LEC.append('\r');
+                            %}
+<STRING_STATE>(\\\")        %{ 
+                                RESULT_STRING_LEC.append('\"');
+                            %}
+<STRING_STATE>(\\)          %{
+                                RESULT_STRING_LEC.append('\\');
+                            %}
 
 //Operadores Artimeticos
 
