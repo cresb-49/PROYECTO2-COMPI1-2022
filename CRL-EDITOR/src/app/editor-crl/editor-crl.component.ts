@@ -24,6 +24,7 @@ export class EditorCrlComponent implements AfterViewInit {
     ace.config.set('basePath', 'https://unpkg.com/ace-builds@1.4.12/src-noconflict');
     const aceEditor = ace.edit(this.editor.nativeElement);
     aceEditor.setTheme('ace/theme/twilight');
+    this.codigoPrueba(aceEditor);
     aceEditor.on("change", () => {
       this.codeCRL = aceEditor.getValue();
     });
@@ -49,4 +50,29 @@ export class EditorCrlComponent implements AfterViewInit {
     this.codigoRef = nombre;
   }
 
+
+  codigoPrueba(aceEditor:any){
+aceEditor.setValue(`import clase.crl
+import aritmetica.crl
+Incertesa 0.00023
+    
+Int global1 = 45;
+Char charGlobal;
+        
+Void Principal():
+  Int valor = 6
+  String cadena1,cadena2,cadena3,cadena4,cadena5
+  Double dou
+  Si(true):
+    hacer(23)
+  Sino:
+    hacer(45)
+        
+Int hacer(Int index):
+  Mientras(false):
+  Para(Int x = 0;x<index;++):
+    Mostrar("Hola prueba de codigo")
+  Para(Int x = 0;x<index;--):
+    Mostrar("Hola prueba de codigo2")`);
+  }
 }

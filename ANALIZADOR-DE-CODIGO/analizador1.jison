@@ -9,16 +9,23 @@
 number [0-9]+       //Exprecion para la repecentacion de numeros
 decimal {number}"." {number}
 string (\"[^"]*\")
+identacion ([\t]+)
+space ([ ])
 identificador ([a-zA-Z_$][a-zA-Z\\d_$]*)
+
+
 %s  INITIAL STRING_STATE
 %%
 
-{number}        return 'ENTERO'
-{decimal}       return 'DECIMAL'
+\s+                 {/* skip whitespace */}
+([\t]+[\n])         {/* skip whitespace */}
+[\n]                {/* skip whitespace */}
+
+{number}            return 'ENTERO';
+{decimal}           return 'DECIMAL';
 //{string}        return 'CADENA'
-
-
-
+{identacion}                return 'IDENTACION'
+space
 ["]                         %{ this.begin('STRING_STATE'); %}
 <STRING_STATE>(\")          %{ 
                                 yytext = RESULT_STRING_LEC.toString();
@@ -44,6 +51,10 @@ identificador ([a-zA-Z_$][a-zA-Z\\d_$]*)
                                 RESULT_STRING_LEC.append('\\');
                             %}
 
+//Extencion de archivo
+
+".crl"          return 'EXTENCION_CRL'
+
 //Operadores Artimeticos
 
 "*"             return '*'
@@ -52,7 +63,7 @@ identificador ([a-zA-Z_$][a-zA-Z\\d_$]*)
 "^"             return '^'
 ";"             return ';'
 ":"             return ':'
-"."             return '.'
+//"."             return '.'
 ","             return ','
 "++"            return '++'
 "--"            return '--'
@@ -101,7 +112,6 @@ identificador ([a-zA-Z_$][a-zA-Z\\d_$]*)
 "DibujarAST"    return 'DIBUJAR_AST'
 "DibujarEXP"    return 'DIBUJAR_EXP'
 "DibujarTS"     return 'DIBUJAR_TS'
-".crl"          return 'EXTENCION_CRL'
 {identificador} return 'ID'
 <<EOF>>         return 'EOF'
 
@@ -163,43 +173,44 @@ instructionGlobal   :   instruccionDeclarar
                     |   funcionDibujarTs
                     ;
 
-funcionDibujarTs    :   DIBUJAR_TS '('')'
+funcionDibujarTs    :   IDENTACION DIBUJAR_TS '('')'
                     ;
 
-funcionDibujarExp   :   DIBUJAR_EXP '(' exprecion ')'
+funcionDibujarExp   :   IDENTACION DIBUJAR_EXP '(' exprecion ')'
                     ;
 
-funcionDibujarAST   :   DIBUJAR_AST '(' identificador ')'
+funcionDibujarAST   :   IDENTACION DIBUJAR_AST '(' identificador ')'
                     ;
 
-funcionMostrar  :   MOSTRAR '(' CADENA ',' parametrosEnviar ')'
-                |   MOSTRAR '(' CADENA ')'
+funcionMostrar  :   IDENTACION MOSTRAR '(' CADENA ',' parametrosEnviar ')'
+                |   IDENTACION MOSTRAR '(' CADENA ')'
                 ;
 
-sentenciaContinuar  :   CONTINUAR
+sentenciaContinuar  :   IDENTACION CONTINUAR
                     ;
 
-sentenciaDetener    :   DETENER
+sentenciaDetener    :   IDENTACION DETENER
                     ;
 
-sentenciaMientras   :   MIENTRAS '(' exprecion ')' ':'
+sentenciaMientras   :   IDENTACION MIENTRAS '(' exprecion ')' ':'
                     ;
 
-sentenciaPara   :   PARA '('INT ID '=' exprecion ';' exprecion ';' opPara ')' ':'
+sentenciaPara   :   IDENTACION PARA '('INT ID '=' exprecion ';' exprecion ';' opPara ')' ':'
                 ;
 
 opPara  :   '++'
         |   '--'
         ;
 
-sentenciaSi :   SI '(' exprecion ')' ':'
-            |   SINO ':'
+sentenciaSi :   IDENTACION SI '(' exprecion ')' ':'
+            |   IDENTACION SINO ':'
             ;
 
-instruccionRetorno  :   RETORNO exprecion
+instruccionRetorno  :   IDENTACION RETORNO exprecion
                     ;
 
-llamarFuncion   :   ID '(' parametrosEnviar ')'
+llamarFuncion   :   IDENTACION ID '(' parametrosEnviar ')'
+                |   IDENTACION ID '(' ')'
                 ;
 
 parametrosEnviar    :   parametrosEnviar ',' exprecion
@@ -214,9 +225,10 @@ parametros  :   parametros ',' tipoDato ID
             ;
 
 instruccionAsignar  :   ID '=' exprecion
+                    |   IDENTACION ID '=' exprecion
                     ;
 
-instruccionDeclarar :   tipoDato listaIds '=' exprecion
+instruccionDeclarar :   IDENTACION tipoDato listaIds
                     ;
                 
 tipoDato    :   INT
@@ -227,11 +239,37 @@ tipoDato    :   INT
             |   VOID
             ;
 
-listaIds    :   listaIds ID
+listaIds    :   listaIds ',' ID
+            |   listaIds ',' ID '=' exprecion
             |   ID
+            |   ID '=' exprecion
             ;
 
-exprecion   :   DECIMAL
-            |   ENTERO
-            |   CADENA
+
+exprecion   :   exprecion '+' exprecion
+            |   exprecion '-' exprecion
+            |   exprecion '/' exprecion
+            |   exprecion '^' exprecion
+            |   exprecion '*' exprecion
+            |   exprecion '%' exprecion
+            |   exprecion '>' exprecion
+            |   exprecion '<' exprecion
+            |   exprecion '>=' exprecion
+            |   exprecion '<=' exprecion
+            |   exprecion '!=' exprecion
+            |   exprecion '||' exprecion
+            |   exprecion '|&' exprecion
+            |   exprecion '&&' exprecion
+            |   exprecion '~' exprecion
+            |   '!' exprecion
+            |   f
             ;
+
+f   :   '(' exprecion ')'
+    |   DECIMAL
+    |   ENTERO
+    |   CADENA
+    |   ID
+    |   ID '(' ')'
+    |   ID '(' parametrosEnviar ')'
+    ;
