@@ -1,8 +1,8 @@
-%{
-    //codigo insertado
-    const {StringBuilder} = require('../StringBuilder');
-    let RESULT_STRING_LEC = new StringBuilder();
-%}
+// %{
+//     //codigo insertado
+//     const {StringBuilder} = require('../StringBuilder');
+//     let RESULT_STRING_LEC = new StringBuilder();
+// %}
 
 
 %lex
@@ -23,33 +23,32 @@ identificador ([a-zA-Z_$][a-zA-Z\\d_$]*)
 
 {number}            return 'ENTERO';
 {decimal}           return 'DECIMAL';
-//{string}        return 'CADENA'
-{identacion}                return 'IDENTACION'
-space
-["]                         %{ this.begin('STRING_STATE'); %}
-<STRING_STATE>(\")          %{ 
-                                yytext = RESULT_STRING_LEC.toString();
-                                this.popState();
-                                return 'CADENA';
-                            %}
-<STRING_STATE>[^\n\r\"\\]+  %{ 
-                                RESULT_STRING_LEC.appedend(yytext);
-                            %}
-<STRING_STATE>(\\t)         %{ 
-                                RESULT_STRING_LEC.append('\t');
-                            %}
-<STRING_STATE>(\\n)         %{ 
-                                RESULT_STRING_LEC.append('\n');
-                            %}
-<STRING_STATE>(\\r)         %{
-                                RESULT_STRING_LEC.append('\r');
-                            %}
-<STRING_STATE>(\\\")        %{ 
-                                RESULT_STRING_LEC.append('\"');
-                            %}
-<STRING_STATE>(\\)          %{
-                                RESULT_STRING_LEC.append('\\');
-                            %}
+{string}            return 'CADENA'
+{identacion}        return 'IDENTACION'
+// ["]                         %{ this.begin('STRING_STATE'); %}
+// <STRING_STATE>(\")          %{ 
+//                                 yytext = RESULT_STRING_LEC.toString();
+//                                 this.popState();
+//                                 return 'CADENA';
+//                             %}
+// <STRING_STATE>[^\n\r\"\\]+  %{ 
+//                                 RESULT_STRING_LEC.appedend(yytext);
+//                             %}
+// <STRING_STATE>(\\t)         %{ 
+//                                 RESULT_STRING_LEC.append('\t');
+//                             %}
+// <STRING_STATE>(\\n)         %{ 
+//                                 RESULT_STRING_LEC.append('\n');
+//                             %}
+// <STRING_STATE>(\\r)         %{
+//                                 RESULT_STRING_LEC.append('\r');
+//                             %}
+// <STRING_STATE>(\\\")        %{ 
+//                                 RESULT_STRING_LEC.append('\"');
+//                             %}
+// <STRING_STATE>(\\)          %{
+//                                 RESULT_STRING_LEC.append('\\');
+//                             %}
 
 //Extencion de archivo
 
@@ -130,7 +129,8 @@ space
 
 %%
 
-Init : inicioCode EOF;
+Init    : inicioCode EOF {console.log("Inicio del analisi");}
+        ;
 
 inicioCode  :   listaImportacion defIncerteza instrucciones
             |   listaImportacion instrucciones
@@ -138,14 +138,14 @@ inicioCode  :   listaImportacion defIncerteza instrucciones
             |   instrucciones
             ;
 
-listaImportacion    :   listaImportacion importacion
-                    |   importacion
+listaImportacion    :   listaImportacion importacion    {console.log("lsita importacion");}
+                    |   importacion                     {console.log("importacion");}
                     ;
 
 importacion :   IMPORTAR ID EXTENCION_CRL
             ;
 
-defIncerteza    :   INCERTEZA DECIMAL
+defIncerteza    :   INCERTEZA DECIMAL   {console.log("inserteza");}
                 ;
 
 instrucciones   :   instrucciones instruction
@@ -154,8 +154,8 @@ instrucciones   :   instrucciones instruction
 
 instruction     :   instructionGlobal
                 |   instruccionFuncionMetodo
-                |   VOID PRINCIPAL '(' ')' ':'
-                |   error
+                |   VOID PRINCIPAL '(' ')' ':'  {console.log("void principal");}
+                |   error   {console.log("Errores del analisis");}
                 ;
 
 instructionGlobal   :   instruccionDeclarar
@@ -173,103 +173,105 @@ instructionGlobal   :   instruccionDeclarar
                     |   funcionDibujarTs
                     ;
 
-funcionDibujarTs    :   IDENTACION DIBUJAR_TS '('')'
+funcionDibujarTs    :   IDENTACION DIBUJAR_TS '('')'    {console.log("identacion TS");}
                     ;
 
-funcionDibujarExp   :   IDENTACION DIBUJAR_EXP '(' exprecion ')'
+funcionDibujarExp   :   IDENTACION DIBUJAR_EXP '(' exprecion ')'    {console.log("identacion EXP");}
                     ;
 
-funcionDibujarAST   :   IDENTACION DIBUJAR_AST '(' identificador ')'
+funcionDibujarAST   :   IDENTACION DIBUJAR_AST '(' identificador ')'    {console.log("identacion AST");}
                     ;
 
-funcionMostrar  :   IDENTACION MOSTRAR '(' CADENA ',' parametrosEnviar ')'
-                |   IDENTACION MOSTRAR '(' CADENA ')'
+funcionMostrar  :   IDENTACION MOSTRAR '(' CADENA ',' parametrosEnviar ')'  {console.log("identacion mostrar");}
+                |   IDENTACION MOSTRAR '(' CADENA ')'   {console.log("identacion mostrar");}
                 ;
 
-sentenciaContinuar  :   IDENTACION CONTINUAR
+sentenciaContinuar  :   IDENTACION CONTINUAR    {console.log("continuar");}
                     ;
 
-sentenciaDetener    :   IDENTACION DETENER
+sentenciaDetener    :   IDENTACION DETENER  {console.log("detener");}
                     ;
 
-sentenciaMientras   :   IDENTACION MIENTRAS '(' exprecion ')' ':'
+sentenciaMientras   :   IDENTACION MIENTRAS '(' exprecion ')' ':'   {console.log("identacion mientras");}
                     ;
 
-sentenciaPara   :   IDENTACION PARA '('INT ID '=' exprecion ';' exprecion ';' opPara ')' ':'
+sentenciaPara   :   IDENTACION PARA '('INT ID '=' exprecion ';' exprecion ';' opPara ')' ':'    {console.log("identacion para");}
                 ;
 
 opPara  :   '++'
         |   '--'
         ;
 
-sentenciaSi :   IDENTACION SI '(' exprecion ')' ':'
-            |   IDENTACION SINO ':'
+sentenciaSi :   IDENTACION SI '(' exprecion ')' ':' {console.log("identacion sentencias si");}
+            |   IDENTACION SINO ':'                 {console.log("identacion sentencia sino");}
             ;
 
-instruccionRetorno  :   IDENTACION RETORNO exprecion
+instruccionRetorno  :   IDENTACION RETORNO exprecion    {console.log("retorno");}
                     ;
 
-llamarFuncion   :   IDENTACION ID '(' parametrosEnviar ')'
-                |   IDENTACION ID '(' ')'
+llamarFuncion   :   IDENTACION ID '(' parametrosEnviar ')'  {console.log("identacion funcion parametros");}
+                |   IDENTACION ID '(' ')'   {console.log("identacion funcion");}
                 ;
 
 parametrosEnviar    :   parametrosEnviar ',' exprecion
                     |   exprecion
                     ;
 
-instruccionFuncionMetodo    :   tipoDato ID '(' parametros ')' ':'
+instruccionFuncionMetodo    :   tipoDato ID '(' parametros ')' ':'  {console.log("declaracion metodo parametros");}
+                            |   tipoDato ID '(' ')' ':'  {console.log("declaracion metodo vacio");}
                             ;
 
 parametros  :   parametros ',' tipoDato ID
             |   tipoDato ID 
             ;
 
-instruccionAsignar  :   ID '=' exprecion
-                    |   IDENTACION ID '=' exprecion
+instruccionAsignar  :   ID '=' exprecion                {console.log("asignacion");}
+                    |   IDENTACION ID '=' exprecion     {console.log("identacion asignar");}
                     ;
 
-instruccionDeclarar :   IDENTACION tipoDato listaIds
+instruccionDeclarar :   IDENTACION tipoDato listaIds    {console.log("identacion declarar");}
+                    |   tipoDato listaIds               {console.log("declarar");}
                     ;
                 
-tipoDato    :   INT
-            |   STRING
-            |   CHAR
-            |   DOUBLE
-            |   BOOLEAN
-            |   VOID
+tipoDato    :   INT         {console.log("int");}
+            |   STRING      {console.log("string");}
+            |   CHAR        {console.log("char");}
+            |   DOUBLE      {console.log("double");}
+            |   BOOLEAN     {console.log("bool");}
+            |   VOID        {console.log("void");}
             ;
 
-listaIds    :   listaIds ',' ID
-            |   listaIds ',' ID '=' exprecion
-            |   ID
-            |   ID '=' exprecion
+listaIds    :   listaIds ',' ID                 {console.log("list , var");}
+            |   listaIds ',' ID '=' exprecion   {console.log("list , asig var");}
+            |   ID                              {console.log("var");}
+            |   ID '=' exprecion                {console.log("asig var");}
             ;
 
 
-exprecion   :   exprecion '+' exprecion
-            |   exprecion '-' exprecion
-            |   exprecion '/' exprecion
-            |   exprecion '^' exprecion
-            |   exprecion '*' exprecion
-            |   exprecion '%' exprecion
-            |   exprecion '>' exprecion
-            |   exprecion '<' exprecion
-            |   exprecion '>=' exprecion
-            |   exprecion '<=' exprecion
-            |   exprecion '!=' exprecion
-            |   exprecion '||' exprecion
-            |   exprecion '|&' exprecion
-            |   exprecion '&&' exprecion
-            |   exprecion '~' exprecion
-            |   '!' exprecion
-            |   f
+exprecion   :   exprecion '+' exprecion     {console.log("+");}
+            |   exprecion '-' exprecion     {console.log("-");}
+            |   exprecion '/' exprecion     {console.log("/");}
+            |   exprecion '^' exprecion     {console.log("^");}
+            |   exprecion '*' exprecion     {console.log("*");}
+            |   exprecion '%' exprecion     {console.log("%");}
+            |   exprecion '>' exprecion     {console.log(">");}
+            |   exprecion '<' exprecion     {console.log("<");}
+            |   exprecion '>=' exprecion    {console.log(">=");}
+            |   exprecion '<=' exprecion    {console.log("<=");}
+            |   exprecion '!=' exprecion    {console.log("!=");}
+            |   exprecion '||' exprecion    {console.log("||");}
+            |   exprecion '|&' exprecion    {console.log("|&");}
+            |   exprecion '&&' exprecion    {console.log("&&");}
+            |   exprecion '~' exprecion     {console.log("~");}
+            |   '!' exprecion               {console.log("!");}
+            |   f                           {console.log("f");}
             ;
 
-f   :   '(' exprecion ')'
-    |   DECIMAL
-    |   ENTERO
-    |   CADENA
-    |   ID
-    |   ID '(' ')'
-    |   ID '(' parametrosEnviar ')'
+f   :   '(' exprecion ')'           {console.log("exprecion entre parentecis");}
+    |   DECIMAL                     {console.log("decimal");}
+    |   ENTERO                      {console.log("entero");}
+    |   CADENA                      {console.log("cadena");}
+    |   ID                          {console.log("identificador");}
+    |   ID '(' ')'                  {console.log("funcion vacia");}
+    |   ID '(' parametrosEnviar ')' {console.log("funcion parametros");}
     ;
