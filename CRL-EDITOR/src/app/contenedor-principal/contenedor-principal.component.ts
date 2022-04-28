@@ -24,7 +24,7 @@ export class ContenedorPrincipalComponent implements AfterViewInit {
   }
 
   obtenerCodigo(){
-    let execution= new Ejecutor();
+    let execution= new Ejecutor(this.contenedorPrincipal.getAllCode());
     execution.ejecucion();
     //alert("Recuperando el codigo CRL");
   }

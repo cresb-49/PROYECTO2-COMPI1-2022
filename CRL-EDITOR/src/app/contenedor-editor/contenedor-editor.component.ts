@@ -57,9 +57,12 @@ export class ContenedorEditorComponent implements AfterViewInit {
   }
 
   getAllCode() {
+    let codigo:Array<CodigoCRL>=[];
     this.editors.forEach((edit: EditorCrlComponent) => {
-      console.log(edit.getCodeCRL());
+      codigo.push(new CodigoCRL(edit.codeCRL));
+      //console.log(edit.getCodeCRL());
     });
+    return codigo;
   }
 
   enabledEditor(index: number) {
