@@ -29,4 +29,8 @@ export class ConsolaCRLComponent implements OnInit {
   agregarError(error:ErrorCRL){
     this.errores.push(error);
   }
+
+  agregarPrint(value:any){
+    this.errores.push(value);
+  }
 }
