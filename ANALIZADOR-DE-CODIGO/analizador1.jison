@@ -3,6 +3,7 @@
     const {StringBuilder} = require('./../Strings/StringBuilder');
     const {Declaracion} = require('./../Instrucciones/Declaracion.ts');
     const {Funcion} = require('./../Instrucciones/Funcion.ts');
+    const {CallFuncion} = require('./../Instrucciones/CallFuncion.ts');
     const {Mientras} = require('./../Instrucciones/Mientras.ts');
     const {Mostrar} = require('./../Instrucciones/Mostrar.ts');
     const {Retornar} = require('./../Instrucciones/Retornar.ts');
@@ -13,12 +14,20 @@
     const {Asignacion} = require('./../Instrucciones/Asignacion.ts');
     const {Detener} = require('./../Instrucciones/Detener.ts');
     const {Continuar} = require('./../Instrucciones/Continuar.ts');
+    const {Importar} = require('./../Instrucciones/Importar.ts');
 
-    const {Acceder} = require ('./../Expresion/Acceder.ts')
-    const {Literal} = require ('./../Expresion/Literal.ts')
-    const {Logica} = require ('./../Expresion/Logica.ts')
-    const {Operacion} = require ('./../Expresion/Operacion.ts')
-    const {Relacional} = require ('./../Expresion/Relacional.ts')
+    const {DrawAST} = require('./../Instrucciones/DrawAST.ts');
+    const {DrawEXP} = require('./../Instrucciones/DrawEXP.ts');
+    const {DrawTS} = require('./../Instrucciones/DrawTS.ts');
+    
+    const {Principal} = require('./../Instrucciones/Principal.ts');
+
+    const {Acceder} = require ('./../Expresion/Acceder.ts');
+    const {Literal} = require ('./../Expresion/Literal.ts');
+    const {Logica} = require ('./../Expresion/Logica.ts');
+    const {Operacion} = require ('./../Expresion/Operacion.ts');
+    const {Relacional} = require ('./../Expresion/Relacional.ts');
+    const {ObtenerValFuncion} = require ('./../Expresion/ObtenerValFuncion.ts');
 
 
 
@@ -158,7 +167,7 @@ listaImportacion    :   listaImportacion importacion
                     |   importacion
                     ;
 
-importacion :   IMPORTAR ID EXTENCION_CRL   {console.log($1 + "Archivo: "+$2);}
+importacion :   IMPORTAR ID EXTENCION_CRL   {$$ = new Importar($2,@1.first_line,(@1.first_column+1));}
             ;
 
 defIncerteza    :   INCERTEZA DECIMAL   {
@@ -173,7 +182,7 @@ instrucciones   :   instrucciones instruction
 
 instruction     :   instructionGlobal
                 |   instruccionFuncionMetodo
-                |   VOID PRINCIPAL '(' ')' ':'  {console.log("void principal");}
+                |   VOID PRINCIPAL '(' ')' ':'  {$$ = new Principal("",null,@2.first_line,(@2.first_column+1));}
                 |   error   {errorAnalisisCodigo(this,$1);}
                 ;
 
@@ -192,13 +201,13 @@ instructionGlobal   :   instruccionDeclarar
                     |   funcionDibujarTs
                     ;
 
-funcionDibujarTs    :   IDENTACION DIBUJAR_TS '('')'    {console.log("identacion TS");}
+funcionDibujarTs    :   IDENTACION DIBUJAR_TS '('')'    {$$ = new DrawTS(-1,-1,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
                     ;
 
-funcionDibujarExp   :   IDENTACION DIBUJAR_EXP '(' exprecion ')'    {console.log("identacion EXP");}
+funcionDibujarExp   :   IDENTACION DIBUJAR_EXP '(' exprecion ')'    {$$ = new DrawEXP($4,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
                     ;
 
-funcionDibujarAST   :   IDENTACION DIBUJAR_AST '(' identificador ')'    {console.log("identacion AST");}
+funcionDibujarAST   :   IDENTACION DIBUJAR_AST '(' identificador ')'    {$$ = new DrawAST($4,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
                     ;
 
 funcionMostrar  :   IDENTACION MOSTRAR '(' exprecion ',' parametrosEnviar ')'   {
@@ -236,20 +245,20 @@ sentenciaSi :   IDENTACION SI '(' exprecion ')' ':' {$$ = new Si($4,null,null,@2
 instruccionRetorno  :   IDENTACION RETORNO exprecion    {$$ = new Retorno($3,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
                     ;
 
-llamarFuncion   :   IDENTACION ID '(' parametrosEnviar ')'  {console.log("identacion funcion parametros");}
-                |   IDENTACION ID '(' ')'   {console.log("identacion funcion");}
+llamarFuncion   :   IDENTACION ID '(' parametrosEnviar ')'  {$$ = new CallFuncion($1,$4,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
+                |   IDENTACION ID '(' ')'   {$$ = new CallFuncion($1,[],@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
                 ;
 
-parametrosEnviar    :   parametrosEnviar ',' exprecion
-                    |   exprecion
+parametrosEnviar    :   parametrosEnviar ',' exprecion  {$1.push($3);$$=$1;}
+                    |   exprecion   {$$=[$1];}
                     ;
 
-instruccionFuncionMetodo    :   tipoDato ID '(' parametros ')' ':'  {console.log("declaracion metodo parametros");}
-                            |   tipoDato ID '(' ')' ':'  {console.log("declaracion metodo vacio");}
+instruccionFuncionMetodo    :   tipoDato ID '(' parametros ')' ':'  {$$ = new Funcion($1,$2,null,$4,@2.first_line,(@2.first_column+1));}
+                            |   tipoDato ID '(' ')' ':'  {$$ = new Funcion($1,$2,null,[],@2.first_line,(@2.first_column+1));}
                             ;
 
-parametros  :   parametros ',' tipoDato ID
-            |   tipoDato ID 
+parametros  :   parametros ',' tipoDato ID  {$1.push(new Declaracion($4,$3,null,@4.first_line,(@4.first_column+1)));$$ = $1;}
+            |   tipoDato ID {$$=[new Declaracion($2,$1,null,@2.first_line,(@2.first_column+1))]}
             ;
 
 instruccionAsignar  :   ID '=' exprecion                {$$ = new Asignacion($1,$3,@1.first_line,(@1.first_column+1));agregarScope2("",$$);}
@@ -260,27 +269,27 @@ instruccionDeclarar :   IDENTACION tipoDato listaIds    {agregarTipoDeclaracion(
                     |   tipoDato listaIds               {agregarTipoDeclaracion($1,$2,"")}
                     ;
                 
-tipoDato    :   INT         {$$=$1;}
-            |   STRING      {$$=$1;}
-            |   CHAR        {$$=$1;}
-            |   DOUBLE      {$$=$1;}
-            |   BOOLEAN     {$$=$1;}
-            |   VOID        {$$=$1;}
+tipoDato    :   INT         {$$=3;}
+            |   STRING      {$$=2;}
+            |   CHAR        {$$=4;}
+            |   DOUBLE      {$$=0;}
+            |   BOOLEAN     {$$=1;}
+            |   VOID        {$$=5;}
             ;
 
 listaIds    :   listaIds ',' ID                 {
-                                                    $1.push(new Declaracion($3,null,@3.first_line,(@3.first_column+1)));
+                                                    $1.push(new Declaracion($3,-1,null,@3.first_line,(@3.first_column+1)));
                                                     $$ = $1;
                                                 }
             |   listaIds ',' ID '=' exprecion   {
-                                                    $1.push(new Declaracion($3,$5,@3.first_line,(@3.first_column+1)));
+                                                    $1.push(new Declaracion($3,-1,$5,@3.first_line,(@3.first_column+1)));
                                                     $$ = $1;
                                                 }
             |   ID                              {
-                                                    $$ = [new Declaracion($1,null,@1.first_line,(@1.first_column+1))];
+                                                    $$ = [new Declaracion($1,-1,null,@1.first_line,(@1.first_column+1))];
                                                 }
             |   ID '=' exprecion                {
-                                                    $$ = [new Declaracion($1,$3,@1.first_line,(@1.first_column+1))];
+                                                    $$ = [new Declaracion($1,-1,$3,@1.first_line,(@1.first_column+1))];
                                                 }
             ;
 
@@ -312,6 +321,6 @@ f   :   '(' exprecion ')'           {$$=$2;}
     |   TRUE                        {$$=new Literal(true,@1.first_line, (@1.first_column+1),1);}
     |   FALSE                       {$$=new Literal(false,@1.first_line, (@1.first_column+1),1);}
     |   ID                          {$$=new Acceder($1, @1.first_line,(@1.first_column+1));}
-    |   ID '(' ')'                  {console.log("funcion vacia");}
-    |   ID '(' parametrosEnviar ')' {console.log("funcion parametros");}
+    |   ID '(' ')'                  {$$ = new ObtenerValFuncion($1,[],@1.first_line,(@1.first_column+1));}
+    |   ID '(' parametrosEnviar ')' {$$ = new ObtenerValFuncion($1,$3,@1.first_line,(@1.first_column+1));}
     ;

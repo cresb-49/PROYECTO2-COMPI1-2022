@@ -90,7 +90,7 @@ case 1:
                             
 break;
 case 8:
-console.log($$[$0-2] + "Archivo: "+$$[$0-1]);
+this.$ = new Importar($$[$0-1],_$[$0-2].first_line,(_$[$0-2].first_column+1));
 break;
 case 9:
 
@@ -99,19 +99,19 @@ case 9:
                                         
 break;
 case 14:
-console.log("void principal");
+this.$ = new Principal("",null,_$[$0-3].first_line,(_$[$0-3].first_column+1));
 break;
 case 15:
 errorAnalisisCodigo(this,$$[$0]);
 break;
 case 29:
-console.log("identacion TS");
+this.$ = new DrawTS(-1,-1,_$[$0-2].first_line,(_$[$0-2].first_column+1));agregarScope2($$[$0-3],this.$);
 break;
 case 30:
-console.log("identacion EXP");
+this.$ = new DrawEXP($$[$0-1],_$[$0-3].first_line,(_$[$0-3].first_column+1));agregarScope2($$[$0-4],this.$);
 break;
 case 31:
-console.log("identacion AST");
+this.$ = new DrawAST($$[$0-1],_$[$0-3].first_line,(_$[$0-3].first_column+1));agregarScope2($$[$0-4],this.$);
 break;
 case 32:
 
@@ -155,16 +155,28 @@ case 42:
 this.$ = new Retorno($$[$0],_$[$0-1].first_line,(_$[$0-1].first_column+1));agregarScope2($$[$0-2],this.$);
 break;
 case 43:
-console.log("identacion funcion parametros");
+this.$ = new CallFuncion($$[$0-4],$$[$0-1],_$[$0-3].first_line,(_$[$0-3].first_column+1));agregarScope2($$[$0-4],this.$);
 break;
 case 44:
-console.log("identacion funcion");
+this.$ = new CallFuncion($$[$0-3],[],_$[$0-2].first_line,(_$[$0-2].first_column+1));agregarScope2($$[$0-3],this.$);
+break;
+case 45:
+$$[$0-2].push($$[$0]);this.$=$$[$0-2];
+break;
+case 46:
+this.$=[$$[$0]];
 break;
 case 47:
-console.log("declaracion metodo parametros");
+this.$ = new Funcion($$[$0-5],$$[$0-4],null,$$[$0-2],_$[$0-4].first_line,(_$[$0-4].first_column+1));
 break;
 case 48:
-console.log("declaracion metodo vacio");
+this.$ = new Funcion($$[$0-4],$$[$0-3],null,[],_$[$0-3].first_line,(_$[$0-3].first_column+1));
+break;
+case 49:
+$$[$0-3].push(new Declaracion($$[$0],$$[$0-1],null,_$[$0].first_line,(_$[$0].first_column+1)));this.$ = $$[$0-3];
+break;
+case 50:
+this.$=[new Declaracion($$[$0],$$[$0-1],null,_$[$0].first_line,(_$[$0].first_column+1))]
 break;
 case 51:
 this.$ = new Asignacion($$[$0-2],$$[$0],_$[$0-2].first_line,(_$[$0-2].first_column+1));agregarScope2("",this.$);
@@ -178,29 +190,44 @@ break;
 case 54:
 agregarTipoDeclaracion($$[$0-1],$$[$0],"")
 break;
-case 55: case 56: case 57: case 58: case 59: case 60: case 82:
-this.$=$$[$0];
+case 55:
+this.$=3;
+break;
+case 56:
+this.$=2;
+break;
+case 57:
+this.$=4;
+break;
+case 58:
+this.$=0;
+break;
+case 59:
+this.$=1;
+break;
+case 60:
+this.$=5;
 break;
 case 61:
 
-                                                    $$[$0-2].push(new Declaracion($$[$0],null,_$[$0].first_line,(_$[$0].first_column+1)));
+                                                    $$[$0-2].push(new Declaracion($$[$0],-1,null,_$[$0].first_line,(_$[$0].first_column+1)));
                                                     this.$ = $$[$0-2];
                                                 
 break;
 case 62:
 
-                                                    $$[$0-4].push(new Declaracion($$[$0-2],$$[$0],_$[$0-2].first_line,(_$[$0-2].first_column+1)));
+                                                    $$[$0-4].push(new Declaracion($$[$0-2],-1,$$[$0],_$[$0-2].first_line,(_$[$0-2].first_column+1)));
                                                     this.$ = $$[$0-4];
                                                 
 break;
 case 63:
 
-                                                    this.$ = [new Declaracion($$[$0],null,_$[$0].first_line,(_$[$0].first_column+1))];
+                                                    this.$ = [new Declaracion($$[$0],-1,null,_$[$0].first_line,(_$[$0].first_column+1))];
                                                 
 break;
 case 64:
 
-                                                    this.$ = [new Declaracion($$[$0-2],$$[$0],_$[$0-2].first_line,(_$[$0-2].first_column+1))];
+                                                    this.$ = [new Declaracion($$[$0-2],-1,$$[$0],_$[$0-2].first_line,(_$[$0-2].first_column+1))];
                                                 
 break;
 case 65:
@@ -254,6 +281,9 @@ break;
 case 81:
 console.log("!"); this.$ = new Logica($$[$0-1],$$[$01],3,_$[$0-1].first_line, (_$[$0-1].first_column+1));
 break;
+case 82:
+this.$=$$[$0];
+break;
 case 83:
 this.$=$$[$0-1];
 break;
@@ -276,10 +306,10 @@ case 89:
 this.$=new Acceder($$[$0], _$[$0].first_line,(_$[$0].first_column+1));
 break;
 case 90:
-console.log("funcion vacia");
+this.$ = new ObtenerValFuncion($$[$0-2],[],_$[$0-2].first_line,(_$[$0-2].first_column+1));
 break;
 case 91:
-console.log("funcion parametros");
+this.$ = new ObtenerValFuncion($$[$0-3],$$[$0-1],_$[$0-3].first_line,(_$[$0-3].first_column+1));
 break;
 }
 },
@@ -537,6 +567,7 @@ _handle_error:
     const {StringBuilder} = require('./../Strings/StringBuilder');
     const {Declaracion} = require('./../Instrucciones/Declaracion.ts');
     const {Funcion} = require('./../Instrucciones/Funcion.ts');
+    const {CallFuncion} = require('./../Instrucciones/CallFuncion.ts');
     const {Mientras} = require('./../Instrucciones/Mientras.ts');
     const {Mostrar} = require('./../Instrucciones/Mostrar.ts');
     const {Retornar} = require('./../Instrucciones/Retornar.ts');
@@ -547,12 +578,20 @@ _handle_error:
     const {Asignacion} = require('./../Instrucciones/Asignacion.ts');
     const {Detener} = require('./../Instrucciones/Detener.ts');
     const {Continuar} = require('./../Instrucciones/Continuar.ts');
+    const {Importar} = require('./../Instrucciones/Importar.ts');
 
-    const {Acceder} = require ('./../Expresion/Acceder.ts')
-    const {Literal} = require ('./../Expresion/Literal.ts')
-    const {Logica} = require ('./../Expresion/Logica.ts')
-    const {Operacion} = require ('./../Expresion/Operacion.ts')
-    const {Relacional} = require ('./../Expresion/Relacional.ts')
+    const {DrawAST} = require('./../Instrucciones/DrawAST.ts');
+    const {DrawEXP} = require('./../Instrucciones/DrawEXP.ts');
+    const {DrawTS} = require('./../Instrucciones/DrawTS.ts');
+    
+    const {Principal} = require('./../Instrucciones/Principal.ts');
+
+    const {Acceder} = require ('./../Expresion/Acceder.ts');
+    const {Literal} = require ('./../Expresion/Literal.ts');
+    const {Logica} = require ('./../Expresion/Logica.ts');
+    const {Operacion} = require ('./../Expresion/Operacion.ts');
+    const {Relacional} = require ('./../Expresion/Relacional.ts');
+    const {ObtenerValFuncion} = require ('./../Expresion/ObtenerValFuncion.ts');
 
 
 
@@ -577,8 +616,7 @@ _handle_error:
     function agregarScope2(identacion,instr){
         console.log("Identacion agregar: "+identacion.length);
         console.log("Instraccion: "+instr);
-    }
-    
+    }  
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
 var lexer = ({
