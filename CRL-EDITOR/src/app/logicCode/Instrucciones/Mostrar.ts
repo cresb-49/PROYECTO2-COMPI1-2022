@@ -6,12 +6,11 @@ import {ConsolaCRLComponent} from "../../consola-crl/consola-crl.component";
 export class Mostrar extends Instruccion{
     private valor:Exprecion;
     private expreciones:Array<Exprecion>;
-    private consola:ConsolaCRLComponent;
+    public consola:ConsolaCRLComponent;
 
-    constructor(consola:ConsolaCRLComponent,expreciones : Array<Exprecion>,valor:Exprecion,linea:number,columna:number){
+    constructor(valor:Exprecion,expreciones : Array<Exprecion>,linea:number,columna:number){
         super(linea,columna);
         this.valor = valor;
-        this.consola = consola;
         this.expreciones = expreciones;
     }
 

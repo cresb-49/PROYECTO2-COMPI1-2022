@@ -1,7 +1,7 @@
 import { Instruccion } from "../Abstracto/Instruccion";
 import { Scope } from "../Symbolo/Scope";
 
-export class Parar extends Instruccion{
+export class Para extends Instruccion{
 
     constructor(linea : number, columna : number){
         super(linea, columna);

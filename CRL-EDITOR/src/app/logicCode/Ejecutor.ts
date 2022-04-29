@@ -1,6 +1,6 @@
 import { CodigoCRL } from "../models/codeCRL";
 
-declare var require:any;
+declare var require: any;
 
 const Parser = require('./Grammar/analizador1')
 
@@ -8,28 +8,19 @@ export class Ejecutor {
 
     private codigoCrl: CodigoCRL[];
 
-    constructor(codigoCrl:CodigoCRL[]) {   
+    constructor(codigoCrl: CodigoCRL[]) {
         this.codigoCrl = codigoCrl;
     }
 
-    public ejecucion(){
-        
-        // console.log("That code its works");
-        // let stringBuilder = new StringBuilder();
-
-        // stringBuilder.appedend("Hola");
-        // stringBuilder.appedend(" como estas");
-        
-        // console.log(stringBuilder.toString());
-
+    public ejecucion() {
         this.analizar();
-        
     }
 
-    public analizar(){
-        try{
-            let ast = Parser.parse("codigo");
-            console.log("Resultado "+ ast);
+    public analizar() {
+        try {
+            console.log(this.codigoCrl);
+            let ast = Parser.parse(this.codigoCrl[0].codigo);
+            console.log("Resultado " + ast);
         } catch (error) {
             console.log(error);
         }
