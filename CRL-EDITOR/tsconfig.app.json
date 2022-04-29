@@ -17,7 +17,12 @@
     "src/app/logicCode/Instrucciones/Retornar.ts",
     "src/app/logicCode/Instrucciones/Sentencias.ts",
     "src/app/logicCode/Instrucciones/Para.ts",
-    "src/app/logicCode/Instrucciones/Si.ts"
+    "src/app/logicCode/Instrucciones/Si.ts",
+    "src/app/logicCode/Expresion/Acceder.ts",
+    "src/app/logicCode/Expresion/Literal.ts",
+    "src/app/logicCode/Expresion/Logica.ts",
+    "src/app/logicCode/Expresion/Operacion.ts",
+    "src/app/logicCode/Expresion/Relacional.ts"
   ],
   "include": [
     "src/**/*.d.ts"

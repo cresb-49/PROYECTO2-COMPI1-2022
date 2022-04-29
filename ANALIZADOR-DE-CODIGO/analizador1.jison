@@ -9,6 +9,16 @@
     const {Sentencias} = require('./../Instrucciones/Sentencias.ts');
     const {Para} = require('./../Instrucciones/Para.ts');
     const {Si} = require('./../Instrucciones/Si.ts');
+
+    const {Acceder} = require ('./../Expresion/Acceder.ts')
+    const {Literal} = require ('./../Expresion/Literal.ts')
+    const {Logica} = require ('./../Expresion/Logica.ts')
+    const {Operacion} = require ('./../Expresion/Operacion.ts')
+    const {Relacional} = require ('./../Expresion/Relacional.ts')
+
+
+
+
     //const {ConsolaCRLComponent} = require('./../../consola-crl/consola-crl.component.ts');
 
     let INCERTEZA_GLOBAL = 0.5;
@@ -267,32 +277,33 @@ listaIds    :   listaIds ',' ID                 {
             ;
 
 
-exprecion   :   exprecion '+' exprecion     {}
-            |   exprecion '-' exprecion     {console.log("-");}
-            |   exprecion '/' exprecion     {console.log("/");}
-            |   exprecion '^' exprecion     {console.log("^");}
-            |   exprecion '*' exprecion     {console.log("*");}
-            |   exprecion '%' exprecion     {console.log("%");}
-            |   exprecion '>' exprecion     {console.log(">");}
-            |   exprecion '<' exprecion     {console.log("<");}
-            |   exprecion '>=' exprecion    {console.log(">=");}
-            |   exprecion '<=' exprecion    {console.log("<=");}
-            |   exprecion '!=' exprecion    {console.log("!=");}
-            |   exprecion '||' exprecion    {console.log("||");}
-            |   exprecion '|&' exprecion    {console.log("|&");}
-            |   exprecion '&&' exprecion    {console.log("&&");}
-            |   exprecion '~' exprecion     {console.log("~");}
-            |   '!' exprecion               {console.log("!");}
-            |   f                           {console.log("f");}
+exprecion   :   exprecion '+' exprecion     {console.log("+"); $$ = new Operacion($1,$3,0,@1.first_line, (@1.first_column+1));}
+            |   exprecion '-' exprecion     {console.log("-"); $$ = new Operacion($1,$3,1,@1.first_line, (@1.first_column+1));}
+            |   exprecion '/' exprecion     {console.log("/"); $$ = new Operacion($1,$3,3,@1.first_line, (@1.first_column+1));}
+            |   exprecion '^' exprecion     {console.log("^"); $$ = new Operacion($1,$3,5,@1.first_line, (@1.first_column+1));}
+            |   exprecion '*' exprecion     {console.log("*"); $$ = new Operacion($1,$3,2,@1.first_line, (@1.first_column+1));}
+            |   exprecion '%' exprecion     {console.log("%"); $$ = new Operacion($1,$3,4,@1.first_line, (@1.first_column+1));}
+            |   exprecion '>' exprecion     {console.log(">"); $$ = new Relacional($1,$3,3,INCERTEZA_GLOBAL,@1.first_line, (@1.first_column+1));}
+            |   exprecion '<' exprecion     {console.log("<"); $$ = new Relacional($1,$3,2,INCERTEZA_GLOBAL,@1.first_line, (@1.first_column+1));}
+            |   exprecion '>=' exprecion    {console.log(">="); $$ = new Relacional($1,$3,5,INCERTEZA_GLOBAL,@1.first_line, (@1.first_column+1));}
+            |   exprecion '<=' exprecion    {console.log("<="); $$ = new Relacional($1,$3,4,INCERTEZA_GLOBAL,@1.first_line, (@1.first_column+1));}
+            |   exprecion '!=' exprecion    {console.log("!="); $$ = new Relacional($1,$3,1,INCERTEZA_GLOBAL,@1.first_line, (@1.first_column+1));}
+            |   exprecion '==' exprecion    {console.log("=="); $$ = new Relacional($1,$3,0,INCERTEZA_GLOBAL,@1.first_line, (@1.first_column+1));}
+            |   exprecion '~' exprecion     {console.log("~"); $$ = new Relacional($1,$3,6,INCERTEZA_GLOBAL,@1.first_line, (@1.first_column+1));}
+            |   exprecion '||' exprecion    {console.log("||"); $$ = new Logica($1,$3,1,@1.first_line, (@1.first_column+1));}
+            |   exprecion '|&' exprecion    {console.log("|&"); $$ = new Logica($1,$3,2,@1.first_line, (@1.first_column+1));}
+            |   exprecion '&&' exprecion    {console.log("&&"); $$ = new Logica($1,$3,0,@1.first_line, (@1.first_column+1));}
+            |   '!' exprecion               {console.log("!"); $$ = new Logica($1,$3,3,@1.first_line, (@1.first_column+1));}
+            |   f                           {$$=$1;}
             ;
 
-f   :   '(' exprecion ')'           {console.log("exprecion entre parentecis");}
-    |   DECIMAL                     {console.log("decimal");}
-    |   ENTERO                      {console.log("entero");}
-    |   CADENA                      {console.log("cadena");console.log($1);}
-    |   TRUE
-    |   FALSE
-    |   ID                          {console.log("identificador");}
+f   :   '(' exprecion ')'           {$$=$2;}
+    |   DECIMAL                     {$$=new Literal($1,@1.first_line, (@1.first_column+1),0);}
+    |   ENTERO                      {$$=new Literal($1,@1.first_line, (@1.first_column+1),3);}
+    |   CADENA                      {$$=new Literal($1.replace(/\"/g,""),@1.first_line, (@1.first_column+1),2);}
+    |   TRUE                        {$$=new Literal(true,@1.first_line, (@1.first_column+1),1);}
+    |   FALSE                       {$$=new Literal(false,@1.first_line, (@1.first_column+1),1);}
+    |   ID                          {$$=new Acceder($1, @1.first_line,(@1.first_column+1));}
     |   ID '(' ')'                  {console.log("funcion vacia");}
     |   ID '(' parametrosEnviar ')' {console.log("funcion parametros");}
     ;

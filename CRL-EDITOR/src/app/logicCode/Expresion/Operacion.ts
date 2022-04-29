@@ -11,7 +11,7 @@ export enum OpcionOperacion{
     POT,
 }
 
-export class Operaracion extends Exprecion{
+export class Operacion extends Exprecion{
     
     constructor (private izquierda:Exprecion,private derecha:Exprecion,private tipo:OpcionOperacion,linea:number,columna:number){
         super(linea,columna);
