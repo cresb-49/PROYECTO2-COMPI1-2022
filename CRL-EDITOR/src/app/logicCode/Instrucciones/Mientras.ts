@@ -1,39 +1,48 @@
+import { Exprecion } from "../Abstracto/Exprecion";
 import { Instruccion } from "../Abstracto/Instruccion";
 import { Tipo } from "../Abstracto/Retorno";
 import { Scope } from "../Symbolo/Scope";
 
 export class Mientras extends Instruccion{
-    private condicion : Instruccion;
+    private condicion : Exprecion;
     private codeMientras : Instruccion|null;
-    constructor(condicion : Instruccion, codeMientras : Instruccion|null, linea : number, columna : number){
+    constructor(condicion : Exprecion, codeMientras : Instruccion|null, linea : number, columna : number){
         super(linea, columna);
         this.condicion=condicion;
         this.codeMientras = codeMientras;
     }
 
     public ejecutar(scope: Scope) {
-        let condicion = this.condicion.ejecutar(scope);
-        if(condicion.tipo != Tipo.BOOLEAN){
-            throw {error: "La condicion no es booleana", linea: this.linea, columna : this.columna};
-        }
+        //TODO: realizar logica de ciclo mientras
 
-        while (condicion.valor) {
-            const elementos = this.codeMientras?.ejecutar(scope);
-            if(elementos != null || elementos != undefined){
-                if(elementos.tipo == 'Detener'){
-                    break;
-                }else if(elementos.tipo == 'Continuar'){
-                    condicion = this.condicion.ejecutar(scope);
-                    continue;
-                }else{
-                    return elementos;
-                }
-            }
-            condicion = this.condicion.ejecutar(scope);
-            if(condicion.tipo != Tipo.BOOLEAN){
-                throw {error: "La condicion no es booleana", linea: this.linea, columna : this.columna};
-            }
-        }
+
+
+
+
+
+
+        // let condicion = this.condicion.ejecutar(scope);
+        // if(condicion.tipo != Tipo.BOOLEAN){
+        //     throw {error: "La condicion no es booleana", linea: this.linea, columna : this.columna};
+        // }
+
+        // while (condicion.valor) {
+        //     const elementos = this.codeMientras?.ejecutar(scope);
+        //     if(elementos != null || elementos != undefined){
+        //         if(elementos.tipo == 'Detener'){
+        //             break;
+        //         }else if(elementos.tipo == 'Continuar'){
+        //             condicion = this.condicion.ejecutar(scope);
+        //             continue;
+        //         }else{
+        //             return elementos;
+        //         }
+        //     }
+        //     condicion = this.condicion.ejecutar(scope);
+        //     if(condicion.tipo != Tipo.BOOLEAN){
+        //         throw {error: "La condicion no es booleana", linea: this.linea, columna : this.columna};
+        //     }
+        // }
     }
     
 }

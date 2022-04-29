@@ -5,9 +5,8 @@ export abstract class Instruccion {
     public linea:number;
     public columna:number;
 
-    public ref1:number;
-    public ref2:number;
-    public ref3:number;
+    public scope1:number;
+    public scope2:number;
 
     constructor(linea:number,columna:number){
         this.linea = linea;
