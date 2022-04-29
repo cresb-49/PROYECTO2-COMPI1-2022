@@ -12,6 +12,7 @@
     "src/app/logicCode/Strings/StringBuilder.ts",
     "src/app/logicCode/Instrucciones/Declaracion.ts",
     "src/app/logicCode/Instrucciones/Funcion.ts",
+    "src/app/logicCode/Instrucciones/CallFuncion.ts",
     "src/app/logicCode/Instrucciones/Mientras.ts",
     "src/app/logicCode/Instrucciones/Mostrar.ts",
     "src/app/logicCode/Instrucciones/Retornar.ts",
@@ -22,11 +23,17 @@
     "src/app/logicCode/Instrucciones/Asignacion.ts",
     "src/app/logicCode/Instrucciones/Continuar.ts",
     "src/app/logicCode/Instrucciones/Detener.ts",
+    "src/app/logicCode/Instrucciones/DrawAST.ts",
+    "src/app/logicCode/Instrucciones/DrawEXP.ts",
+    "src/app/logicCode/Instrucciones/DrawTS.ts",
+    "src/app/logicCode/Instrucciones/Principal.ts",
+    "src/app/logicCode/Instrucciones/Importar.ts",
     "src/app/logicCode/Expresion/Acceder.ts",
     "src/app/logicCode/Expresion/Literal.ts",
     "src/app/logicCode/Expresion/Logica.ts",
     "src/app/logicCode/Expresion/Operacion.ts",
-    "src/app/logicCode/Expresion/Relacional.ts"
+    "src/app/logicCode/Expresion/Relacional.ts",
+    "src/app/logicCode/Expresion/ObtenerValFuncion.ts"
   ],
   "include": [
     "src/**/*.d.ts"
