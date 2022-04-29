@@ -1,7 +1,7 @@
-import { AfterViewInit,Component, ElementRef,ViewChild,Output, EventEmitter, Input } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, ViewChild, Output, EventEmitter, Input } from "@angular/core";
 
 import * as ace from "ace-builds";
-import {CodigoCRL} from "../models/codeCRL";
+import { CodigoCRL } from "../models/codeCRL";
 
 @Component({
   selector: 'app-editor-crl',
@@ -10,69 +10,77 @@ import {CodigoCRL} from "../models/codeCRL";
 })
 
 export class EditorCrlComponent implements AfterViewInit {
-  
-  @ViewChild("editor") private editor: ElementRef<HTMLElement>;
-  @ViewChild("contenedor") private contenedor: ElementRef<HTMLElement>;
-  
 
-  codigoRef:string='';
-  mostrar:boolean = true;
+  //@ViewChild("editor") private editor: ElementRef<HTMLInputElement>;
+  @ViewChild("textbox") private textbox: ElementRef<HTMLInputElement>;
+  @ViewChild("contenedor") private contenedor: ElementRef<HTMLElement>;
+
+
+  codigoRef: string = '';
+  mostrar: boolean = true;
   codeCRL: string = "";
+  ubicacionEditor: string = "Linea: 1, Columna: 1";
+
+
+  onKeyDownEvent(event: any) {
+    if (event.key == 'Tab') {
+      event.preventDefault();
+      var start = this.textbox.nativeElement.selectionStart;
+      var end = this.textbox.nativeElement.selectionEnd;
+
+      // set textarea value to: text before caret + tab + text after caret
+      if (start != null && end != null) {
+
+        this.textbox.nativeElement.value = this.textbox.nativeElement.value.substring(0, start) +
+          "\t" + this.textbox.nativeElement.value.substring(end);
+
+        // put caret at right position again
+        this.textbox.nativeElement.selectionStart = this.textbox.nativeElement.selectionEnd = start + 1;
+      }
+    }
+  } 
+  actualizarCodigo() {
+    this.codeCRL = this.textbox.nativeElement.value;
+    this.mostrarUbicacion();
+    //const aceEditor = ace.edit(this.editor.nativeElement);
+    //aceEditor.setValue(this.codeCRL);
+  }
+
+  mostrarUbicacion() {
+    let start = this.textbox.nativeElement.selectionStart;
+
+    if (start != null) {
+      let textLines = this.textbox.nativeElement.value.substr(0, start).split("\n");
+      let currentLineNumber = textLines.length;
+      let currentColumnIndex = textLines[textLines.length - 1].length;
+
+      this.ubicacionEditor="Linea: "+(currentLineNumber)+", Columna: "+(currentColumnIndex+1);
+    }
+
+  }
 
   ngAfterViewInit(): void {
-    ace.config.set("fontSize", "14px");
-    ace.config.set('basePath', 'https://unpkg.com/ace-builds@1.4.12/src-noconflict');
-    const aceEditor = ace.edit(this.editor.nativeElement);
-    aceEditor.setTheme('ace/theme/twilight');
-    this.codigoPrueba(aceEditor);
-    aceEditor.on("change", () => {
-      this.codeCRL = aceEditor.getValue();
-    });
+    // this.codeCRL = aceEditor.getValue();
+    // });
   }
   descargarCodigoEditor() {
     alert("Descargando el codigo");
     console.log(this.codeCRL);
   }
 
-  public getCodeCRL(){
+  public getCodeCRL() {
     return this.codeCRL;
   }
 
-  public visibilidad(estado:boolean){
-    if(estado){
+  public visibilidad(estado: boolean) {
+    if (estado) {
       this.contenedor.nativeElement.classList.remove('display-false');
-    }else{
+    } else {
       this.contenedor.nativeElement.classList.add('display-false');
     }
   }
 
-  public setCodeRef(nombre:string){
+  public setCodeRef(nombre: string) {
     this.codigoRef = nombre;
-  }
-
-
-  codigoPrueba(aceEditor:any){
-aceEditor.setValue(`import clase.crl
-import aritmetica.crl
-Incertesa 0.00023
-    
-Int global1 = 45;
-Char charGlobal;
-        
-Void Principal():
-  Int valor = 6
-  String cadena1,cadena2,cadena3,cadena4,cadena5
-  Double dou
-  Si(true):
-    hacer(23)
-  Sino:
-    hacer(45)
-        
-Int hacer(Int index):
-  Mientras(false):
-  Para(Int x = 0;x<index;++):
-    Mostrar("Hola prueba de codigo")
-  Para(Int x = 0;x<index;--):
-    Mostrar("Hola prueba de codigo2")`);
   }
 }
