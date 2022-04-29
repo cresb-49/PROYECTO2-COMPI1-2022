@@ -9,7 +9,15 @@
   "files": [
     "src/main.ts",
     "src/polyfills.ts",
-    "src/app/logicCode/Strings/StringBuilder.ts"
+    "src/app/logicCode/Strings/StringBuilder.ts",
+    "src/app/logicCode/Instrucciones/Declaracion.ts",
+    "src/app/logicCode/Instrucciones/Funcion.ts",
+    "src/app/logicCode/Instrucciones/Mientras.ts",
+    "src/app/logicCode/Instrucciones/Mostrar.ts",
+    "src/app/logicCode/Instrucciones/Retornar.ts",
+    "src/app/logicCode/Instrucciones/Sentencias.ts",
+    "src/app/logicCode/Instrucciones/Para.ts",
+    "src/app/logicCode/Instrucciones/Si.ts"
   ],
   "include": [
     "src/**/*.d.ts"
