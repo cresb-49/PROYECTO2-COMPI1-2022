@@ -9,6 +9,10 @@
     const {Sentencias} = require('./../Instrucciones/Sentencias.ts');
     const {Para} = require('./../Instrucciones/Para.ts');
     const {Si} = require('./../Instrucciones/Si.ts');
+    const {Sino} = require('./../Instrucciones/Sino.ts');
+    const {Asignacion} = require('./../Instrucciones/Asignacion.ts');
+    const {Detener} = require('./../Instrucciones/Detener.ts');
+    const {Continuar} = require('./../Instrucciones/Continuar.ts');
 
     const {Acceder} = require ('./../Expresion/Acceder.ts')
     const {Literal} = require ('./../Expresion/Literal.ts')
@@ -35,7 +39,11 @@
         console.log('Identacion: '+identacion.length);
         console.log('Elementos: '+elementos);
     }
-    
+
+    function agregarScope2(identacion,instr){
+        console.log("Identacion agregar: "+identacion.length);
+        console.log("Instraccion: "+instr);
+    }  
 %}
 
 
@@ -205,27 +213,27 @@ funcionMostrar  :   IDENTACION MOSTRAR '(' exprecion ',' parametrosEnviar ')'   
                                                             }
                 ;
 
-sentenciaContinuar  :   IDENTACION CONTINUAR    {console.log("continuar");}
+sentenciaContinuar  :   IDENTACION CONTINUAR    {$$ = new Continuar(@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
                     ;
 
-sentenciaDetener    :   IDENTACION DETENER  {console.log("detener");}
+sentenciaDetener    :   IDENTACION DETENER  {$$ = new Detener(@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
                     ;
 
-sentenciaMientras   :   IDENTACION MIENTRAS '(' exprecion ')' ':'   {console.log("identacion mientras");}
+sentenciaMientras   :   IDENTACION MIENTRAS '(' exprecion ')' ':'   {$$ = new Mientras($4,null,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
                     ;
 
-sentenciaPara   :   IDENTACION PARA '('INT ID '=' exprecion ';' exprecion ';' opPara ')' ':'    {console.log("identacion para");}
+sentenciaPara   :   IDENTACION PARA '('INT ID '=' exprecion ';' exprecion ';' opPara ')' ':'    {$$ = new Para($5,$7.$9,$11,null,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
                 ;
 
-opPara  :   '++'
-        |   '--'
+opPara  :   '++'    {$$ = 0;}
+        |   '--'    {$$ = 1;}
         ;
 
-sentenciaSi :   IDENTACION SI '(' exprecion ')' ':' {console.log("identacion sentencias si");}
-            |   IDENTACION SINO ':'                 {console.log("identacion sentencia sino");}
+sentenciaSi :   IDENTACION SI '(' exprecion ')' ':' {$$ = new Si($4,null,null,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
+            |   IDENTACION SINO ':'                 {$$ = new Sino(null,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
             ;
 
-instruccionRetorno  :   IDENTACION RETORNO exprecion    {console.log("retorno");}
+instruccionRetorno  :   IDENTACION RETORNO exprecion    {$$ = new Retorno($3,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
                     ;
 
 llamarFuncion   :   IDENTACION ID '(' parametrosEnviar ')'  {console.log("identacion funcion parametros");}
@@ -244,8 +252,8 @@ parametros  :   parametros ',' tipoDato ID
             |   tipoDato ID 
             ;
 
-instruccionAsignar  :   ID '=' exprecion                {console.log("asignacion");}
-                    |   IDENTACION ID '=' exprecion     {console.log("identacion asignar");}
+instruccionAsignar  :   ID '=' exprecion                {$$ = new Asignacion($1,$3,@1.first_line,(@1.first_column+1));agregarScope2("",$$);}
+                    |   IDENTACION ID '=' exprecion     {$$ = new Asignacion($2,$4,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}}
                     ;
 
 instruccionDeclarar :   IDENTACION tipoDato listaIds    {agregarTipoDeclaracion($2,$3,$1)}
@@ -261,18 +269,18 @@ tipoDato    :   INT         {$$=$1;}
             ;
 
 listaIds    :   listaIds ',' ID                 {
-                                                    $1.push(new Declaracion($3,null,@3.first_line,@3.first_column));
+                                                    $1.push(new Declaracion($3,null,@3.first_line,(@3.first_column+1)));
                                                     $$ = $1;
                                                 }
             |   listaIds ',' ID '=' exprecion   {
-                                                    $1.push(new Declaracion($3,$5,@3.first_line,@3.first_column));
+                                                    $1.push(new Declaracion($3,$5,@3.first_line,(@3.first_column+1)));
                                                     $$ = $1;
                                                 }
             |   ID                              {
-                                                    $$ = [new Declaracion($1,null,@1.first_line,@1.first_column)];
+                                                    $$ = [new Declaracion($1,null,@1.first_line,(@1.first_column+1))];
                                                 }
             |   ID '=' exprecion                {
-                                                    $$ = [new Declaracion($1,$3,@1.first_line,@1.first_column)];
+                                                    $$ = [new Declaracion($1,$3,@1.first_line,(@1.first_column+1))];
                                                 }
             ;
 
