@@ -55,8 +55,7 @@ export class EditorCrlComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    // this.codeCRL = aceEditor.getValue();
-    // });
+    
   }
   descargarCodigoEditor() {
     alert("Descargando el codigo");
