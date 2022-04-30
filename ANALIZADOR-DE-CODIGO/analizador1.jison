@@ -266,8 +266,8 @@ sentenciaSi :   IDENTACION SI '(' exprecion ')' ':' {$$ = new Si($4,null,null,@2
 instruccionRetorno  :   IDENTACION RETORNO exprecion    {$$ = new Retorno($3,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
                     ;
 
-llamarFuncion   :   IDENTACION ID '(' parametrosEnviar ')'  {$$ = new CallFuncion($1,$4,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
-                |   IDENTACION ID '(' ')'   {$$ = new CallFuncion($1,[],@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
+llamarFuncion   :   IDENTACION ID '(' parametrosEnviar ')'  {$$ = new CallFuncion($2,$4,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
+                |   IDENTACION ID '(' ')'   {$$ = new CallFuncion($2,[],@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
                 ;
 
 parametrosEnviar    :   parametrosEnviar ',' exprecion  {$1.push($3);$$=$1;}

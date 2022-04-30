@@ -173,10 +173,10 @@ case 42:
 this.$ = new Retorno($$[$0],_$[$0-1].first_line,(_$[$0-1].first_column+1));agregarScope2($$[$0-2],this.$);
 break;
 case 43:
-this.$ = new CallFuncion($$[$0-4],$$[$0-1],_$[$0-3].first_line,(_$[$0-3].first_column+1));agregarScope2($$[$0-4],this.$);
+this.$ = new CallFuncion($$[$0-3],$$[$0-1],_$[$0-3].first_line,(_$[$0-3].first_column+1));agregarScope2($$[$0-4],this.$);
 break;
 case 44:
-this.$ = new CallFuncion($$[$0-3],[],_$[$0-2].first_line,(_$[$0-2].first_column+1));agregarScope2($$[$0-3],this.$);
+this.$ = new CallFuncion($$[$0-2],[],_$[$0-2].first_line,(_$[$0-2].first_column+1));agregarScope2($$[$0-3],this.$);
 break;
 case 45:
 $$[$0-2].push($$[$0]);this.$=$$[$0-2];
