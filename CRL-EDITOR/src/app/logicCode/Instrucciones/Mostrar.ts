@@ -18,5 +18,9 @@ export class Mostrar extends Instruccion{
         const valor = this.valor.ejecutar(scope);
         this.consola.agregarPrint(valor);
     }
+
+    public setConsolaCRL(consola:ConsolaCRLComponent){
+        this.consola = consola;
+    }
     
 }
