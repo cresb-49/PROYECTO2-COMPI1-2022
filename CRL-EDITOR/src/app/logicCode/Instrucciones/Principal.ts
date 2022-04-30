@@ -1,9 +1,10 @@
 import { Instruccion } from "../Abstracto/Instruccion";
 import { Scope } from "../Symbolo/Scope";
+import { Sentencias } from "./Sentencias";
 
 export class Principal extends Instruccion {
     
-    constructor(private file:string,private instrucciones:Instruccion|null,linea:number,columna:number) {
+    constructor(private file:string,private sentencias:Sentencias|null,linea:number,columna:number) {
         super(linea,columna);
     }
 

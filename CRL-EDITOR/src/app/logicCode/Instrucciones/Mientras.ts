@@ -2,14 +2,12 @@ import { Exprecion } from "../Abstracto/Exprecion";
 import { Instruccion } from "../Abstracto/Instruccion";
 import { Tipo } from "../Abstracto/Retorno";
 import { Scope } from "../Symbolo/Scope";
+import { Sentencias } from "./Sentencias";
 
 export class Mientras extends Instruccion{
-    private condicion : Exprecion;
-    private codeMientras : Instruccion|null;
-    constructor(condicion : Exprecion, codeMientras : Instruccion|null, linea : number, columna : number){
+
+    constructor(private condicion : Exprecion, private sentencias : Sentencias|null, linea : number, columna : number){
         super(linea, columna);
-        this.condicion=condicion;
-        this.codeMientras = codeMientras;
     }
 
     public ejecutar(scope: Scope) {
