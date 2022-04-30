@@ -34,7 +34,8 @@
     "src/app/logicCode/Expresion/Operacion.ts",
     "src/app/logicCode/Expresion/Relacional.ts",
     "src/app/logicCode/Expresion/ObtenerValFuncion.ts",
-    "src/app/logicCode/Result/Result.ts"
+    "src/app/logicCode/Result/Result.ts",
+    "src/app/logicCode/Abstracto/Retorno.ts"
   ],
   "include": [
     "src/**/*.d.ts"
