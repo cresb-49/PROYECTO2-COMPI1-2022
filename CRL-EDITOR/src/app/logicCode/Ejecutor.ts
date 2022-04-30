@@ -1,6 +1,7 @@
 import { ConsolaCRLComponent } from "../consola-crl/consola-crl.component";
 import { CodigoCRL } from "../models/codeCRL";
 import { Instruccion } from "./Abstracto/Instruccion";
+import { Organizar } from "./OrganizarInstrucciones/Organizar";
 
 declare var require: any;
 
@@ -22,10 +23,12 @@ export class Ejecutor {
             let ast = Parser.parse(this.codigoCrl[0].codigo);
             this.pushErrors(ast.errores);
             ast.instrucciones = this.cleanAst(ast.instrucciones);
-            console.log("ast: " + ast.instrucciones)
-            ast.instrucciones.forEach((element: any) => {
-                console.log(element);
-            });
+            this.orderAST(ast.instrucciones);
+
+            // console.log("ast: " + ast.instrucciones)
+            // ast.instrucciones.forEach((element: any) => {
+            //     console.log(element);
+            // });
         } catch (error) {
             console.log(error);
         }
@@ -43,5 +46,10 @@ export class Ejecutor {
             }
         }
         return newAt;
+    }
+
+    private orderAST(element:any[]){
+        let organizar = new Organizar(element,this.consola);
+        organizar.start();
     }
 }
