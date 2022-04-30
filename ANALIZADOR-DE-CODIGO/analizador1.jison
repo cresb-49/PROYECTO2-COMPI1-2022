@@ -152,15 +152,18 @@ identificador ([a-zA-Z_$]([a-zA-Z_$]|[0-9])*)
 /lex
 
 //menos precedencia
-%left   '!'
-%left   '&&'
-%left   '|&'
-%left   '||'
-%left   '==','!=','~'
-%left   '<','>','<=','>='
-%right  '^'
-%left   '*','/','%'
+
 %left   '+','-'
+%left   '*','/','%'
+%right  '^'
+%left   '<','>','<=','>='
+%left   '==','!=','~'
+%left   '||'
+%left   '|&'
+%left   '&&'
+%left   '!'
+%left UMINUS
+
 //mas precendecia 
 %start Init
 
@@ -315,7 +318,8 @@ listaIds    :   listaIds ',' ID                 {
             ;
 
 
-exprecion   :   exprecion '+' exprecion     {console.log("+"); $$ = new Operacion($1,$3,0,@1.first_line, (@1.first_column+1));}
+exprecion   :   '-' exprecion %prec UMINUS  {console.log("- uninus"); $$ = new Operacion(new Literal("-1",@1.first_line, (@1.first_column+1),3),$2,2,@1.first_line, (@1.first_column+1));}
+            |   exprecion '+' exprecion     {console.log("+"); $$ = new Operacion($1,$3,0,@1.first_line, (@1.first_column+1));}
             |   exprecion '-' exprecion     {console.log("-"); $$ = new Operacion($1,$3,1,@1.first_line, (@1.first_column+1));}
             |   exprecion '/' exprecion     {console.log("/"); $$ = new Operacion($1,$3,3,@1.first_line, (@1.first_column+1));}
             |   exprecion '^' exprecion     {console.log("^"); $$ = new Operacion($1,$3,5,@1.first_line, (@1.first_column+1));}
