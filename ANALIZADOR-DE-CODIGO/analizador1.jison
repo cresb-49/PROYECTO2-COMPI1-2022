@@ -33,13 +33,15 @@
     
     const {Result} = require ('./../Result/Result.ts');
 
+    const {Tipo}= require ('./../Abstracto/Retorno.ts');
+
 
 
 
     //const {ConsolaCRLComponent} = require('./../../consola-crl/consola-crl.component.ts');
 
     let INCERTEZA_GLOBAL = 0.5;
-    let RESULT_STRING_LEC = new StringBuilder();
+    //let RESULT_STRING_LEC = new StringBuilder();
     let ERRORES_ANALISIS=[];
 
     function errorAnalisisCodigo(element,er){
@@ -73,6 +75,18 @@
         instr.setScope2(identacion.length);
     }
 
+    function agregarInstrucciones(instrucciones,elemento){
+        if(Array.isArray(elemento)){
+            elemento.forEach(ele=>{
+                instrucciones.push(ele);
+            });
+        }else{
+            instrucciones.push(elemento);
+        }
+
+        return instrucciones
+    }
+
     function sumarArray(imports,instrucciones){
         return imports.concat(instrucciones);
     }
@@ -85,12 +99,12 @@ identificador ([a-zA-Z_$]([a-zA-Z_$]|[0-9])*)
 
 %%
 
-\t+                 {
+\t+               {
                         //console.log('Identacion');
                         return 'IDENTACION';
                     }
 \n                  {
-                        //console.log('Salto de linea');
+                        return 'NUEVA_LINEA';
                     }
 \s                  {
                         /*ingnorado*/
@@ -205,14 +219,16 @@ defIncerteza    :   INCERTEZA DECIMAL   {
                                         }
                 ;
 
-instrucciones   :   instrucciones instruction   {$1.push($2);$$ = $1;}
-                |   instruction     {$$=[$1];}
+instrucciones   :   instrucciones instruction   {$$ = agregarInstrucciones($1,$2);}//{$1.push($2);$$ = $1;}
+                |   instruction     {$$ = agregarInstrucciones([],$1);}//{$$=[$1];}
                 ;
 
-instruction     :   instructionGlobal           {$$ = $1;}
-                |   instruccionFuncionMetodo    {$$ = $1;}
-                |   VOID PRINCIPAL '(' ')' ':'  {$$ = new Principal("",null,@2.first_line,(@2.first_column+1));}
-                |   error   {errorAnalisisCodigo(this,$1);}
+instruction     :   instructionGlobal NUEVA_LINEA           {$$ = $1;}
+                |   instruccionFuncionMetodo NUEVA_LINEA    {$$ = $1;}
+                |   VOID PRINCIPAL '(' ')' ':' NUEVA_LINEA  {$$ = new Principal("",null,@2.first_line,(@2.first_column+1));}
+                |   NUEVA_LINEA
+                |   IDENTACION NUEVA_LINEA
+                |   error                                   {errorAnalisisCodigo(this,$1);}
                 ;
 
 instructionGlobal   :   instruccionDeclarar
@@ -277,7 +293,7 @@ sentenciaSi :   IDENTACION SI '(' exprecion ')' ':' {$$ = new Si($4,null,null,@2
             |   IDENTACION SINO ':'                 {$$ = new Sino(null,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
             ;
 
-instruccionRetorno  :   IDENTACION RETORNO exprecion    {$$ = new Retorno($3,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
+instruccionRetorno  :   IDENTACION RETORNO exprecion    {$$ = new Retornar($3,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
                     ;
 
 llamarFuncion   :   IDENTACION ID '(' parametrosEnviar ')'  {$$ = new CallFuncion($2,$4,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
@@ -304,12 +320,12 @@ instruccionDeclarar :   IDENTACION tipoDato listaIds    {$$ = $3;agregarTipoDecl
                     |   tipoDato listaIds               {$$ = $2;agregarTipoDeclaracion($1,$2,"");agregarScope2Declaraciones("",$$);}
                     ;
                 
-tipoDato    :   INT         {$$=3;}
-            |   STRING      {$$=2;}
-            |   CHAR        {$$=4;}
-            |   DOUBLE      {$$=0;}
-            |   BOOLEAN     {$$=1;}
-            |   VOID        {$$=5;}
+tipoDato    :   INT         {$$=Tipo.INT;}
+            |   STRING      {$$=Tipo.STRING;}
+            |   CHAR        {$$=Tipo.CHAR;}
+            |   DOUBLE      {$$=Tipo.DOUBLE;}
+            |   BOOLEAN     {$$=Tipo.BOOLEAN;}
+            |   VOID        {$$=Tipo.VOID;}
             ;
 
 listaIds    :   listaIds ',' ID                 {
@@ -351,12 +367,12 @@ exprecion   :   '-' exprecion %prec UMINUS  {console.log("- uninus"); $$ = new O
             ;
 
 f   :   '(' exprecion ')'           {$$=$2;}
-    |   DECIMAL                     {$$=new Literal($1,@1.first_line, (@1.first_column+1),0);}
-    |   ENTERO                      {$$=new Literal($1,@1.first_line, (@1.first_column+1),3);}
-    |   CADENA                      {$$=new Literal($1.replace(/\"/g,""),@1.first_line, (@1.first_column+1),2);}
-    |   CARACTER                    {$$=new Literal($1.replace(/\'/g,""),@1.first_line, (@1.first_column+1),4);}
-    |   TRUE                        {$$=new Literal(true,@1.first_line, (@1.first_column+1),1);}
-    |   FALSE                       {$$=new Literal(false,@1.first_line, (@1.first_column+1),1);}
+    |   DECIMAL                     {$$=new Literal($1,@1.first_line, (@1.first_column+1),Tipo.DOUBLE);}
+    |   ENTERO                      {$$=new Literal($1,@1.first_line, (@1.first_column+1),Tipo.INT);}
+    |   CADENA                      {$$=new Literal($1.replace(/\"/g,""),@1.first_line, (@1.first_column+1),Tipo.STRING);}
+    |   CARACTER                    {$$=new Literal($1.replace(/\'/g,""),@1.first_line, (@1.first_column+1),Tipo.CHAR);}
+    |   TRUE                        {$$=new Literal(true,@1.first_line, (@1.first_column+1),Tipo.BOOLEAN);}
+    |   FALSE                       {$$=new Literal(false,@1.first_line, (@1.first_column+1),Tipo.BOOLEAN);}
     |   ID                          {$$=new Acceder($1, @1.first_line,(@1.first_column+1));}
     |   ID '(' ')'                  {$$ = new ObtenerValFuncion($1,[],@1.first_line,(@1.first_column+1));}
     |   ID '(' parametrosEnviar ')' {$$ = new ObtenerValFuncion($1,$3,@1.first_line,(@1.first_column+1));}
