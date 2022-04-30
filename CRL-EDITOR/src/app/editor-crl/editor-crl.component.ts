@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, ViewChild, Output, EventEmitter, Input } from "@angular/core";
 
-import * as ace from "ace-builds";
-import { CodigoCRL } from "../models/codeCRL";
+//import * as ace from "ace-builds";
+//import { CodigoCRL } from "../models/codeCRL";
 
 @Component({
   selector: 'app-editor-crl',
@@ -38,25 +38,20 @@ export class EditorCrlComponent implements AfterViewInit {
         this.textbox.nativeElement.selectionStart = this.textbox.nativeElement.selectionEnd = start + 1;
       }
     }
-  } 
+  }
   actualizarCodigo() {
     this.codeCRL = this.textbox.nativeElement.value;
     this.mostrarUbicacion();
-    //const aceEditor = ace.edit(this.editor.nativeElement);
-    //aceEditor.setValue(this.codeCRL);
   }
 
   mostrarUbicacion() {
     let start = this.textbox.nativeElement.selectionStart;
-
     if (start != null) {
       let textLines = this.textbox.nativeElement.value.substr(0, start).split("\n");
       let currentLineNumber = textLines.length;
       let currentColumnIndex = textLines[textLines.length - 1].length;
-
-      this.ubicacionEditor="Linea: "+(currentLineNumber)+", Columna: "+(currentColumnIndex+1);
+      this.ubicacionEditor = "Linea: " + (currentLineNumber) + ", Columna: " + (currentColumnIndex + 1);
     }
-
   }
 
   ngAfterViewInit(): void {
@@ -69,7 +64,14 @@ export class EditorCrlComponent implements AfterViewInit {
   }
 
   public getCodeCRL() {
-    return this.codeCRL;
+    let temp = '';
+    if(this.codeCRL.slice(-1) != '\n'){
+      temp = this.codeCRL + "\n";
+      this.codeCRL = temp;
+    }else{
+      temp = this.codeCRL;
+    }
+    return temp;
   }
 
   public visibilidad(estado: boolean) {

@@ -1,5 +1,6 @@
 import { ConsolaCRLComponent } from "../consola-crl/consola-crl.component";
 import { CodigoCRL } from "../models/codeCRL";
+import { Instruccion } from "./Abstracto/Instruccion";
 
 declare var require: any;
 
@@ -20,6 +21,7 @@ export class Ejecutor {
             console.log(this.codigoCrl);
             let ast = Parser.parse(this.codigoCrl[0].codigo);
             this.pushErrors(ast.errores);
+            ast.instrucciones = this.cleanAst(ast.instrucciones);
             console.log("ast: " + ast.instrucciones)
             ast.instrucciones.forEach((element: any) => {
                 console.log(element);
@@ -31,5 +33,15 @@ export class Ejecutor {
 
     private pushErrors(element: any[]) {
         this.consola.agregarErrores(element);
+    }
+
+    private cleanAst(elements:any[]):any[]{
+        let newAt =[];
+        for (const iterator of elements) {
+            if(iterator instanceof Instruccion){
+                newAt.push(iterator);
+            }
+        }
+        return newAt;
     }
 }
