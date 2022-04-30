@@ -85,9 +85,11 @@ var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
 
-                                console.log("Inicio del analisi");
-                                return INSTRUCCIONES_RECUPERADAS;
+                                return $$[$0-1];
                             
+break;
+case 5: case 82:
+this.$=$$[$0];
 break;
 case 8:
 this.$ = new Importar($$[$0-1],_$[$0-2].first_line,(_$[$0-2].first_column+1));
@@ -97,6 +99,15 @@ case 9:
                                             console.log("incerteza: "+$$[$0]);
                                             INCERTEZA_GLOBAL = Number($$[$0]);
                                         
+break;
+case 10:
+$$[$0-1].push($$[$0]);this.$ = $$[$0-1];
+break;
+case 11: case 46:
+this.$=[$$[$0]];
+break;
+case 12: case 13:
+this.$ = $$[$0];
 break;
 case 14:
 this.$ = new Principal("",null,_$[$0-3].first_line,(_$[$0-3].first_column+1));
@@ -117,14 +128,16 @@ case 32:
 
                                                                                     //console.log("identacion mostrar");
                                                                                     this.$ = new Mostrar($$[$0-3],[],_$[$0-5].first_line,_$[$0-5].first_column);
-                                                                                    INSTRUCCIONES_RECUPERADAS.push(this.$);
+                                                                                    agregarScope2($$[$0-6],this.$);
+                                                                                    //INSTRUCCIONES_RECUPERADAS.push(this.$);
                                                                                 
 break;
 case 33:
 
                                                                 //console.log("identacion mostrar");
                                                                 this.$ = new Mostrar($$[$0-1],[],_$[$0-3].first_line,_$[$0-3].first_column);
-                                                                INSTRUCCIONES_RECUPERADAS.push(this.$);
+                                                                agregarScope2($$[$0-4],this.$);
+                                                                //INSTRUCCIONES_RECUPERADAS.push(this.$);
                                                             
 break;
 case 34:
@@ -137,7 +150,15 @@ case 36:
 this.$ = new Mientras($$[$0-2],null,_$[$0-4].first_line,(_$[$0-4].first_column+1));agregarScope2($$[$0-5],this.$);
 break;
 case 37:
-this.$ = new Para($$[$0-8],$$[$0-6].$$[$0-4],$$[$0-2],null,_$[$0-11].first_line,(_$[$0-11].first_column+1));agregarScope2($$[$0-12],this.$);
+
+                                                                                                    console.log($$[$0-12].length);
+                                                                                                    console.log(_$[$0-11].first_line);
+                                                                                                    console.log(_$[$0-11].first_column);
+                                                                                                    console.log($$[$0-8]);
+                                                                                                    console.log($$[$0-6]);
+                                                                                                    console.log($$[$0-4]);
+                                                                                                    console.log($$[$0-3]);
+                                                                                                
 break;
 case 38:
 this.$ = 0;
@@ -163,9 +184,6 @@ break;
 case 45:
 $$[$0-2].push($$[$0]);this.$=$$[$0-2];
 break;
-case 46:
-this.$=[$$[$0]];
-break;
 case 47:
 this.$ = new Funcion($$[$0-5],$$[$0-4],null,$$[$0-2],_$[$0-4].first_line,(_$[$0-4].first_column+1));
 break;
@@ -185,10 +203,10 @@ case 52:
 this.$ = new Asignacion($$[$0-2],$$[$0],_$[$0-2].first_line,(_$[$0-2].first_column+1));agregarScope2($$[$0-3],this.$);
 break;
 case 53:
-agregarTipoDeclaracion($$[$0-1],$$[$0],$$[$0-2])
+this.$ = $$[$0];agregarTipoDeclaracion($$[$0-1],$$[$0],$$[$0-2]);agregarScope2Declaraciones($$[$0-2],this.$);
 break;
 case 54:
-agregarTipoDeclaracion($$[$0-1],$$[$0],"")
+this.$ = $$[$0];agregarTipoDeclaracion($$[$0-1],$$[$0],"");agregarScope2Declaraciones("",this.$);
 break;
 case 55:
 this.$=3;
@@ -280,9 +298,6 @@ console.log("&&"); this.$ = new Logica($$[$0-2],$$[$0],0,_$[$0-2].first_line, (_
 break;
 case 81:
 console.log("!"); this.$ = new Logica($$[$0-1],$$[$01],3,_$[$0-1].first_line, (_$[$0-1].first_column+1));
-break;
-case 82:
-this.$=$$[$0];
 break;
 case 83:
 this.$=$$[$0-1];
@@ -604,19 +619,33 @@ _handle_error:
 
 
     function errorAnalisisCodigo(element,er){
-        console.log("Error sintactico: "+er+" en la liena: "+element._$.first_line+" ,en la columna: "+(element._$.first_column+1)+" ,Esperados: ");
+        //console.log("Error sintactico: "+er+" en la liena: "+element._$.first_line+" ,en la columna: "+(element._$.first_column+1)+" ,Esperados: "+element._$);
+        console.log("Error sintactico: "+er+" en la liena: "+element._$.first_line+" ,en la columna: "+(element._$.first_column+1));
     }
 
     function agregarTipoDeclaracion(tipo,elementos,identacion){
-        console.log('Tipo: '+tipo);
-        console.log('Identacion: '+identacion.length);
-        console.log('Elementos: '+elementos);
+        //console.log('Tipo: '+tipo);
+        //console.log('Identacion: '+identacion.length);
+        //console.log('Elementos: '+elementos);
+        elementos.forEach(element => {
+            element.setTipo(tipo);
+            //console.log(element);
+        });
+    }
+
+    function agregarScope2Declaraciones(identacion,instr){
+        //console.log("Identacion agregar: "+identacion.length);
+        //console.log(instr);
+        instr.forEach(ele=>{
+            ele.setScope2(identacion.length);
+        });
     }
 
     function agregarScope2(identacion,instr){
-        console.log("Identacion agregar: "+identacion.length);
-        console.log("Instraccion: "+instr);
-    }  
+        //console.log("Identacion agregar: "+identacion.length);
+        //console.log(instr);
+        instr.setScope2(identacion.length);
+    }
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
 var lexer = ({
@@ -946,12 +975,12 @@ performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
 var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
 case 0:
-                        console.log('Identacion');
+                        //console.log('Identacion');
                         return 36;
                     
 break;
 case 1:
-                        console.log('Salto de linea');
+                        //console.log('Salto de linea');
                     
 break;
 case 2:

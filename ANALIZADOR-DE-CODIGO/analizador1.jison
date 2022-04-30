@@ -40,19 +40,33 @@
 
 
     function errorAnalisisCodigo(element,er){
-        console.log("Error sintactico: "+er+" en la liena: "+element._$.first_line+" ,en la columna: "+(element._$.first_column+1)+" ,Esperados: ");
+        //console.log("Error sintactico: "+er+" en la liena: "+element._$.first_line+" ,en la columna: "+(element._$.first_column+1)+" ,Esperados: "+element._$);
+        console.log("Error sintactico: "+er+" en la liena: "+element._$.first_line+" ,en la columna: "+(element._$.first_column+1));
     }
 
     function agregarTipoDeclaracion(tipo,elementos,identacion){
-        console.log('Tipo: '+tipo);
-        console.log('Identacion: '+identacion.length);
-        console.log('Elementos: '+elementos);
+        //console.log('Tipo: '+tipo);
+        //console.log('Identacion: '+identacion.length);
+        //console.log('Elementos: '+elementos);
+        elementos.forEach(element => {
+            element.setTipo(tipo);
+            //console.log(element);
+        });
+    }
+
+    function agregarScope2Declaraciones(identacion,instr){
+        //console.log("Identacion agregar: "+identacion.length);
+        //console.log(instr);
+        instr.forEach(ele=>{
+            ele.setScope2(identacion.length);
+        });
     }
 
     function agregarScope2(identacion,instr){
-        console.log("Identacion agregar: "+identacion.length);
-        console.log("Instraccion: "+instr);
-    }  
+        //console.log("Identacion agregar: "+identacion.length);
+        //console.log(instr);
+        instr.setScope2(identacion.length);
+    }
 %}
 
 
@@ -63,11 +77,11 @@ identificador ([a-zA-Z_$]([a-zA-Z_$]|[0-9])*)
 %%
 
 \t+                 {
-                        console.log('Identacion');
+                        //console.log('Identacion');
                         return 'IDENTACION';
                     }
 \n                  {
-                        console.log('Salto de linea');
+                        //console.log('Salto de linea');
                     }
 \s                  {
                         /*ingnorado*/
@@ -152,15 +166,14 @@ identificador ([a-zA-Z_$]([a-zA-Z_$]|[0-9])*)
 %%
 
 Init    : inicioCode EOF    {
-                                console.log("Inicio del analisi");
-                                return INSTRUCCIONES_RECUPERADAS;
+                                return $1;
                             }
         ;
 
 inicioCode  :   listaImportacion defIncerteza instrucciones
             |   listaImportacion instrucciones
             |   defIncerteza instrucciones
-            |   instrucciones
+            |   instrucciones   {$$=$1;}
             ;
 
 listaImportacion    :   listaImportacion importacion
@@ -176,12 +189,12 @@ defIncerteza    :   INCERTEZA DECIMAL   {
                                         }
                 ;
 
-instrucciones   :   instrucciones instruction
-                |   instruction
+instrucciones   :   instrucciones instruction   {$1.push($2);$$ = $1;}
+                |   instruction     {$$=[$1];}
                 ;
 
-instruction     :   instructionGlobal
-                |   instruccionFuncionMetodo
+instruction     :   instructionGlobal           {$$ = $1;}
+                |   instruccionFuncionMetodo    {$$ = $1;}
                 |   VOID PRINCIPAL '(' ')' ':'  {$$ = new Principal("",null,@2.first_line,(@2.first_column+1));}
                 |   error   {errorAnalisisCodigo(this,$1);}
                 ;
@@ -213,12 +226,14 @@ funcionDibujarAST   :   IDENTACION DIBUJAR_AST '(' identificador ')'    {$$ = ne
 funcionMostrar  :   IDENTACION MOSTRAR '(' exprecion ',' parametrosEnviar ')'   {
                                                                                     //console.log("identacion mostrar");
                                                                                     $$ = new Mostrar($4,[],@2.first_line,@2.first_column);
-                                                                                    INSTRUCCIONES_RECUPERADAS.push($$);
+                                                                                    agregarScope2($1,$$);
+                                                                                    //INSTRUCCIONES_RECUPERADAS.push($$);
                                                                                 }
                 |   IDENTACION MOSTRAR '(' exprecion ')'    {
                                                                 //console.log("identacion mostrar");
                                                                 $$ = new Mostrar($4,[],@2.first_line,@2.first_column);
-                                                                INSTRUCCIONES_RECUPERADAS.push($$);
+                                                                agregarScope2($1,$$);
+                                                                //INSTRUCCIONES_RECUPERADAS.push($$);
                                                             }
                 ;
 
@@ -231,7 +246,15 @@ sentenciaDetener    :   IDENTACION DETENER  {$$ = new Detener(@2.first_line,(@2.
 sentenciaMientras   :   IDENTACION MIENTRAS '(' exprecion ')' ':'   {$$ = new Mientras($4,null,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
                     ;
 
-sentenciaPara   :   IDENTACION PARA '('INT ID '=' exprecion ';' exprecion ';' opPara ')' ':'    {$$ = new Para($5,$7.$9,$11,null,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
+sentenciaPara   :   IDENTACION PARA '('INT ID '=' exprecion ';' exprecion ';' opPara ')' ':'    {
+                                                                                                    console.log($1.length);
+                                                                                                    console.log(@2.first_line);
+                                                                                                    console.log(@2.first_column);
+                                                                                                    console.log($5);
+                                                                                                    console.log($7);
+                                                                                                    console.log($9);
+                                                                                                    console.log($10);
+                                                                                                }
                 ;
 
 opPara  :   '++'    {$$ = 0;}
@@ -265,8 +288,8 @@ instruccionAsignar  :   ID '=' exprecion                {$$ = new Asignacion($1,
                     |   IDENTACION ID '=' exprecion     {$$ = new Asignacion($2,$4,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}}
                     ;
 
-instruccionDeclarar :   IDENTACION tipoDato listaIds    {agregarTipoDeclaracion($2,$3,$1)}
-                    |   tipoDato listaIds               {agregarTipoDeclaracion($1,$2,"")}
+instruccionDeclarar :   IDENTACION tipoDato listaIds    {$$ = $3;agregarTipoDeclaracion($2,$3,$1);agregarScope2Declaraciones($1,$$);}}
+                    |   tipoDato listaIds               {$$ = $2;agregarTipoDeclaracion($1,$2,"");agregarScope2Declaraciones("",$$);}
                     ;
                 
 tipoDato    :   INT         {$$=3;}
