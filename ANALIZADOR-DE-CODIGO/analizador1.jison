@@ -89,6 +89,7 @@ identificador ([a-zA-Z_$]([a-zA-Z_$]|[0-9])*)
 [0-9]+              {return 'ENTERO';}
 [0-9]+"."[0-9]+     {return 'DECIMAL';}
 (\"[^"]*\")         {return 'CADENA';}
+(\'[^"]\')          {return 'CARACTER';}
 ".crl"              {return 'EXTENCION_CRL';}
 
 
@@ -166,6 +167,7 @@ identificador ([a-zA-Z_$]([a-zA-Z_$]|[0-9])*)
 %%
 
 Init    : inicioCode EOF    {
+                                INCERTEZA_GLOBAL = 0.5;
                                 return $1;
                             }
         ;
@@ -247,13 +249,9 @@ sentenciaMientras   :   IDENTACION MIENTRAS '(' exprecion ')' ':'   {$$ = new Mi
                     ;
 
 sentenciaPara   :   IDENTACION PARA '('INT ID '=' exprecion ';' exprecion ';' opPara ')' ':'    {
-                                                                                                    console.log($1.length);
-                                                                                                    console.log(@2.first_line);
-                                                                                                    console.log(@2.first_column);
-                                                                                                    console.log($5);
-                                                                                                    console.log($7);
-                                                                                                    console.log($9);
-                                                                                                    console.log($10);
+                                                                                                    $$ = new Para($5,$7,$9,$10,null,@2.first_line,(@2.first_column+1));
+                                                                                                    //console.log($1.length);console.log(@2.first_line);console.log(@2.first_column);console.log($5);console.log($7);console.log($9);console.log($10);
+                                                                                                    agregarScope2($1,$$);
                                                                                                 }
                 ;
 
@@ -341,6 +339,7 @@ f   :   '(' exprecion ')'           {$$=$2;}
     |   DECIMAL                     {$$=new Literal($1,@1.first_line, (@1.first_column+1),0);}
     |   ENTERO                      {$$=new Literal($1,@1.first_line, (@1.first_column+1),3);}
     |   CADENA                      {$$=new Literal($1.replace(/\"/g,""),@1.first_line, (@1.first_column+1),2);}
+    |   CARACTER                    {$$=new Literal($1.replace(/\'/g,""),@1.first_line, (@1.first_column+1),4);}
     |   TRUE                        {$$=new Literal(true,@1.first_line, (@1.first_column+1),1);}
     |   FALSE                       {$$=new Literal(false,@1.first_line, (@1.first_column+1),1);}
     |   ID                          {$$=new Acceder($1, @1.first_line,(@1.first_column+1));}
