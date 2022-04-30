@@ -24,7 +24,7 @@ export class ContenedorPrincipalComponent implements AfterViewInit {
   }
 
   obtenerCodigo(){
-    let execution= new Ejecutor(this.contenedorPrincipal.getAllCode());
+    let execution= new Ejecutor(this.contenedorPrincipal.getAllCode(),this.consolaCRL);
     execution.ejecucion();
   }
 

@@ -6,7 +6,7 @@
     <div class="container console-externo console-border">
         <div class="console console-color" name="console" id="console">
             <div *ngFor="let err of errores; let i = index">
-                <div>{{"- Error :"+err.tipo+" ,Linea: "+err.linea+" ,Columna: "+err.columna+" -> "+err.mensaje}}</div>
+                <div>{{err}}</div>
             </div>
         </div>
     </div>

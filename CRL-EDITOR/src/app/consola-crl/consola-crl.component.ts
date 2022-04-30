@@ -8,12 +8,12 @@ import { tipoErrores } from '../models/ErrorCRL';
   styleUrls: ['./consola-crl.component.css']
 })
 export class ConsolaCRLComponent implements OnInit {
-  errores : Array<ErrorCRL>= new Array();
+  errores : any= new Array();
   constructor() { }
 
   ngOnInit(): void {
     //Prueba unitaria del comportamiento de un error
-    this.pruebaError();
+    //this.pruebaError();
   }
 
   clearConsole() {
@@ -22,12 +22,17 @@ export class ConsolaCRLComponent implements OnInit {
 
   pruebaError(){
     let errorP = "jhgjkdfhgashjdfjksdgasdhfgkasdjghfkasjdgfashjkdfahjsdfhjasdfhjkas"
-    let tmp = new ErrorCRL(1,1,tipoErrores.SEMANTICO,errorP);
-    this.agregarError(tmp);
+    this.agregarError(errorP);
   }
 
-  agregarError(error:ErrorCRL){
+  agregarError(error:any){
     this.errores.push(error);
+  }
+
+  agregarErrores(error:any[]){
+    for (const iterator of error) {
+      this.errores.push(iterator);
+    }
   }
 
   agregarPrint(value:any){
