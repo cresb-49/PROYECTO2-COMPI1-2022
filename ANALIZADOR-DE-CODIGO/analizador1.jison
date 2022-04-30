@@ -28,6 +28,10 @@
     const {Operacion} = require ('./../Expresion/Operacion.ts');
     const {Relacional} = require ('./../Expresion/Relacional.ts');
     const {ObtenerValFuncion} = require ('./../Expresion/ObtenerValFuncion.ts');
+    
+    
+    
+    const {Result} = require ('./../Result/Result.ts');
 
 
 
@@ -36,12 +40,13 @@
 
     let INCERTEZA_GLOBAL = 0.5;
     let RESULT_STRING_LEC = new StringBuilder();
-    let INSTRUCCIONES_RECUPERADAS=[];
-
+    let ERRORES_ANALISIS=[];
 
     function errorAnalisisCodigo(element,er){
         //console.log("Error sintactico: "+er+" en la liena: "+element._$.first_line+" ,en la columna: "+(element._$.first_column+1)+" ,Esperados: "+element._$);
-        console.log("Error sintactico: "+er+" en la liena: "+element._$.first_line+" ,en la columna: "+(element._$.first_column+1));
+        let tmp = "Error sintactico: \""+er+"\" ,Linea: "+element._$.first_line+" ,Columna: "+(element._$.first_column+1);
+        console.log(tmp);
+        ERRORES_ANALISIS.push(tmp);
     }
 
     function agregarTipoDeclaracion(tipo,elementos,identacion){
@@ -66,6 +71,10 @@
         //console.log("Identacion agregar: "+identacion.length);
         //console.log(instr);
         instr.setScope2(identacion.length);
+    }
+
+    function sumarArray(imports,instrucciones){
+        return imports.concat(instrucciones);
     }
 %}
 
@@ -171,18 +180,20 @@ identificador ([a-zA-Z_$]([a-zA-Z_$]|[0-9])*)
 
 Init    : inicioCode EOF    {
                                 INCERTEZA_GLOBAL = 0.5;
-                                return $1;
+                                let errorTemp = ERRORES_ANALISIS;
+                                ERRORES_ANALISIS = [];
+                                return new Result($1,errorTemp);
                             }
         ;
 
-inicioCode  :   listaImportacion defIncerteza instrucciones
-            |   listaImportacion instrucciones
-            |   defIncerteza instrucciones
-            |   instrucciones   {$$=$1;}
+inicioCode  :   listaImportacion defIncerteza instrucciones {$$ = sumarArray($1,$3);}
+            |   listaImportacion instrucciones  {$$ = sumarArray($1,$2);}
+            |   defIncerteza instrucciones  {$$ = $2;}
+            |   instrucciones   {$$ = $1;}
             ;
 
-listaImportacion    :   listaImportacion importacion
-                    |   importacion
+listaImportacion    :   listaImportacion importacion {$1.push($2);$$ = $1;}
+                    |   importacion {$$ = [$1];}
                     ;
 
 importacion :   IMPORTAR ID EXTENCION_CRL   {$$ = new Importar($2,@1.first_line,(@1.first_column+1));}
