@@ -2,7 +2,7 @@ import { Exprecion } from "../Abstracto/Exprecion";
 import { Retorno } from "../Abstracto/Retorno";
 import { Scope } from "../Symbolo/Scope";
 
-export class Acceso extends Exprecion{
+export class Acceder extends Exprecion{
 
     constructor(private id:string,linea:number,columna:number){
         super(linea,columna);

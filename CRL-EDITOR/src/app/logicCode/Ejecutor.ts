@@ -19,8 +19,11 @@ export class Ejecutor {
     public analizar() {
         try {
             console.log(this.codigoCrl);
-            let ast = Parser.parse(this.codigoCrl[0].codigo);
-            console.log("Resultado " + ast);
+            let ast= Parser.parse(this.codigoCrl[0].codigo);
+            console.log("ast: "+ast)
+            ast.forEach((element: any) => {
+               console.log(element);
+            });
         } catch (error) {
             console.log(error);
         }

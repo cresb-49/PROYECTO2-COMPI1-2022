@@ -6,11 +6,9 @@ export enum opcionPara {
     SUM_PARA,
     RES_PARA
 }
-
-
 export class Para extends Instruccion {
 
-    constructor(private varIterator: string, private valVar: Exprecion, private expr: Exprecion, opPara: number,instrucciones:Instruccion,linea: number, columna: number) {
+    constructor(private varIterator: string, private valVar: Exprecion, private expr: Exprecion, private opPara: number,private instrucciones:Instruccion|null,linea: number, columna: number) {
         super(linea, columna);
     }
     public ejecutar(scope: Scope) {

@@ -12,7 +12,7 @@ export enum OpcionRelacional{
     INCERTEZA,
 }
 
-export class Realacional extends Exprecion{
+export class Relacional extends Exprecion{
     constructor(private izquierda:Exprecion,private derecha:Exprecion,private tipo: OpcionRelacional,private incerteza:number,linea:number,columna:number){
         super(linea,columna);
     }

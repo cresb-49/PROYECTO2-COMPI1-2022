@@ -1,7 +1,7 @@
 import { Instruccion } from "../Abstracto/Instruccion";
 import { Scope } from "../Symbolo/Scope";
 
-export class Pincipal extends Instruccion {
+export class Principal extends Instruccion {
     
     constructor(private file:string,private instrucciones:Instruccion|null,linea:number,columna:number) {
         super(linea,columna);
