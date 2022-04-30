@@ -1,12 +1,15 @@
 import { ConsolaCRLComponent } from "src/app/consola-crl/consola-crl.component";
 import { Instruccion } from "../Abstracto/Instruccion";
 import { Funcion } from "../Instrucciones/Funcion";
+import { Importar } from "../Instrucciones/Importar";
 import { Mostrar } from "../Instrucciones/Mostrar";
 import { Principal } from "../Instrucciones/Principal";
+import { EmpaquetarInstrucciones } from "./EmpaquetarInstrucciones";
 
 export class Organizar {
 
     private subAST: any[] = [];
+    private imports:any[] = [];
 
     constructor(private ast: any[],private consolaCRL:ConsolaCRLComponent) { }
 
@@ -22,7 +25,9 @@ export class Organizar {
                 funcionesPadre.push(instruccion)
             } else if (instruccion instanceof Funcion) {
                 funcionesPadre.push(instruccion)
-            } else if(instruccion instanceof Mostrar){
+            } else if(instruccion instanceof Importar){
+                this.imports.push(instruccion);
+            }else if(instruccion instanceof Mostrar){
                 instruccion.setConsolaCRL(this.consolaCRL);
                 restoInstrucciones.push(instruccion);
             }else {
@@ -31,7 +36,34 @@ export class Organizar {
         });
         console.log("Funciones padre:");
         console.log(funcionesPadre);
-        console.log("Resto Instrucciones:");
-        console.log(restoInstrucciones);
+
+        let segmentadoCodigo = this.segmentarCodigo(restoInstrucciones,funcionesPadre);
+        console.log("segmentadoCodigo:");
+        console.log(segmentadoCodigo);
+
+        let empaquetar = new EmpaquetarInstrucciones(segmentadoCodigo[2]);
+        empaquetar.start();
+
+    }
+
+    private segmentarCodigo(instrucciones:any[],padres:any[]){
+        let result:any[] = [];
+        let t1:any[] = []
+        let t2:any[] = []
+        let temp2:any[] = instrucciones;
+        padres.forEach((padre:Instruccion)=>{
+            temp2.forEach((inst:any)=>{
+                if(inst.linea <= padre.linea){
+                    t1.push(inst);
+                }else{
+                    t2.push(inst);
+                }
+            })
+            result.push(t1);
+            t1=[];
+            temp2=t2;
+            t2=[];
+        });
+        return result;
     }
 }
