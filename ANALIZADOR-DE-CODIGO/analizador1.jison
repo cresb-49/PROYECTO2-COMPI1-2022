@@ -52,6 +52,7 @@
 
 
     let MEMORIA_PRINCIPAL = new Pila();
+
     let OBJ_MOSTRAR = [];
 
 
@@ -325,8 +326,34 @@
         SENTENCIAS_GENERADAS.push(result);
         return result;
     }
+
+    function plegarPila(){
+        if(MEMORIA_PRINCIPAL.size() != 0){
+            let scopePadre = MEMORIA_PRINCIPAL.peek().getScope2();
+            if(scopePadre != 0){
+                console.log("Scope padre actual: "+scopePadre);
+                let tmp = [];
+                while(scopePadre == MEMORIA_PRINCIPAL.peek().getScope2()){
+                    tmp.push(MEMORIA_PRINCIPAL.pop());
+                }
+                console.log("Intrucciones recuperadas: ");
+                let recuperacion = tmp.reverse();
+                console.log(recuperacion);
+                recuperacion.forEach(ele=>{MEMORIA_PRINCIPAL.peek().agregar(ele);});
+                console.log("Memoria actual:");
+                MEMORIA_PRINCIPAL.print();
+                plegarPila();
+            }
+        }else{
+            MEMORIA_PRINCIPAL.pop();
+        }
+    }
     
     function respuestaAnalisis(lista){
+        if(MEMORIA_PRINCIPAL.size()>0){
+            plegarPila();
+        }
+
         INCERTEZA_GLOBAL = 0.5;
         
         let errorTemp = ERRORES_ANALISIS;
