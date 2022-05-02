@@ -19,17 +19,15 @@ export class Ejecutor {
 
     public analizar() {
         try {
+            this.consola.clearConsole();
             console.log(this.codigoCrl);
             let result = Parser.parse(this.codigoCrl[0].codigo);
             this.pushErrors(result.errores);
             console.log(result);
             result.instrucciones = this.cleanAst(result.instrucciones);
-            this.orderAST(result.instrucciones);
+            this.orderAST(result.instrucciones,this.codigoCrl[0].nombre);
 
-            // console.log("result: " + result.instrucciones)
-            // result.instrucciones.forEach((element: any) => {
-            //     console.log(element);
-            // });
+
         } catch (error) {
             console.log(error);
         }
@@ -49,8 +47,11 @@ export class Ejecutor {
         return newAt;
     }
 
-    private orderAST(element:any[]){
+    private orderAST(element:any[],nombre:string){
         let organizar = new Organizar(element,this.consola);
-        organizar.start();
+        let padres = organizar.start();
+        if(padres.length==0){
+            this.consola.agregarError("Error al analizar codigo, el archivo "+nombre+" esta vacio!!!!!!");
+        }
     }
 }
