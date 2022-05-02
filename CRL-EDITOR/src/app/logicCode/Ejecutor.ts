@@ -1,6 +1,8 @@
 import { ConsolaCRLComponent } from "../consola-crl/consola-crl.component";
 import { CodigoCRL } from "../models/codeCRL";
 import { Instruccion } from "./Abstracto/Instruccion";
+import { Mostrar } from "./Instrucciones/Mostrar";
+import { Sentencias } from "./Instrucciones/Sentencias";
 import { Organizar } from "./OrganizarInstrucciones/Organizar";
 
 declare var require: any;
@@ -26,10 +28,14 @@ export class Ejecutor {
             console.log(result);
             result.instrucciones = this.cleanAst(result.instrucciones);
             this.orderAST(result.instrucciones,this.codigoCrl[0].nombre);
-
-
+            result.mostra.forEach((element:Mostrar) => {
+                element.setConsolaCRL(this.consola);
+            });
+            result.sentencias.forEach((element:Sentencias) => {
+                element.setConsola(this.consola);
+            });
         } catch (error) {
-            console.log(error);
+            this.consola.agregarError("Error al analizar el codigo del archivo");
         }
     }
 
