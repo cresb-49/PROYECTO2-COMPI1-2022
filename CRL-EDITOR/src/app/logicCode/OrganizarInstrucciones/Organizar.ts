@@ -12,11 +12,11 @@ export class Organizar {
 
     constructor(private ast: any[],private consolaCRL:ConsolaCRLComponent) { }
 
-    public start() {
-        this.calcularSubsAST();
+    public start():any[] {
+        return this.calcularSubsAST();
     }
 
-    private calcularSubsAST() {
+    private calcularSubsAST():any[] {
         let funcionesPadre: any[] = [];
         let restoInstrucciones: any[] = [];
         this.ast.forEach((instruccion: any) => {
@@ -35,11 +35,7 @@ export class Organizar {
         });
         console.log("Funciones padre:");
         console.log(funcionesPadre);
-
-        //let segmentadoCodigo = this.segmentarCodigo(restoInstrucciones,funcionesPadre);
-        console.log("segmentadoCodigo:"+restoInstrucciones.length);
-        console.log(restoInstrucciones);
-
+        return funcionesPadre;
     }
 
     private segmentarCodigo(instrucciones:any[],padres:any[]){
