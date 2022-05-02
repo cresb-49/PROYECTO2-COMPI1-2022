@@ -19,4 +19,8 @@ export class Sino extends Instruccion implements AsigInstrucciones{
     public getCodeFalse():Sentencias|null{
         return this.codeFalse;
     }
+
+    public getSentencias():Sentencias|null{
+        return this.codeFalse;
+    }
 }

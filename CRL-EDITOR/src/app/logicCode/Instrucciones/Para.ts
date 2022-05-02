@@ -21,4 +21,7 @@ export class Para extends Instruccion implements AsigInstrucciones {
     public agregar(instruccion: Instruccion) {
         this.sentencias?.agregarInstruccion(instruccion);
     }
+    public getSentencias():Sentencias|null{
+        return this.sentencias;
+    }
 }
