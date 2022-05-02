@@ -4,7 +4,6 @@ import { Funcion } from "../Instrucciones/Funcion";
 import { Importar } from "../Instrucciones/Importar";
 import { Mostrar } from "../Instrucciones/Mostrar";
 import { Principal } from "../Instrucciones/Principal";
-import { EmpaquetarInstrucciones } from "./EmpaquetarInstrucciones";
 
 export class Organizar {
 
@@ -37,12 +36,9 @@ export class Organizar {
         console.log("Funciones padre:");
         console.log(funcionesPadre);
 
-        let segmentadoCodigo = this.segmentarCodigo(restoInstrucciones,funcionesPadre);
-        console.log("segmentadoCodigo:");
-        console.log(segmentadoCodigo);
-
-        let empaquetar = new EmpaquetarInstrucciones(segmentadoCodigo[2]);
-        empaquetar.start();
+        //let segmentadoCodigo = this.segmentarCodigo(restoInstrucciones,funcionesPadre);
+        console.log("segmentadoCodigo:"+restoInstrucciones.length);
+        console.log(restoInstrucciones);
 
     }
 

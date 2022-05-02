@@ -1,3 +1,4 @@
+import { AsigInstrucciones } from "../Abstracto/AsigIntrucciones";
 import { Exprecion } from "../Abstracto/Exprecion";
 import { Instruccion } from "../Abstracto/Instruccion";
 import { Scope } from "../Symbolo/Scope";
@@ -7,7 +8,7 @@ export enum opcionPara {
     SUM_PARA,
     RES_PARA
 }
-export class Para extends Instruccion {
+export class Para extends Instruccion implements AsigInstrucciones {
 
     constructor(private varIterator: string, private valVar: Exprecion, private expr: Exprecion, private opPara: number,private sentencias:Sentencias|null,linea: number, columna: number) {
         super(linea, columna);
@@ -16,5 +17,8 @@ export class Para extends Instruccion {
         //TODO: logica para ejecutar el ciclo para
         //return {linea : this.linea, columna: this.columna, type : 'Parar'};
     }
-
+    
+    public agregar(instruccion: Instruccion) {
+        this.sentencias?.agregarInstruccion(instruccion);
+    }
 }
