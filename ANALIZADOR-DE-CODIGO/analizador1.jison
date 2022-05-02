@@ -47,6 +47,9 @@
 
     let SENTENCIAS_GENERADAS = [];
     let VARIABLES_GLOBALES = [];
+    let IMPORTACION_ARCHIVOS = [];
+
+    let FUNCION_PRINCIPAL = null;
 
     let PILA_ANALISIS_SI = new Pila();
 
@@ -55,11 +58,19 @@
 
     let OBJ_MOSTRAR = [];
 
+    let FUNCIONES_DECLARADAS = [];
+
 
 
     function errorAnalisisCodigo(element,er){
         //console.log("Error sintactico: "+er+" en la liena: "+element._$.first_line+" ,en la columna: "+(element._$.first_column+1)+" ,Esperados: "+element._$);
-        let tmp = "Error sintactico: \""+er+"\" ,Linea: "+element._$.first_line+" ,Columna: "+(element._$.first_column+1);
+        let simbolo = er;
+        if(er == '\n'){
+            simbolo = '\\n';
+        }else if(er == '\t'){
+            simbolo = '\\t';
+        }
+        let tmp = "Error sintactico: \""+simbolo+"\" ,Linea: "+element._$.first_line+" ,Columna: "+(element._$.first_column+1);
         console.log(tmp);
         ERRORES_ANALISIS.push(tmp);
     }
@@ -350,6 +361,20 @@
             MEMORIA_PRINCIPAL.pop();
         }
     }
+
+    function agregarImport(imp){
+        IMPORTACION_ARCHIVOS.push(imp);
+    }
+
+    function agregarFPrincipal(f){
+        if(FUNCION_PRINCIPAL == null){
+            FUNCION_PRINCIPAL = f;
+        }else{
+            let tmp = "Error Semantico: Linea: "+f.linea+" ,Columna: "+f.columna+"-> Solo puede existir una funcion principal";
+            ERRORES_ANALISIS.push(tmp);
+        }
+    }
+
     
     function respuestaAnalisis(lista){
         if(MEMORIA_PRINCIPAL.size()>0){
@@ -362,6 +387,8 @@
         let sentences = SENTENCIAS_GENERADAS;
         let mostra = OBJ_MOSTRAR;
         let varGlobales= VARIABLES_GLOBALES;
+        let imports = IMPORTACION_ARCHIVOS;
+        let fp = FUNCION_PRINCIPAL;
 
         MEMORIA_PRINCIPAL.clear();
         PILA_ANALISIS_SI.clear();
@@ -369,9 +396,24 @@
         SENTENCIAS_GENERADAS = [];
         OBJ_MOSTRAR = [];
         VARIABLES_GLOBALES = [];
+        IMPORTACION_ARCHIVOS = [];
+        FUNCION_PRINCIPAL = null;
+        FUNCIONES_DECLARADAS = [];
 
-        return new Result(lista,errorTemp,sentences,mostra,varGlobales);
+        return new Result(lista,errorTemp,sentences,mostra,varGlobales,imports,fp);
     }
+
+    function verificarExistenciaFuncion(f){
+        let bandera = false;
+        let res = FUNCIONES_DECLARADAS.filter(fu => fu.getId() == f.getId());
+        if(res.length == 0){
+            FUNCIONES_DECLARADAS.push(f);
+        }else{
+            let tmp = "Error Semantico: \""+f.getId()+"\" Linea: "+f.linea+" ,Columna: "+f.columna+"-> La funcion ya se declaro con anterioridad";
+            ERRORES_ANALISIS.push(tmp);
+        }
+    }
+
 %}
 
 
@@ -385,21 +427,21 @@ comentSimple (("!!")([^\n]*))
 
 {comentSimple}      {/*Ingonorar un comentario simple*/}
 
-\t+\n               {
+\t+\n+              {
                         return 'NUEVA_LINEA';
                     }
 \t+                 {
                         //console.log('Identacion');
                         return 'IDENTACION';
                     }
-\n                  {
+\n+                 {
                         return 'NUEVA_LINEA';
                     }
 \s                  {
                         /*ingnorado*/
                     }
-[0-9]+              {return 'ENTERO';}
 [0-9]+"."[0-9]+     {return 'DECIMAL';}
+[0-9]+              {return 'ENTERO';}
 (\"[^"]*\")         {return 'CADENA';}
 (\'[^"]\')          {return 'CARACTER';}
 ".crl"              {return 'EXTENCION_CRL';}
@@ -486,9 +528,12 @@ Init    : inicioCode EOF    {
                             }
         ;
 
-inicioCode  :   listaImportacion defIncerteza instrucciones {$$ = sumarArray($1,$3);}
-            |   listaImportacion instrucciones  {$$ = sumarArray($1,$2);}
+inicioCode  :   listaImportacion defIncerteza instrucciones {$$ = $3;}
+            |   NUEVA_LINEA listaImportacion defIncerteza instrucciones {$$ = $4;}
+            |   listaImportacion instrucciones  {$$ = $2;}
+            |   NUEVA_LINEA listaImportacion instrucciones  {$$ = $3;}
             |   defIncerteza instrucciones  {$$ = $2;}
+            |   NUEVA_LINEA defIncerteza instrucciones  {$$ = $3;}
             |   instrucciones   {$$ = $1;}
             ;
 
@@ -496,13 +541,13 @@ listaImportacion    :   listaImportacion importacion {$1.push($2);$$ = $1;}
                     |   importacion {$$ = [$1];}
                     ;
 
-importacion :   IMPORTAR ID EXTENCION_CRL   {$$ = new Importar($2,@1.first_line,(@1.first_column+1));}
+importacion :   IMPORTAR ID EXTENCION_CRL NUEVA_LINEA {$$ = new Importar($2,@1.first_line,(@1.first_column+1));agregarImport($$);}
             ;
 
-defIncerteza    :   INCERTEZA DECIMAL   {
-                                            console.log("incerteza: "+$2);
-                                            INCERTEZA_GLOBAL = Number($2);
-                                        }
+defIncerteza    :   INCERTEZA DECIMAL NUEVA_LINEA   {
+                                                        console.log("incerteza: "+$2);
+                                                        INCERTEZA_GLOBAL = Number($2);
+                                                    }
                 ;
 
 instrucciones   :   instrucciones instruction   {$$ = agregarInstrucciones($1,$2);}//{$1.push($2);$$ = $1;}
@@ -511,7 +556,11 @@ instrucciones   :   instrucciones instruction   {$$ = agregarInstrucciones($1,$2
 
 instruction     :   instructionGlobal NUEVA_LINEA           {$$ = $1;}
                 |   instruccionFuncionMetodo NUEVA_LINEA    {$$ = $1;}
-                |   VOID PRINCIPAL '(' ')' ':' NUEVA_LINEA  {$$ = new Principal("",generarSentencias(@2.first_line,(@2.first_column+1)),@2.first_line,(@2.first_column+1));agregadoFuncion($$);}
+                |   VOID PRINCIPAL '(' ')' ':' NUEVA_LINEA  {
+                                                                $$ = new Principal("",generarSentencias(@2.first_line,(@2.first_column+1)),@2.first_line,(@2.first_column+1));
+                                                                agregadoFuncion($$);
+                                                                agregarFPrincipal($$);
+                                                            }
                 |   NUEVA_LINEA
                 |   IDENTACION NUEVA_LINEA
                 |   error                                   {errorAnalisisCodigo(this,$1);}
@@ -605,8 +654,16 @@ parametrosEnviar    :   parametrosEnviar ',' exprecion  {$1.push($3);$$=$1;}
                     |   exprecion   {$$=[$1];}
                     ;
 
-instruccionFuncionMetodo    :   tipoDato ID '(' parametros ')' ':'  {$$ = new Funcion($1,$2,generarSentencias(@2.first_line,(@2.first_column+1)),$4,@2.first_line,(@2.first_column+1));agregadoFuncion($$);}
-                            |   tipoDato ID '(' ')' ':'  {$$ = new Funcion($1,$2,generarSentencias(@2.first_line,(@2.first_column+1)),[],@2.first_line,(@2.first_column+1));agregadoFuncion($$);}
+instruccionFuncionMetodo    :   tipoDato ID '(' parametros ')' ':'  {
+                                                                        $$ = new Funcion($1,$2,generarSentencias(@2.first_line,(@2.first_column+1)),$4,@2.first_line,(@2.first_column+1));
+                                                                        verificarExistenciaFuncion($$);
+                                                                        agregadoFuncion($$);
+                                                                    }
+                            |   tipoDato ID '(' ')' ':' {
+                                                            $$ = new Funcion($1,$2,generarSentencias(@2.first_line,(@2.first_column+1)),[],@2.first_line,(@2.first_column+1));
+                                                            verificarExistenciaFuncion($$);
+                                                            agregadoFuncion($$);
+                                                        }
                             ;
 
 parametros  :   parametros ',' tipoDato ID  {$1.push(new Declaracion($4,$3,null,@4.first_line,(@4.first_column+1)));$$ = $1;}
