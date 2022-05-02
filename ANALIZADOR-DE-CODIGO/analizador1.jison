@@ -76,27 +76,27 @@
     }
 
     function agregarTipoDeclaracion(tipo,elementos,identacion){
-        //console.log('Tipo: '+tipo);
-        //console.log('Identacion: '+identacion.length);
-        //console.log('Elementos: '+elementos);
         elementos.forEach(element => {
             element.setTipo(tipo);
-            //console.log(element);
         });
     }
 
     function agregarScope2Declaraciones(identacion,instr){
-        //console.log("Identacion agregar: "+identacion.length);
-        //console.log(instr);
         instr.forEach(ele=>{
             ele.setScope2(identacion.length);
         });
     }
 
     function agregarScope2(identacion,instr){
-        //console.log("Identacion agregar: "+identacion.length);
-        //console.log(instr);
         instr.setScope2(identacion.length);
+    }
+    
+    function verificarVarFuncion(vars,nueva){
+        let result = vars.filter(v => v.getId() == nueva.getId());
+        if(result.length != 0){
+            let tmp = "Error Semantico: \""+nueva.getId()+"\" Linea: "+nueva.linea+" ,Columna: "+nueva.columna+"-> No puede declara otra variable con el mismo identificador";
+            ERRORES_ANALISIS.push(tmp);
+        }
     }
 
     function agregarInstrucciones(instrucciones,elemento){
@@ -666,8 +666,15 @@ instruccionFuncionMetodo    :   tipoDato ID '(' parametros ')' ':'  {
                                                         }
                             ;
 
-parametros  :   parametros ',' tipoDato ID  {$1.push(new Declaracion($4,$3,null,@4.first_line,(@4.first_column+1)));$$ = $1;}
-            |   tipoDato ID {$$=[new Declaracion($2,$1,null,@2.first_line,(@2.first_column+1))]}
+parametros  :   parametros ',' tipoDato ID  {
+                                                let tmpD = new Declaracion($4,$3,null,@4.first_line,(@4.first_column+1));
+                                                verificarVarFuncion($1,tmpD);
+                                                $1.push(tmpD);
+                                                $$ = $1;
+                                            }
+            |   tipoDato ID {
+                                $$=[new Declaracion($2,$1,null,@2.first_line,(@2.first_column+1))];
+                            }
             ;
 
 instruccionAsignar  :   ID '=' exprecion                {$$ = new Asignacion($1,$3,@1.first_line,(@1.first_column+1));agregarScope2("",$$);addSimpleInst($$);}

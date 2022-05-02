@@ -223,10 +223,17 @@ case 53:
                                                         
 break;
 case 54:
-$$[$0-3].push(new Declaracion($$[$0],$$[$0-1],null,_$[$0].first_line,(_$[$0].first_column+1)));this.$ = $$[$0-3];
+
+                                                let tmpD = new Declaracion($$[$0],$$[$0-1],null,_$[$0].first_line,(_$[$0].first_column+1));
+                                                verificarVarFuncion($$[$0-3],tmpD);
+                                                $$[$0-3].push(tmpD);
+                                                this.$ = $$[$0-3];
+                                            
 break;
 case 55:
-this.$=[new Declaracion($$[$0],$$[$0-1],null,_$[$0].first_line,(_$[$0].first_column+1))]
+
+                                this.$=[new Declaracion($$[$0],$$[$0-1],null,_$[$0].first_line,(_$[$0].first_column+1))];
+                            
 break;
 case 56:
 this.$ = new Asignacion($$[$0-2],$$[$0],_$[$0-2].first_line,(_$[$0-2].first_column+1));agregarScope2("",this.$);addSimpleInst(this.$);
@@ -696,27 +703,27 @@ _handle_error:
     }
 
     function agregarTipoDeclaracion(tipo,elementos,identacion){
-        //console.log('Tipo: '+tipo);
-        //console.log('Identacion: '+identacion.length);
-        //console.log('Elementos: '+elementos);
         elementos.forEach(element => {
             element.setTipo(tipo);
-            //console.log(element);
         });
     }
 
     function agregarScope2Declaraciones(identacion,instr){
-        //console.log("Identacion agregar: "+identacion.length);
-        //console.log(instr);
         instr.forEach(ele=>{
             ele.setScope2(identacion.length);
         });
     }
 
     function agregarScope2(identacion,instr){
-        //console.log("Identacion agregar: "+identacion.length);
-        //console.log(instr);
         instr.setScope2(identacion.length);
+    }
+    
+    function verificarVarFuncion(vars,nueva){
+        let result = vars.filter(v => v.getId() == nueva.getId());
+        if(result.length != 0){
+            let tmp = "Error Semantico: \""+nueva.getId()+"\" Linea: "+nueva.linea+" ,Columna: "+nueva.columna+"-> No puede declara otra variable con el mismo identificador";
+            ERRORES_ANALISIS.push(tmp);
+        }
     }
 
     function agregarInstrucciones(instrucciones,elemento){
