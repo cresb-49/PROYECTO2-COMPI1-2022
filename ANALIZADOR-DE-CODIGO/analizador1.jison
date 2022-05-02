@@ -46,6 +46,7 @@
     let ERRORES_ANALISIS=[];
 
     let SENTENCIAS_GENERADAS = [];
+    let VARIABLES_GLOBALES = [];
 
 
     let MEMORIA_PRINCIPAL = new Pila();
@@ -150,19 +151,22 @@
         }else if( instr instanceof Mientras){
             tipo = "Mientras";
         }
-        if(MEMORIA_PRINCIPAL.peek().size()==0){
+        if(MEMORIA_PRINCIPAL.size()==0){
             let tmp = "Error Semantico: \""+tipo+"\" ,Linea: "+instr.linea+" ,Columna: "+instr.columna+"-> La instruccion solo puede estar dentro de una funcion o metodo";
             ERRORES_ANALISIS.push(tmp);
         }else{
             let ident = MEMORIA_PRINCIPAL.peek().getScope2();
             if(instr.getScope2() == 0){
-                let tmp = "Error Semantico: \""+tipo+"\" ,Linea: "+si.linea+" ,Columna: "+si.columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
+                let tmp = "Error Semantico: \""+tipo+"\" ,Linea: "+instr.linea+" ,Columna: "+instr.columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
                 ERRORES_ANALISIS.push(tmp);
             }else{
                 if(((instr.getScope2()-1) == ident)||(instr.getScope2()==ident)){
                     MEMORIA_PRINCIPAL.push(instr);
+                }else if(instr.getScope2() < ident){
+                    //TODO:logica para hacer el retorceso en la pila
+                    console.log("instruccion fuera del scope");
                 }else{
-                    let tmp = "Error Semantico: \""+tipo+"\" ,Linea: "+si.linea+" ,Columna: "+si.columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
+                    let tmp = "Error Semantico: \""+tipo+"\" ,Linea: "+instr.linea+" ,Columna: "+instr.columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
                     ERRORES_ANALISIS.push(tmp);
                     //TODO: verificar si es necesario meter la instruccion en la pila
                 }
@@ -171,16 +175,65 @@
     }
 
     function addSimpleInst(instruccion){
-        if(Array.isArray(elemento)){
-
+        if(Array.isArray(instruccion)){
+            if(MEMORIA_PRINCIPAL.size() == 0){
+                if(instruccion[0].getScope2() == 0){
+                    intruccion.forEach(ele=>{
+                        VARIABLES_GLOBALES.push(ele);
+                    });
+                }else{
+                    let tmp = "Error Semantico: Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+"-> No se esperaba una identacion";
+                    ERRORES_ANALISIS.push(tmp);
+                }
+            }else{
+                let ident = MEMORIA_PRINCIPAL.peek().getScope2();
+                if(instruccion[0].getScope2() == 0){
+                    let tmp = "Error Semantico Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+"-> La instruccion solo puede estar dentro de una funcion o metodo";
+                    ERRORES_ANALISIS.push(tmp);
+                }else{
+                    if(instruccion.getScope2() == (ident+1)){
+                        instruccion.forEach(ele=>{
+                            MEMORIA_PRINCIPAL.peek().agregar(ele);
+                        });
+                    }else{
+                        console.log("codigo de arreglos no ejecutado");
+                    }
+                }
+            }            
         }else{
-
+            if(MEMORIA_PRINCIPAL.size()==0){
+                let tmp = "Error Semantico: Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+"-> La instruccion solo puede estar dentro de una funcion o metodo";
+                ERRORES_ANALISIS.push(tmp);
+            }else{
+                let ident = MEMORIA_PRINCIPAL.peek().getScope2();
+                if(instruccion.getScope2() == 0){
+                    let tmp = "Error Semantico Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
+                    ERRORES_ANALISIS.push(tmp); 
+                }else{
+                    if(instruccion.getScope2() == (ident+1)){
+                        MEMORIA_PRINCIPAL.peek().agregar(instruccion);
+                    }else if(instruccion.getScope2()<=ident){
+                        let scopePadre = MEMORIA_PRINCIPAL.peek().getScope2();
+                        console.log("Scope padre actual: "+scopePadre);
+                        console.log("La instruccion Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+" no pertenece al scope");
+                        let tmp2 = [];
+                        while(scopePadre==MEMORIA_PRINCIPAL.peek().getScope2()){
+                            tmp2.push(MEMORIA_PRINCIPAL.pop());
+                        }
+                        console.log("Intrucciones recuperadas: ");
+                        let recuperacion = tmp2.reverse();
+                        console.log(recuperacion);
+                        recuperacion.forEach(ele=>{MEMORIA_PRINCIPAL.peek().agregar(ele);});
+                        console.log("Memoria actual:");
+                        MEMORIA_PRINCIPAL.print();
+                        addSimpleInst(instruccion);
+                    }else{
+                        let tmp = "Error Semantico: Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
+                        ERRORES_ANALISIS.push(tmp);
+                    }
+                }
+            }
         }
-    }
-
-
-    function respuestaAnalisis(){
-
     }
 
     function generarSentencias(linea,columna){
@@ -189,6 +242,23 @@
         return result;
     }
     
+    function respuestaAnalisis(lista){
+        INCERTEZA_GLOBAL = 0.5;
+        
+        let errorTemp = ERRORES_ANALISIS;
+        let sentences = SENTENCIAS_GENERADAS;
+        let mostra = OBJ_MOSTRAR;
+        let varGlobales= VARIABLES_GLOBALES;
+
+        MEMORIA_PRINCIPAL.clear();
+
+        ERRORES_ANALISIS = [];
+        SENTENCIAS_GENERADAS = [];
+        OBJ_MOSTRAR = [];
+        VARIABLES_GLOBALES = [];
+
+        return new Result(lista,errorTemp,sentences,mostra,varGlobales);
+    }
 %}
 
 
@@ -196,9 +266,16 @@
 
 identificador ([a-zA-Z_$]([a-zA-Z_$]|[0-9])*)
 
+comentSimple (("!!")([^\n]*))
+
 %%
 
-\t+               {
+{comentSimple}      {/*Ingonorar un comentario simple*/}
+
+\t+\n               {
+                        return 'NUEVA_LINEA';
+                    }
+\t+                 {
                         //console.log('Identacion');
                         return 'IDENTACION';
                     }
@@ -292,10 +369,7 @@ identificador ([a-zA-Z_$]([a-zA-Z_$]|[0-9])*)
 %%
 
 Init    : inicioCode EOF    {
-                                INCERTEZA_GLOBAL = 0.5;
-                                let errorTemp = ERRORES_ANALISIS;
-                                ERRORES_ANALISIS = [];
-                                return new Result($1,errorTemp);
+                                return respuestaAnalisis($1);
                             }
         ;
 
@@ -324,7 +398,7 @@ instrucciones   :   instrucciones instruction   {$$ = agregarInstrucciones($1,$2
 
 instruction     :   instructionGlobal NUEVA_LINEA           {$$ = $1;}
                 |   instruccionFuncionMetodo NUEVA_LINEA    {$$ = $1;}
-                |   VOID PRINCIPAL '(' ')' ':' NUEVA_LINEA  {$$ = new Principal("",generarSentencias(@2.first_line,(@2.first_column+1)),@2.first_line,(@2.first_column+1));}
+                |   VOID PRINCIPAL '(' ')' ':' NUEVA_LINEA  {$$ = new Principal("",generarSentencias(@2.first_line,(@2.first_column+1)),@2.first_line,(@2.first_column+1));agregadoFuncion($$);}
                 |   NUEVA_LINEA
                 |   IDENTACION NUEVA_LINEA
                 |   error                                   {errorAnalisisCodigo(this,$1);}
@@ -345,42 +419,49 @@ instructionGlobal   :   instruccionDeclarar
                     |   funcionDibujarTs
                     ;
 
-funcionDibujarTs    :   IDENTACION DIBUJAR_TS '('')'    {$$ = new DrawTS(-1,-1,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
+funcionDibujarTs    :   IDENTACION DIBUJAR_TS '('')'    {$$ = new DrawTS(-1,-1,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
                     ;
 
-funcionDibujarExp   :   IDENTACION DIBUJAR_EXP '(' exprecion ')'    {$$ = new DrawEXP($4,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
+funcionDibujarExp   :   IDENTACION DIBUJAR_EXP '(' exprecion ')'    {$$ = new DrawEXP($4,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
                     ;
 
-funcionDibujarAST   :   IDENTACION DIBUJAR_AST '(' identificador ')'    {$$ = new DrawAST($4,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
+funcionDibujarAST   :   IDENTACION DIBUJAR_AST '(' identificador ')'    {$$ = new DrawAST($4,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
                     ;
 
 funcionMostrar  :   IDENTACION MOSTRAR '(' exprecion ',' parametrosEnviar ')'   {
                                                                                     //console.log("identacion mostrar");
                                                                                     $$ = new Mostrar($4,[],@2.first_line,@2.first_column);
                                                                                     agregarScope2($1,$$);
+                                                                                    addSimpleInst($$);
                                                                                     //INSTRUCCIONES_RECUPERADAS.push($$);
                                                                                 }
                 |   IDENTACION MOSTRAR '(' exprecion ')'    {
                                                                 //console.log("identacion mostrar");
                                                                 $$ = new Mostrar($4,[],@2.first_line,@2.first_column);
                                                                 agregarScope2($1,$$);
+                                                                addSimpleInst($$);
                                                                 //INSTRUCCIONES_RECUPERADAS.push($$);
                                                             }
                 ;
 
-sentenciaContinuar  :   IDENTACION CONTINUAR    {$$ = new Continuar(@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
+sentenciaContinuar  :   IDENTACION CONTINUAR    {$$ = new Continuar(@2.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
                     ;
 
-sentenciaDetener    :   IDENTACION DETENER  {$$ = new Detener(@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
+sentenciaDetener    :   IDENTACION DETENER  {$$ = new Detener(@2.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
                     ;
 
-sentenciaMientras   :   IDENTACION MIENTRAS '(' exprecion ')' ':'   {$$ = new Mientras($4,generarSentencias(@2.first_line,(@2.first_column+1)),@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
+sentenciaMientras   :   IDENTACION MIENTRAS '(' exprecion ')' ':'   {   
+                                                                        $$ = new Mientras($4,generarSentencias(@2.first_line,(@2.first_column+1)),@2.first_line,(@2.first_column+1));
+                                                                        agregarScope2($1,$$);
+                                                                        addIntruccionMientrasPara($$);
+                                                                    }
                     ;
 
 sentenciaPara   :   IDENTACION PARA '('INT ID '=' exprecion ';' exprecion ';' opPara ')' ':'    {
                                                                                                     $$ = new Para($5,$7,$9,$10,generarSentencias(@2.first_line,(@2.first_column+1)),@2.first_line,(@2.first_column+1));
                                                                                                     //console.log($1.length);console.log(@2.first_line);console.log(@2.first_column);console.log($5);console.log($7);console.log($9);console.log($10);
                                                                                                     agregarScope2($1,$$);
+                                                                                                    addIntruccionMientrasPara($$);
                                                                                                 }
                 ;
 
@@ -388,35 +469,43 @@ opPara  :   '++'    {$$ = 0;}
         |   '--'    {$$ = 1;}
         ;
 
-sentenciaSi :   IDENTACION SI '(' exprecion ')' ':' {$$ = new Si($4,generarSentencias(@2.first_line,(@2.first_column+1)),null,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
-            |   IDENTACION SINO ':'                 {$$ = new Sino(generarSentencias(@2.first_line,(@2.first_column+1)),@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
+sentenciaSi :   IDENTACION SI '(' exprecion ')' ':' {
+                                                        $$ = new Si($4,generarSentencias(@2.first_line,(@2.first_column+1)),null,@2.first_line,(@2.first_column+1));
+                                                        agregarScope2($1,$$);
+                                                        addInstruccionSi($$);
+                                                    }
+            |   IDENTACION SINO ':'                 {
+                                                        $$ = new Sino(generarSentencias(@2.first_line,(@2.first_column+1)),@2.first_line,(@2.first_column+1));
+                                                        agregarScope2($1,$$);
+                                                        addInstruccionSi($$);
+                                                    }
             ;
 
-instruccionRetorno  :   IDENTACION RETORNO exprecion    {$$ = new Retornar($3,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
+instruccionRetorno  :   IDENTACION RETORNO exprecion    {$$ = new Retornar($3,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
                     ;
 
-llamarFuncion   :   IDENTACION ID '(' parametrosEnviar ')'  {$$ = new CallFuncion($2,$4,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
-                |   IDENTACION ID '(' ')'   {$$ = new CallFuncion($2,[],@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}
+llamarFuncion   :   IDENTACION ID '(' parametrosEnviar ')'  {$$ = new CallFuncion($2,$4,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
+                |   IDENTACION ID '(' ')'   {$$ = new CallFuncion($2,[],@2.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
                 ;
 
 parametrosEnviar    :   parametrosEnviar ',' exprecion  {$1.push($3);$$=$1;}
                     |   exprecion   {$$=[$1];}
                     ;
 
-instruccionFuncionMetodo    :   tipoDato ID '(' parametros ')' ':'  {$$ = new Funcion($1,$2,generarSentencias(@2.first_line,(@2.first_column+1)),$4,@2.first_line,(@2.first_column+1));}
-                            |   tipoDato ID '(' ')' ':'  {$$ = new Funcion($1,$2,generarSentencias(@2.first_line,(@2.first_column+1)),[],@2.first_line,(@2.first_column+1));}
+instruccionFuncionMetodo    :   tipoDato ID '(' parametros ')' ':'  {$$ = new Funcion($1,$2,generarSentencias(@2.first_line,(@2.first_column+1)),$4,@2.first_line,(@2.first_column+1));agregadoFuncion($$);}
+                            |   tipoDato ID '(' ')' ':'  {$$ = new Funcion($1,$2,generarSentencias(@2.first_line,(@2.first_column+1)),[],@2.first_line,(@2.first_column+1));agregadoFuncion($$);}
                             ;
 
 parametros  :   parametros ',' tipoDato ID  {$1.push(new Declaracion($4,$3,null,@4.first_line,(@4.first_column+1)));$$ = $1;}
             |   tipoDato ID {$$=[new Declaracion($2,$1,null,@2.first_line,(@2.first_column+1))]}
             ;
 
-instruccionAsignar  :   ID '=' exprecion                {$$ = new Asignacion($1,$3,@1.first_line,(@1.first_column+1));agregarScope2("",$$);}
-                    |   IDENTACION ID '=' exprecion     {$$ = new Asignacion($2,$4,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);}}
+instruccionAsignar  :   ID '=' exprecion                {$$ = new Asignacion($1,$3,@1.first_line,(@1.first_column+1));agregarScope2("",$$);addSimpleInst($$);}
+                    |   IDENTACION ID '=' exprecion     {$$ = new Asignacion($2,$4,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
                     ;
 
-instruccionDeclarar :   IDENTACION tipoDato listaIds    {$$ = $3;agregarTipoDeclaracion($2,$$,$1);agregarScope2Declaraciones($1,$$);}}
-                    |   tipoDato listaIds               {$$ = $2;agregarTipoDeclaracion($1,$$,"");agregarScope2Declaraciones("",$$);}
+instruccionDeclarar :   IDENTACION tipoDato listaIds    {$$ = $3;agregarTipoDeclaracion($2,$$,$1);agregarScope2Declaraciones($1,$$);addSimpleInst($$);}
+                    |   tipoDato listaIds               {$$ = $2;agregarTipoDeclaracion($1,$$,"");agregarScope2Declaraciones("",$$);addSimpleInst($$);}
                     ;
                 
 tipoDato    :   INT         {$$=Tipo.INT;}

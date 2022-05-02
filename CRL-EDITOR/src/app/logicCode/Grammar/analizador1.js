@@ -85,10 +85,7 @@ var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
 
-                                INCERTEZA_GLOBAL = 0.5;
-                                let errorTemp = ERRORES_ANALISIS;
-                                ERRORES_ANALISIS = [];
-                                return new Result($$[$0-1],errorTemp);
+                                return respuestaAnalisis($$[$0-1]);
                             
 break;
 case 2:
@@ -125,25 +122,26 @@ case 12: case 13:
 this.$ = $$[$0-1];
 break;
 case 14:
-this.$ = new Principal("",generarSentencias(_$[$0-4].first_line,(_$[$0-4].first_column+1)),_$[$0-4].first_line,(_$[$0-4].first_column+1));
+this.$ = new Principal("",generarSentencias(_$[$0-4].first_line,(_$[$0-4].first_column+1)),_$[$0-4].first_line,(_$[$0-4].first_column+1));agregadoFuncion(this.$);
 break;
 case 17:
 errorAnalisisCodigo(this,$$[$0]);
 break;
 case 31:
-this.$ = new DrawTS(-1,-1,_$[$0-2].first_line,(_$[$0-2].first_column+1));agregarScope2($$[$0-3],this.$);
+this.$ = new DrawTS(-1,-1,_$[$0-2].first_line,(_$[$0-2].first_column+1));agregarScope2($$[$0-3],this.$);addSimpleInst(this.$);
 break;
 case 32:
-this.$ = new DrawEXP($$[$0-1],_$[$0-3].first_line,(_$[$0-3].first_column+1));agregarScope2($$[$0-4],this.$);
+this.$ = new DrawEXP($$[$0-1],_$[$0-3].first_line,(_$[$0-3].first_column+1));agregarScope2($$[$0-4],this.$);addSimpleInst(this.$);
 break;
 case 33:
-this.$ = new DrawAST($$[$0-1],_$[$0-3].first_line,(_$[$0-3].first_column+1));agregarScope2($$[$0-4],this.$);
+this.$ = new DrawAST($$[$0-1],_$[$0-3].first_line,(_$[$0-3].first_column+1));agregarScope2($$[$0-4],this.$);addSimpleInst(this.$);
 break;
 case 34:
 
                                                                                     //console.log("identacion mostrar");
                                                                                     this.$ = new Mostrar($$[$0-3],[],_$[$0-5].first_line,_$[$0-5].first_column);
                                                                                     agregarScope2($$[$0-6],this.$);
+                                                                                    addSimpleInst(this.$);
                                                                                     //INSTRUCCIONES_RECUPERADAS.push(this.$);
                                                                                 
 break;
@@ -152,23 +150,29 @@ case 35:
                                                                 //console.log("identacion mostrar");
                                                                 this.$ = new Mostrar($$[$0-1],[],_$[$0-3].first_line,_$[$0-3].first_column);
                                                                 agregarScope2($$[$0-4],this.$);
+                                                                addSimpleInst(this.$);
                                                                 //INSTRUCCIONES_RECUPERADAS.push(this.$);
                                                             
 break;
 case 36:
-this.$ = new Continuar(_$[$0].first_line,(_$[$0].first_column+1));agregarScope2($$[$0-1],this.$);
+this.$ = new Continuar(_$[$0].first_line,(_$[$0].first_column+1));agregarScope2($$[$0-1],this.$);addSimpleInst(this.$);
 break;
 case 37:
-this.$ = new Detener(_$[$0].first_line,(_$[$0].first_column+1));agregarScope2($$[$0-1],this.$);
+this.$ = new Detener(_$[$0].first_line,(_$[$0].first_column+1));agregarScope2($$[$0-1],this.$);addSimpleInst(this.$);
 break;
 case 38:
-this.$ = new Mientras($$[$0-2],generarSentencias(_$[$0-4].first_line,(_$[$0-4].first_column+1)),_$[$0-4].first_line,(_$[$0-4].first_column+1));agregarScope2($$[$0-5],this.$);
+   
+                                                                        this.$ = new Mientras($$[$0-2],generarSentencias(_$[$0-4].first_line,(_$[$0-4].first_column+1)),_$[$0-4].first_line,(_$[$0-4].first_column+1));
+                                                                        agregarScope2($$[$0-5],this.$);
+                                                                        addIntruccionMientrasPara(this.$);
+                                                                    
 break;
 case 39:
 
                                                                                                     this.$ = new Para($$[$0-8],$$[$0-6],$$[$0-4],$$[$0-3],generarSentencias(_$[$0-11].first_line,(_$[$0-11].first_column+1)),_$[$0-11].first_line,(_$[$0-11].first_column+1));
                                                                                                     //console.log($$[$0-12].length);console.log(_$[$0-11].first_line);console.log(_$[$0-11].first_column);console.log($$[$0-8]);console.log($$[$0-6]);console.log($$[$0-4]);console.log($$[$0-3]);
                                                                                                     agregarScope2($$[$0-12],this.$);
+                                                                                                    addIntruccionMientrasPara(this.$);
                                                                                                 
 break;
 case 40:
@@ -178,19 +182,27 @@ case 41:
 this.$ = 1;
 break;
 case 42:
-this.$ = new Si($$[$0-2],generarSentencias(_$[$0-4].first_line,(_$[$0-4].first_column+1)),null,_$[$0-4].first_line,(_$[$0-4].first_column+1));agregarScope2($$[$0-5],this.$);
+
+                                                        this.$ = new Si($$[$0-2],generarSentencias(_$[$0-4].first_line,(_$[$0-4].first_column+1)),null,_$[$0-4].first_line,(_$[$0-4].first_column+1));
+                                                        agregarScope2($$[$0-5],this.$);
+                                                        addInstruccionSi(this.$);
+                                                    
 break;
 case 43:
-this.$ = new Sino(generarSentencias(_$[$0-1].first_line,(_$[$0-1].first_column+1)),_$[$0-1].first_line,(_$[$0-1].first_column+1));agregarScope2($$[$0-2],this.$);
+
+                                                        this.$ = new Sino(generarSentencias(_$[$0-1].first_line,(_$[$0-1].first_column+1)),_$[$0-1].first_line,(_$[$0-1].first_column+1));
+                                                        agregarScope2($$[$0-2],this.$);
+                                                        addInstruccionSi(this.$);
+                                                    
 break;
 case 44:
-this.$ = new Retornar($$[$0],_$[$0-1].first_line,(_$[$0-1].first_column+1));agregarScope2($$[$0-2],this.$);
+this.$ = new Retornar($$[$0],_$[$0-1].first_line,(_$[$0-1].first_column+1));agregarScope2($$[$0-2],this.$);addSimpleInst(this.$);
 break;
 case 45:
-this.$ = new CallFuncion($$[$0-3],$$[$0-1],_$[$0-3].first_line,(_$[$0-3].first_column+1));agregarScope2($$[$0-4],this.$);
+this.$ = new CallFuncion($$[$0-3],$$[$0-1],_$[$0-3].first_line,(_$[$0-3].first_column+1));agregarScope2($$[$0-4],this.$);addSimpleInst(this.$);
 break;
 case 46:
-this.$ = new CallFuncion($$[$0-2],[],_$[$0-2].first_line,(_$[$0-2].first_column+1));agregarScope2($$[$0-3],this.$);
+this.$ = new CallFuncion($$[$0-2],[],_$[$0-2].first_line,(_$[$0-2].first_column+1));agregarScope2($$[$0-3],this.$);addSimpleInst(this.$);
 break;
 case 47:
 $$[$0-2].push($$[$0]);this.$=$$[$0-2];
@@ -199,10 +211,10 @@ case 48:
 this.$=[$$[$0]];
 break;
 case 49:
-this.$ = new Funcion($$[$0-5],$$[$0-4],generarSentencias(_$[$0-4].first_line,(_$[$0-4].first_column+1)),$$[$0-2],_$[$0-4].first_line,(_$[$0-4].first_column+1));
+this.$ = new Funcion($$[$0-5],$$[$0-4],generarSentencias(_$[$0-4].first_line,(_$[$0-4].first_column+1)),$$[$0-2],_$[$0-4].first_line,(_$[$0-4].first_column+1));agregadoFuncion(this.$);
 break;
 case 50:
-this.$ = new Funcion($$[$0-4],$$[$0-3],generarSentencias(_$[$0-3].first_line,(_$[$0-3].first_column+1)),[],_$[$0-3].first_line,(_$[$0-3].first_column+1));
+this.$ = new Funcion($$[$0-4],$$[$0-3],generarSentencias(_$[$0-3].first_line,(_$[$0-3].first_column+1)),[],_$[$0-3].first_line,(_$[$0-3].first_column+1));agregadoFuncion(this.$);
 break;
 case 51:
 $$[$0-3].push(new Declaracion($$[$0],$$[$0-1],null,_$[$0].first_line,(_$[$0].first_column+1)));this.$ = $$[$0-3];
@@ -211,16 +223,16 @@ case 52:
 this.$=[new Declaracion($$[$0],$$[$0-1],null,_$[$0].first_line,(_$[$0].first_column+1))]
 break;
 case 53:
-this.$ = new Asignacion($$[$0-2],$$[$0],_$[$0-2].first_line,(_$[$0-2].first_column+1));agregarScope2("",this.$);
+this.$ = new Asignacion($$[$0-2],$$[$0],_$[$0-2].first_line,(_$[$0-2].first_column+1));agregarScope2("",this.$);addSimpleInst(this.$);
 break;
 case 54:
-this.$ = new Asignacion($$[$0-2],$$[$0],_$[$0-2].first_line,(_$[$0-2].first_column+1));agregarScope2($$[$0-3],this.$);
+this.$ = new Asignacion($$[$0-2],$$[$0],_$[$0-2].first_line,(_$[$0-2].first_column+1));agregarScope2($$[$0-3],this.$);addSimpleInst(this.$);
 break;
 case 55:
-this.$ = $$[$0];agregarTipoDeclaracion($$[$0-1],this.$,$$[$0-2]);agregarScope2Declaraciones($$[$0-2],this.$);
+this.$ = $$[$0];agregarTipoDeclaracion($$[$0-1],this.$,$$[$0-2]);agregarScope2Declaraciones($$[$0-2],this.$);addSimpleInst(this.$);
 break;
 case 56:
-this.$ = $$[$0];agregarTipoDeclaracion($$[$0-1],this.$,"");agregarScope2Declaraciones("",this.$);
+this.$ = $$[$0];agregarTipoDeclaracion($$[$0-1],this.$,"");agregarScope2Declaraciones("",this.$);addSimpleInst(this.$);
 break;
 case 57:
 this.$=Tipo.INT;
@@ -648,6 +660,7 @@ _handle_error:
     let ERRORES_ANALISIS=[];
 
     let SENTENCIAS_GENERADAS = [];
+    let VARIABLES_GLOBALES = [];
 
 
     let MEMORIA_PRINCIPAL = new Pila();
@@ -752,19 +765,22 @@ _handle_error:
         }else if( instr instanceof Mientras){
             tipo = "Mientras";
         }
-        if(MEMORIA_PRINCIPAL.peek().size()==0){
+        if(MEMORIA_PRINCIPAL.size()==0){
             let tmp = "Error Semantico: \""+tipo+"\" ,Linea: "+instr.linea+" ,Columna: "+instr.columna+"-> La instruccion solo puede estar dentro de una funcion o metodo";
             ERRORES_ANALISIS.push(tmp);
         }else{
             let ident = MEMORIA_PRINCIPAL.peek().getScope2();
             if(instr.getScope2() == 0){
-                let tmp = "Error Semantico: \""+tipo+"\" ,Linea: "+si.linea+" ,Columna: "+si.columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
+                let tmp = "Error Semantico: \""+tipo+"\" ,Linea: "+instr.linea+" ,Columna: "+instr.columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
                 ERRORES_ANALISIS.push(tmp);
             }else{
                 if(((instr.getScope2()-1) == ident)||(instr.getScope2()==ident)){
                     MEMORIA_PRINCIPAL.push(instr);
+                }else if(instr.getScope2() < ident){
+                    //TODO:logica para hacer el retorceso en la pila
+                    console.log("instruccion fuera del scope");
                 }else{
-                    let tmp = "Error Semantico: \""+tipo+"\" ,Linea: "+si.linea+" ,Columna: "+si.columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
+                    let tmp = "Error Semantico: \""+tipo+"\" ,Linea: "+instr.linea+" ,Columna: "+instr.columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
                     ERRORES_ANALISIS.push(tmp);
                     //TODO: verificar si es necesario meter la instruccion en la pila
                 }
@@ -773,16 +789,72 @@ _handle_error:
     }
 
     function addSimpleInst(instruccion){
-        if(Array.isArray(elemento)){
-
+        if(Array.isArray(instruccion)){
+            if(MEMORIA_PRINCIPAL.size() == 0){
+                if(instruccion[0].getScope2() == 0){
+                    intruccion.forEach(ele=>{
+                        VARIABLES_GLOBALES.push(ele);
+                    });
+                }else{
+                    let tmp = "Error Semantico: Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+"-> No se esperaba una identacion";
+                    ERRORES_ANALISIS.push(tmp);
+                }
+            }else{
+                let ident = MEMORIA_PRINCIPAL.peek().getScope2();
+                if(instruccion[0].getScope2() == 0){
+                    let tmp = "Error Semantico Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+"-> La instruccion solo puede estar dentro de una funcion o metodo";
+                    ERRORES_ANALISIS.push(tmp);
+                }else{
+                    if(instruccion.getScope2() == (ident+1)){
+                        instruccion.forEach(ele=>{
+                            MEMORIA_PRINCIPAL.peek().agregar(ele);
+                        });
+                    }else{
+                        console.log("codigo de arreglos no ejecutado");
+                    }
+                }
+            }            
         }else{
-
+            if(MEMORIA_PRINCIPAL.size()==0){
+                let tmp = "Error Semantico: Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+"-> La instruccion solo puede estar dentro de una funcion o metodo";
+                ERRORES_ANALISIS.push(tmp);
+            }else{
+                let ident = MEMORIA_PRINCIPAL.peek().getScope2();
+                if(instruccion.getScope2() == 0){
+                    let tmp = "Error Semantico Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
+                    ERRORES_ANALISIS.push(tmp); 
+                }else{
+                    if(instruccion.getScope2() == (ident+1)){
+                        MEMORIA_PRINCIPAL.peek().agregar(instruccion);
+                    }else if(instruccion.getScope2()<=ident){
+                        let scopePadre = MEMORIA_PRINCIPAL.peek().getScope2();
+                        console.log("Scope padre actual: "+scopePadre);
+                        console.log("La instruccion Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+" no pertenece al scope");
+                            console.log("La instruccion es patner del scope padre actual");
+                            let tmp2 = [];
+                            while(scopePadre==MEMORIA_PRINCIPAL.peek().getScope2()){
+                                tmp2.push(MEMORIA_PRINCIPAL.pop());
+                            }
+                            console.log("Intrucciones recuperadas: ");
+                            let recuperacion = tmp2.reverse();
+                            console.log(recuperacion);
+                            recuperacion.forEach(ele=>{
+                                MEMORIA_PRINCIPAL.peek().agregar(ele);
+                            });
+                        console.log("Memoria actual:");
+                        MEMORIA_PRINCIPAL.print();
+                        addSimpleInst(instruccion);
+                        // if(scopePadre == instruccion.getScope2()){
+                        // }else{
+                        //     console.log("La instruccion es mayor al padre actual");
+                        // }
+                    }else{
+                        let tmp = "Error Semantico: Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
+                        ERRORES_ANALISIS.push(tmp);
+                    }
+                }
+            }
         }
-    }
-
-
-    function respuestaAnalisis(){
-
     }
 
     function generarSentencias(linea,columna){
@@ -791,6 +863,23 @@ _handle_error:
         return result;
     }
     
+    function respuestaAnalisis(lista){
+        INCERTEZA_GLOBAL = 0.5;
+        
+        let errorTemp = ERRORES_ANALISIS;
+        let sentences = SENTENCIAS_GENERADAS;
+        let mostra = OBJ_MOSTRAR;
+        let varGlobales= VARIABLES_GLOBALES;
+
+        MEMORIA_PRINCIPAL.clear();
+
+        ERRORES_ANALISIS = [];
+        SENTENCIAS_GENERADAS = [];
+        OBJ_MOSTRAR = [];
+        VARIABLES_GLOBALES = [];
+
+        return new Result(lista,errorTemp,sentences,mostra,varGlobales);
+    }
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
 var lexer = ({
@@ -1119,133 +1208,139 @@ options: {},
 performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
 var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
-case 0:
-                        //console.log('Identacion');
-                        return 24;
-                    
+case 0:/*Ingonorar un comentario simple*/
 break;
 case 1:
                         return 17;
                     
 break;
 case 2:
+                        //console.log('Identacion');
+                        return 24;
+                    
+break;
+case 3:
+                        return 17;
+                    
+break;
+case 4:
                         /*ingnorado*/
                     
 break;
-case 3:return 84;
+case 5:return 84;
 break;
-case 4:return 14;
+case 6:return 14;
 break;
-case 5:return 85;
+case 7:return 85;
 break;
-case 6:return 86;
+case 8:return 86;
 break;
-case 7:return 12;
+case 9:return 12;
 break;
-case 8:return 70;
+case 10:return 70;
 break;
-case 9:return 68;
+case 11:return 68;
 break;
-case 10:return 71;
+case 12:return 71;
 break;
-case 11:return 69;
+case 13:return 69;
 break;
-case 12:return 52;
+case 14:return 52;
 break;
-case 13:return 23;
+case 15:return 23;
 break;
-case 14:return 44;
+case 16:return 44;
 break;
-case 15:return 54;
+case 17:return 54;
 break;
-case 16:return 55;
+case 18:return 55;
 break;
-case 17:return 66;
+case 19:return 66;
 break;
-case 18:return 67;
+case 20:return 67;
 break;
-case 19:return 75;
+case 21:return 75;
 break;
-case 20:return 74;
+case 22:return 74;
 break;
-case 21:return 77;
+case 23:return 77;
 break;
-case 22:return 76;
+case 24:return 76;
 break;
-case 23:return 79;
+case 25:return 79;
 break;
-case 24:return 80;
+case 26:return 80;
 break;
-case 25:return 81;
+case 27:return 81;
 break;
-case 26:return 82;
+case 28:return 82;
 break;
-case 27:return 73;
+case 29:return 73;
 break;
-case 28:return 72;
+case 30:return 72;
 break;
-case 29:return 51;
+case 31:return 51;
 break;
-case 30:return 78;
+case 32:return 78;
 break;
-case 31:return 21;
+case 33:return 21;
 break;
-case 32:return 22;
+case 34:return 22;
 break;
-case 33:return 64;
+case 35:return 64;
 break;
-case 34:return 65;
+case 36:return 65;
 break;
-case 35:return 62;
+case 37:return 62;
 break;
-case 36:return 50;
+case 38:return 50;
 break;
-case 37:return 63;
+case 39:return 63;
 break;
-case 38:return 19;
+case 40:return 19;
 break;
-case 39:return 87;
+case 41:return 87;
 break;
-case 40:return 88;
+case 42:return 88;
 break;
-case 41:return 56;
+case 43:return 56;
 break;
-case 42:return 57;
+case 44:return 57;
 break;
-case 43:return 49;
+case 45:return 49;
 break;
-case 44:return 48;
+case 46:return 48;
 break;
-case 45:return 47;
+case 47:return 47;
 break;
-case 46:return 46;
+case 48:return 46;
 break;
-case 47:return 58;
+case 49:return 58;
 break;
-case 48:return 43;
+case 50:return 43;
 break;
-case 49:return 10;
+case 51:return 10;
 break;
-case 50:return 13;
+case 52:return 13;
 break;
-case 51:return 41;
+case 53:return 41;
 break;
-case 52:return 39;
+case 54:return 39;
 break;
-case 53:return 38;
+case 55:return 38;
 break;
-case 54:return 20;
+case 56:return 20;
 break;
-case 55:return 11;
+case 57:return 11;
 break;
-case 56:return 5;
+case 58:return 5;
 break;
-case 57:console.log('Se encontro un error lexico:'+ yy_.yytext);
+case 59:console.log('Se encontro un error lexico:'+ yy_.yytext);
 break;
 }
 },
-rules: [/^(?:\t+)/,/^(?:\n)/,/^(?:\s)/,/^(?:[0-9]+)/,/^(?:[0-9]+\.[0-9]+)/,/^(?:("[^"]*"))/,/^(?:('[^"]'))/,/^(?:\.crl\b)/,/^(?:\*)/,/^(?:\/)/,/^(?:%)/,/^(?:\^)/,/^(?:;)/,/^(?::)/,/^(?:,)/,/^(?:\+\+)/,/^(?:--)/,/^(?:-)/,/^(?:\+)/,/^(?:<=)/,/^(?:>=)/,/^(?:==)/,/^(?:!=)/,/^(?:\|\|)/,/^(?:\|&)/,/^(?:&&)/,/^(?:!)/,/^(?:<)/,/^(?:>)/,/^(?:=)/,/^(?:~)/,/^(?:\()/,/^(?:\))/,/^(?:Double\b)/,/^(?:Boolean\b)/,/^(?:String\b)/,/^(?:Int\b)/,/^(?:Char\b)/,/^(?:Void\b)/,/^(?:true\b)/,/^(?:false\b)/,/^(?:Si\b)/,/^(?:Sino\b)/,/^(?:Para\b)/,/^(?:Mientras\b)/,/^(?:Detener\b)/,/^(?:Continuar\b)/,/^(?:Retorno\b)/,/^(?:Mostrar\b)/,/^(?:Importar\b)/,/^(?:Incerteza\b)/,/^(?:DibujarAST\b)/,/^(?:DibujarEXP\b)/,/^(?:DibujarTS\b)/,/^(?:Principal\b)/,/^(?:(([a-zA-Z_$]([a-zA-Z_$]|[0-9])*)))/,/^(?:$)/,/^(?:.)/],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57],"inclusive":true}}
+rules: [/^(?:(((!!)([^\n]*))))/,/^(?:\t+\n)/,/^(?:\t+)/,/^(?:\n)/,/^(?:\s)/,/^(?:[0-9]+)/,/^(?:[0-9]+\.[0-9]+)/,/^(?:("[^"]*"))/,/^(?:('[^"]'))/,/^(?:\.crl\b)/,/^(?:\*)/,/^(?:\/)/,/^(?:%)/,/^(?:\^)/,/^(?:;)/,/^(?::)/,/^(?:,)/,/^(?:\+\+)/,/^(?:--)/,/^(?:-)/,/^(?:\+)/,/^(?:<=)/,/^(?:>=)/,/^(?:==)/,/^(?:!=)/,/^(?:\|\|)/,/^(?:\|&)/,/^(?:&&)/,/^(?:!)/,/^(?:<)/,/^(?:>)/,/^(?:=)/,/^(?:~)/,/^(?:\()/,/^(?:\))/,/^(?:Double\b)/,/^(?:Boolean\b)/,/^(?:String\b)/,/^(?:Int\b)/,/^(?:Char\b)/,/^(?:Void\b)/,/^(?:true\b)/,/^(?:false\b)/,/^(?:Si\b)/,/^(?:Sino\b)/,/^(?:Para\b)/,/^(?:Mientras\b)/,/^(?:Detener\b)/,/^(?:Continuar\b)/,/^(?:Retorno\b)/,/^(?:Mostrar\b)/,/^(?:Importar\b)/,/^(?:Incerteza\b)/,/^(?:DibujarAST\b)/,/^(?:DibujarEXP\b)/,/^(?:DibujarTS\b)/,/^(?:Principal\b)/,/^(?:(([a-zA-Z_$]([a-zA-Z_$]|[0-9])*)))/,/^(?:$)/,/^(?:.)/],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59],"inclusive":true}}
 });
 return lexer;
 })();
