@@ -105,6 +105,8 @@
     }
 
     function agregadoFuncion(funcion){
+        plegarPila();
+        MEMORIA_PRINCIPAL.pop();
         MEMORIA_PRINCIPAL.push(funcion);
     }
 
@@ -247,7 +249,7 @@
         if(Array.isArray(instruccion)){
             if(MEMORIA_PRINCIPAL.size() == 0){
                 if(instruccion[0].getScope2() == 0){
-                    intruccion.forEach(ele=>{
+                    instruccion.forEach(ele=>{
                         VARIABLES_GLOBALES.push(ele);
                     });
                 }else{
