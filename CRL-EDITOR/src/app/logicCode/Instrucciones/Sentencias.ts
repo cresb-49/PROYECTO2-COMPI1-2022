@@ -1,4 +1,3 @@
-import { timeStamp } from "console";
 import { ConsolaCRLComponent } from "src/app/consola-crl/consola-crl.component";
 import { Instruccion } from "../Abstracto/Instruccion";
 import { Scope } from "../Symbolo/Scope";
