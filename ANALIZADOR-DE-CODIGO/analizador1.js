@@ -125,7 +125,7 @@ case 12: case 13:
 this.$ = $$[$0-1];
 break;
 case 14:
-this.$ = new Principal("",null,_$[$0-4].first_line,(_$[$0-4].first_column+1));
+this.$ = new Principal("",generarSentencias(_$[$0-4].first_line,(_$[$0-4].first_column+1)),_$[$0-4].first_line,(_$[$0-4].first_column+1));
 break;
 case 17:
 errorAnalisisCodigo(this,$$[$0]);
@@ -162,11 +162,11 @@ case 37:
 this.$ = new Detener(_$[$0].first_line,(_$[$0].first_column+1));agregarScope2($$[$0-1],this.$);
 break;
 case 38:
-this.$ = new Mientras($$[$0-2],null,_$[$0-4].first_line,(_$[$0-4].first_column+1));agregarScope2($$[$0-5],this.$);
+this.$ = new Mientras($$[$0-2],generarSentencias(_$[$0-4].first_line,(_$[$0-4].first_column+1)),_$[$0-4].first_line,(_$[$0-4].first_column+1));agregarScope2($$[$0-5],this.$);
 break;
 case 39:
 
-                                                                                                    this.$ = new Para($$[$0-8],$$[$0-6],$$[$0-4],$$[$0-3],null,_$[$0-11].first_line,(_$[$0-11].first_column+1));
+                                                                                                    this.$ = new Para($$[$0-8],$$[$0-6],$$[$0-4],$$[$0-3],generarSentencias(_$[$0-11].first_line,(_$[$0-11].first_column+1)),_$[$0-11].first_line,(_$[$0-11].first_column+1));
                                                                                                     //console.log($$[$0-12].length);console.log(_$[$0-11].first_line);console.log(_$[$0-11].first_column);console.log($$[$0-8]);console.log($$[$0-6]);console.log($$[$0-4]);console.log($$[$0-3]);
                                                                                                     agregarScope2($$[$0-12],this.$);
                                                                                                 
@@ -178,10 +178,10 @@ case 41:
 this.$ = 1;
 break;
 case 42:
-this.$ = new Si($$[$0-2],null,null,_$[$0-4].first_line,(_$[$0-4].first_column+1));agregarScope2($$[$0-5],this.$);
+this.$ = new Si($$[$0-2],generarSentencias(_$[$0-4].first_line,(_$[$0-4].first_column+1)),null,_$[$0-4].first_line,(_$[$0-4].first_column+1));agregarScope2($$[$0-5],this.$);
 break;
 case 43:
-this.$ = new Sino(null,_$[$0-1].first_line,(_$[$0-1].first_column+1));agregarScope2($$[$0-2],this.$);
+this.$ = new Sino(generarSentencias(_$[$0-1].first_line,(_$[$0-1].first_column+1)),_$[$0-1].first_line,(_$[$0-1].first_column+1));agregarScope2($$[$0-2],this.$);
 break;
 case 44:
 this.$ = new Retornar($$[$0],_$[$0-1].first_line,(_$[$0-1].first_column+1));agregarScope2($$[$0-2],this.$);
@@ -199,10 +199,10 @@ case 48:
 this.$=[$$[$0]];
 break;
 case 49:
-this.$ = new Funcion($$[$0-5],$$[$0-4],null,$$[$0-2],_$[$0-4].first_line,(_$[$0-4].first_column+1));
+this.$ = new Funcion($$[$0-5],$$[$0-4],generarSentencias(_$[$0-4].first_line,(_$[$0-4].first_column+1)),$$[$0-2],_$[$0-4].first_line,(_$[$0-4].first_column+1));
 break;
 case 50:
-this.$ = new Funcion($$[$0-4],$$[$0-3],null,[],_$[$0-3].first_line,(_$[$0-3].first_column+1));
+this.$ = new Funcion($$[$0-4],$$[$0-3],generarSentencias(_$[$0-3].first_line,(_$[$0-3].first_column+1)),[],_$[$0-3].first_line,(_$[$0-3].first_column+1));
 break;
 case 51:
 $$[$0-3].push(new Declaracion($$[$0],$$[$0-1],null,_$[$0].first_line,(_$[$0].first_column+1)));this.$ = $$[$0-3];
@@ -217,10 +217,10 @@ case 54:
 this.$ = new Asignacion($$[$0-2],$$[$0],_$[$0-2].first_line,(_$[$0-2].first_column+1));agregarScope2($$[$0-3],this.$);
 break;
 case 55:
-this.$ = $$[$0];agregarTipoDeclaracion($$[$0-1],$$[$0],$$[$0-2]);agregarScope2Declaraciones($$[$0-2],this.$);
+this.$ = $$[$0];agregarTipoDeclaracion($$[$0-1],this.$,$$[$0-2]);agregarScope2Declaraciones($$[$0-2],this.$);
 break;
 case 56:
-this.$ = $$[$0];agregarTipoDeclaracion($$[$0-1],$$[$0],"");agregarScope2Declaraciones("",this.$);
+this.$ = $$[$0];agregarTipoDeclaracion($$[$0-1],this.$,"");agregarScope2Declaraciones("",this.$);
 break;
 case 57:
 this.$=Tipo.INT;
@@ -638,6 +638,7 @@ _handle_error:
     const {Tipo}= require ('./../Abstracto/Retorno.ts');
 
 
+    const {Pila}= require ('./../EDD/Pila.ts');
 
 
     //const {ConsolaCRLComponent} = require('./../../consola-crl/consola-crl.component.ts');
@@ -645,6 +646,14 @@ _handle_error:
     let INCERTEZA_GLOBAL = 0.5;
     //let RESULT_STRING_LEC = new StringBuilder();
     let ERRORES_ANALISIS=[];
+
+    let SENTENCIAS_GENERADAS = [];
+
+
+    let MEMORIA_PRINCIPAL = new Pila();
+    let OBJ_MOSTRAR = [];
+
+
 
     function errorAnalisisCodigo(element,er){
         //console.log("Error sintactico: "+er+" en la liena: "+element._$.first_line+" ,en la columna: "+(element._$.first_column+1)+" ,Esperados: "+element._$);
@@ -692,6 +701,96 @@ _handle_error:
     function sumarArray(imports,instrucciones){
         return imports.concat(instrucciones);
     }
+
+    function agregadoFuncion(funcion){
+        MEMORIA_PRINCIPAL.push(funcion);
+    }
+
+    function addInstruccionSi(si){
+        if(MEMORIA_PRINCIPAL.size() == 0){
+            let tmp = "Error Semantico: \"Si\" ,Linea: "+si.linea+" ,Columna: "+si.columna+"-> La instruccion solo puede estar dentro de una funcion o metodo";
+            ERRORES_ANALISIS.push(tmp);
+        }else{
+            let ident = MEMORIA_PRINCIPAL.peek().getScope2();
+            if(si.getScope2() == 0){
+                console.log("Debuj al sacar elemento de la pila if");
+                let tmp = "Error Semantico: \"Si\" ,Linea: "+si.linea+" ,Columna: "+si.columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
+                ERRORES_ANALISIS.push(tmp);
+                //TODO: verificar si es necesario meter la instruccion en la pila
+            }else{
+                if(si instanceof Si){
+                    if(((si.getScope2()-1) == ident)||(si.getScope2()==ident)){
+                        MEMORIA_PRINCIPAL.push(si);
+                    }else{
+                        let tmp = "Error Semantico: \"Si\" ,Linea: "+si.linea+" ,Columna: "+si.columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
+                        ERRORES_ANALISIS.push(tmp);
+                    }
+                }else if(si instanceof Sino){
+                    if(MEMORIA_PRINCIPAL.peek() instanceof Si){
+                        if(si.getScope2() == ident){
+                            MEMORIA_PRINCIPAL.push(si);
+                        }else{
+                            let tmp = "Error Semantico: \"Sino\" ,Linea: "+si.linea+" ,Columna: "+si.columna+"-> La intruccion no tiene la identacion correcta se esperaba: "+ident;
+                            ERRORES_ANALISIS.push(tmp);    
+                            //TODO: verificar si es necesario meter la instruccion en la pila
+                        }
+                    }else{
+                        let tmp = "Error Semantico: \"Sino\" ,Linea: "+si.linea+" ,Columna: "+si.columna+"-> La intruccion necesita de la precedencia de la instruccion Si";
+                        ERRORES_ANALISIS.push(tmp);
+                    }
+                }else{
+                    console.log("Se utilizo la funcion incorrecta -> Linea: "+si.linea+" ,Columna: "+si.columna);
+                }
+            }
+        }
+    }
+
+    function addIntruccionMientrasPara(instr){
+        let tipo = "undefined";
+        if(instr instanceof Para){
+            tipo = "Para";
+        }else if( instr instanceof Mientras){
+            tipo = "Mientras";
+        }
+        if(MEMORIA_PRINCIPAL.peek().size()==0){
+            let tmp = "Error Semantico: \""+tipo+"\" ,Linea: "+instr.linea+" ,Columna: "+instr.columna+"-> La instruccion solo puede estar dentro de una funcion o metodo";
+            ERRORES_ANALISIS.push(tmp);
+        }else{
+            let ident = MEMORIA_PRINCIPAL.peek().getScope2();
+            if(instr.getScope2() == 0){
+                let tmp = "Error Semantico: \""+tipo+"\" ,Linea: "+si.linea+" ,Columna: "+si.columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
+                ERRORES_ANALISIS.push(tmp);
+            }else{
+                if(((instr.getScope2()-1) == ident)||(instr.getScope2()==ident)){
+                    MEMORIA_PRINCIPAL.push(instr);
+                }else{
+                    let tmp = "Error Semantico: \""+tipo+"\" ,Linea: "+si.linea+" ,Columna: "+si.columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
+                    ERRORES_ANALISIS.push(tmp);
+                    //TODO: verificar si es necesario meter la instruccion en la pila
+                }
+            }
+        }
+    }
+
+    function addSimpleInst(instruccion){
+        if(Array.isArray(elemento)){
+
+        }else{
+
+        }
+    }
+
+
+    function respuestaAnalisis(){
+
+    }
+
+    function generarSentencias(linea,columna){
+        let result = new Sentencias([],linea,columna);
+        SENTENCIAS_GENERADAS.push(result);
+        return result;
+    }
+    
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
 var lexer = ({
