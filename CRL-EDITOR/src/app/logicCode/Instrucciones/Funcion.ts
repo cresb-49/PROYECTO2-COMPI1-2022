@@ -26,4 +26,8 @@ export class Funcion extends Instruccion implements AsigInstrucciones{
     public getId():string{
         return this.id;
     }
+
+    public getSentencias():Sentencias|null{
+        return this.sentencias;
+    }
 }
