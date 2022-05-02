@@ -33,4 +33,8 @@ export class Si extends Instruccion implements AsigInstrucciones{
     public agregar(instruccion: Instruccion) {
         this.codeTrue?.agregarInstruccion(instruccion);
     }
+
+    public setCodeFalse(codeFalse:Sentencias|null){
+        this.codeFalse = codeFalse;
+    }
 }
