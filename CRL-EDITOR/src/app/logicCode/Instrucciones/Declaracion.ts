@@ -32,4 +32,8 @@ export class Declaracion extends Instruccion{
         // }
     }
 
+    public getId():string{
+        return this.id;
+    }
+
 }
