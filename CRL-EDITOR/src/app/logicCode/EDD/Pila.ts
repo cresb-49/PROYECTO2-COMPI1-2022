@@ -23,6 +23,10 @@ export class Pila {
     public clear(){
         this.pila=[];
     }
+
+    public getArray(){
+        return this.pila;
+    }
     
     public print(){
         console.log(this.pila);
