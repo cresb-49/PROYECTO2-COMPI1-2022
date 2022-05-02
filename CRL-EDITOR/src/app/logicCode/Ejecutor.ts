@@ -20,13 +20,14 @@ export class Ejecutor {
     public analizar() {
         try {
             console.log(this.codigoCrl);
-            let ast = Parser.parse(this.codigoCrl[0].codigo);
-            this.pushErrors(ast.errores);
-            ast.instrucciones = this.cleanAst(ast.instrucciones);
-            this.orderAST(ast.instrucciones);
+            let result = Parser.parse(this.codigoCrl[0].codigo);
+            this.pushErrors(result.errores);
+            console.log(result);
+            result.instrucciones = this.cleanAst(result.instrucciones);
+            this.orderAST(result.instrucciones);
 
-            // console.log("ast: " + ast.instrucciones)
-            // ast.instrucciones.forEach((element: any) => {
+            // console.log("result: " + result.instrucciones)
+            // result.instrucciones.forEach((element: any) => {
             //     console.log(element);
             // });
         } catch (error) {

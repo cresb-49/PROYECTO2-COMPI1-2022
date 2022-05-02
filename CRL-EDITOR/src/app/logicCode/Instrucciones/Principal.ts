@@ -7,6 +7,7 @@ export class Principal extends Instruccion implements AsigInstrucciones {
     
     constructor(private file:string,private sentencias:Sentencias|null,linea:number,columna:number) {
         super(linea,columna);
+        this.setScope2(0);
     }
     
     public ejecutar(scope: Scope) {

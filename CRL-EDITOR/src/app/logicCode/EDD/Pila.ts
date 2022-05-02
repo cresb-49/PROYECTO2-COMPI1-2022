@@ -19,6 +19,10 @@ export class Pila {
     public size(){
         return this.pila.length;
     }
+
+    public clear(){
+        this.pila=[];
+    }
     
     public print(){
         console.log(this.pila);

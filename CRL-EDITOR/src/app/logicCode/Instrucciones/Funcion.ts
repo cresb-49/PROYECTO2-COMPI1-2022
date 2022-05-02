@@ -9,17 +9,12 @@ export class Funcion extends Instruccion implements AsigInstrucciones{
       
     constructor(private tipo:number,private id: string, private sentencias:Sentencias|null, private parametros : Array<Declaracion>, liena : number, columna : number){
         super(liena,columna);
-        this.tipo = tipo;
-        this.id = id;
-        this.parametros = parametros;
+        this.setScope2(0);
     }
     
     public ejecutar(scope: Scope):Retorno {
         //TODO:Realizar la logia del ejecutar de una funcion
-        
-        
-        
-        
+
         //scope.guardarFuncion(this.id,this);
         return {value:0,tipo:this.tipo};
     }
