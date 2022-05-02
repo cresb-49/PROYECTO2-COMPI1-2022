@@ -275,6 +275,10 @@
                 }else{
                     if(instruccion[0].getScope2() == (ident+1)){
                         instruccion.forEach(ele=>{
+                            if(MEMORIA_PRINCIPAL.peek().getSentencias().verrificarExistenciaVar(ele)){
+                                let tmp = "Error Semantico \""+ele.getId()+"\" Linea: "+ele.linea+" ,Columna: "+ele.columna+"-> La variable ya esta declarada dentro de este ambito";
+                                ERRORES_ANALISIS.push(tmp);
+                            }
                             MEMORIA_PRINCIPAL.peek().agregar(ele);
                         });
                     }else if (instruccion[0].getScope2() <= (ident+1)){
@@ -591,18 +595,14 @@ funcionDibujarAST   :   IDENTACION DIBUJAR_AST '(' identificador ')'    {$$ = ne
                     ;
 
 funcionMostrar  :   IDENTACION MOSTRAR '(' exprecion ',' parametrosEnviar ')'   {
-                                                                                    //console.log("identacion mostrar");
                                                                                     $$ = new Mostrar($4,[],@2.first_line,@2.first_column);
                                                                                     agregarScope2($1,$$);
                                                                                     addSimpleInst($$);
-                                                                                    //INSTRUCCIONES_RECUPERADAS.push($$);
                                                                                 }
                 |   IDENTACION MOSTRAR '(' exprecion ')'    {
-                                                                //console.log("identacion mostrar");
                                                                 $$ = new Mostrar($4,[],@2.first_line,@2.first_column);
                                                                 agregarScope2($1,$$);
                                                                 addSimpleInst($$);
-                                                                //INSTRUCCIONES_RECUPERADAS.push($$);
                                                             }
                 ;
 
@@ -621,7 +621,8 @@ sentenciaMientras   :   IDENTACION MIENTRAS '(' exprecion ')' ':'   {
 
 sentenciaPara   :   IDENTACION PARA '('INT ID '=' exprecion ';' exprecion ';' opPara ')' ':'    {
                                                                                                     $$ = new Para($5,$7,$9,$10,generarSentencias(@2.first_line,(@2.first_column+1)),@2.first_line,(@2.first_column+1));
-                                                                                                    //console.log($1.length);console.log(@2.first_line);console.log(@2.first_column);console.log($5);console.log($7);console.log($9);console.log($10);
+                                                                                                    let varPara = new Declaracion($5,Tipo.INT,$7,@5.first_line,(@5.first_column+1));
+                                                                                                    $$.getSentencias().agregarVarsPrecedencia(varPara);
                                                                                                     agregarScope2($1,$$);
                                                                                                     addIntruccionMientrasPara($$);
                                                                                                 }
@@ -632,7 +633,7 @@ opPara  :   '++'    {$$ = 0;}
         ;
 
 sentenciaSi :   IDENTACION SI '(' exprecion ')' ':' {
-                                                        $$ = new Si($4,generarSentencias(@2.first_line,(@2.first_column+1)),null,@2.first_line,(@2.first_column+1));
+                                                        $$ = new Si($4,generarSentencias(@2.first_line,(@2.first_column+1)),null,@2.first_line,(@2.first_column+1));                                                        
                                                         agregarScope2($1,$$);
                                                         addInstruccionSi($$);
                                                     }
@@ -657,6 +658,7 @@ parametrosEnviar    :   parametrosEnviar ',' exprecion  {$1.push($3);$$=$1;}
 instruccionFuncionMetodo    :   tipoDato ID '(' parametros ')' ':'  {
                                                                         $$ = new Funcion($1,$2,generarSentencias(@2.first_line,(@2.first_column+1)),$4,@2.first_line,(@2.first_column+1));
                                                                         verificarExistenciaFuncion($$);
+                                                                        $$.getSentencias().agregarVarsPrecedencia($4);
                                                                         agregadoFuncion($$);
                                                                     }
                             |   tipoDato ID '(' ')' ':' {

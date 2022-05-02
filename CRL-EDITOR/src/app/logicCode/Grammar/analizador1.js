@@ -168,7 +168,8 @@ break;
 case 42:
 
                                                                                                     this.$ = new Para($$[$0-8],$$[$0-6],$$[$0-4],$$[$0-3],generarSentencias(_$[$0-11].first_line,(_$[$0-11].first_column+1)),_$[$0-11].first_line,(_$[$0-11].first_column+1));
-                                                                                                    //console.log($$[$0-12].length);console.log(_$[$0-11].first_line);console.log(_$[$0-11].first_column);console.log($$[$0-8]);console.log($$[$0-6]);console.log($$[$0-4]);console.log($$[$0-3]);
+                                                                                                    let varPara = new Declaracion($$[$0-8],Tipo.INT,$$[$0-6],_$[$0-8].first_line,(_$[$0-8].first_column+1));
+                                                                                                    this.$.getSentencias().agregarVarsPrecedencia(varPara);
                                                                                                     agregarScope2($$[$0-12],this.$);
                                                                                                     addIntruccionMientrasPara(this.$);
                                                                                                 
@@ -181,7 +182,7 @@ this.$ = 1;
 break;
 case 45:
 
-                                                        this.$ = new Si($$[$0-2],generarSentencias(_$[$0-4].first_line,(_$[$0-4].first_column+1)),null,_$[$0-4].first_line,(_$[$0-4].first_column+1));
+                                                        this.$ = new Si($$[$0-2],generarSentencias(_$[$0-4].first_line,(_$[$0-4].first_column+1)),null,_$[$0-4].first_line,(_$[$0-4].first_column+1));                                                        
                                                         agregarScope2($$[$0-5],this.$);
                                                         addInstruccionSi(this.$);
                                                     
@@ -212,6 +213,7 @@ case 52:
 
                                                                         this.$ = new Funcion($$[$0-5],$$[$0-4],generarSentencias(_$[$0-4].first_line,(_$[$0-4].first_column+1)),$$[$0-2],_$[$0-4].first_line,(_$[$0-4].first_column+1));
                                                                         verificarExistenciaFuncion(this.$);
+                                                                        this.$.getSentencias().agregarVarsPrecedencia($$[$0-2]);
                                                                         agregadoFuncion(this.$);
                                                                     
 break;
@@ -902,6 +904,10 @@ _handle_error:
                 }else{
                     if(instruccion[0].getScope2() == (ident+1)){
                         instruccion.forEach(ele=>{
+                            if(MEMORIA_PRINCIPAL.peek().getSentencias().verrificarExistenciaVar(ele)){
+                                let tmp = "Error Semantico \""+ele.getId()+"\" Linea: "+ele.linea+" ,Columna: "+ele.columna+"-> La variable ya esta declarada dentro de este ambito";
+                                ERRORES_ANALISIS.push(tmp);
+                            }
                             MEMORIA_PRINCIPAL.peek().agregar(ele);
                         });
                     }else if (instruccion[0].getScope2() <= (ident+1)){
