@@ -148,6 +148,7 @@ case 32:
                                                                                     this.$ = new Mostrar($$[$0-3],[],_$[$0-5].first_line,_$[$0-5].first_column);
                                                                                     agregarScope2($$[$0-6],this.$);
                                                                                     addSimpleInst(this.$);
+                                                                                    OBJ_MOSTRAR.push(this.$);
                                                                                 
 break;
 case 33:
@@ -155,6 +156,7 @@ case 33:
                                                                 this.$ = new Mostrar($$[$0-1],[],_$[$0-3].first_line,_$[$0-3].first_column);
                                                                 agregarScope2($$[$0-4],this.$);
                                                                 addSimpleInst(this.$);
+                                                                OBJ_MOSTRAR.push(this.$);
                                                             
 break;
 case 34:

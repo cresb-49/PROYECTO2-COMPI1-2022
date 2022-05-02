@@ -628,11 +628,13 @@ funcionMostrar  :   IDENTACION MOSTRAR '(' exprecion ',' parametrosEnviar ')'   
                                                                                     $$ = new Mostrar($4,[],@2.first_line,@2.first_column);
                                                                                     agregarScope2($1,$$);
                                                                                     addSimpleInst($$);
+                                                                                    OBJ_MOSTRAR.push($$);
                                                                                 }
                 |   IDENTACION MOSTRAR '(' exprecion ')'    {
                                                                 $$ = new Mostrar($4,[],@2.first_line,@2.first_column);
                                                                 agregarScope2($1,$$);
                                                                 addSimpleInst($$);
+                                                                OBJ_MOSTRAR.push($$);
                                                             }
                 ;
 
