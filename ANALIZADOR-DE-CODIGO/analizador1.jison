@@ -42,6 +42,8 @@
     //const {ConsolaCRLComponent} = require('./../../consola-crl/consola-crl.component.ts');
 
     let INCERTEZA_GLOBAL = 0.5;
+    let INCERTEZA_GLOBAL_IS_ASIG = false;
+
     //let RESULT_STRING_LEC = new StringBuilder();
     let ERRORES_ANALISIS=[];
 
@@ -403,6 +405,7 @@
         IMPORTACION_ARCHIVOS = [];
         FUNCION_PRINCIPAL = null;
         FUNCIONES_DECLARADAS = [];
+        INCERTEZA_GLOBAL_IS_ASIG = false;
 
         return new Result(lista,errorTemp,sentences,mostra,varGlobales,imports,fp);
     }
@@ -426,10 +429,12 @@
 identificador ([a-zA-Z_$]([a-zA-Z_$]|[0-9])*)
 
 comentSimple (("!!")([^\n]*))
+comentMultip ((\'\'\')([^']*)(\'\'\'))
 
 %%
 
 {comentSimple}      {/*Ingonorar un comentario simple*/}
+{comentMultip}      {/*Ingonorar un comentario multiple*/}
 
 \t+\n+              {
                         return 'NUEVA_LINEA';
@@ -532,26 +537,46 @@ Init    : inicioCode EOF    {
                             }
         ;
 
-inicioCode  :   listaImportacion defIncerteza instrucciones {$$ = $3;}
-            |   NUEVA_LINEA listaImportacion defIncerteza instrucciones {$$ = $4;}
-            |   listaImportacion instrucciones  {$$ = $2;}
-            |   NUEVA_LINEA listaImportacion instrucciones  {$$ = $3;}
-            |   defIncerteza instrucciones  {$$ = $2;}
-            |   NUEVA_LINEA defIncerteza instrucciones  {$$ = $3;}
-            |   instrucciones   {$$ = $1;}
+// inicioCode  :   listaImportacion defIncerteza instrucciones {$$ = $3;}
+//             |   NUEVA_LINEA listaImportacion defIncerteza instrucciones {$$ = $4;}
+//             |   listaImportacion instrucciones  {$$ = $2;}
+//             |   NUEVA_LINEA listaImportacion instrucciones  {$$ = $3;}
+//             |   defIncerteza instrucciones  {$$ = $2;}
+//             |   NUEVA_LINEA defIncerteza instrucciones  {$$ = $3;}
+//             |   instrucciones   {$$ = $1;}
+//             ;
+
+inicioCode  :   instrucciones   {$$ = $1;}
             ;
 
-listaImportacion    :   listaImportacion importacion {$1.push($2);$$ = $1;}
-                    |   importacion {$$ = [$1];}
-                    ;
+// listaImportacion    :   listaImportacion importacion {$1.push($2);$$ = $1;}
+//                     |   importacion {$$ = [$1];}
+//                     ;
 
-importacion :   IMPORTAR ID EXTENCION_CRL NUEVA_LINEA {$$ = new Importar($2,@1.first_line,(@1.first_column+1));agregarImport($$);}
+
+intruccionesEncabezado  :   importacion
+                        |   defIncerteza
+                        ;
+
+
+importacion :   IMPORTAR ID EXTENCION_CRL   {
+                                                $$ = new Importar($2,@1.first_line,(@1.first_column+1));
+                                                agregarImport($$);
+                                                if(MEMORIA_PRINCIPAL.size() != 0){
+                                                    let tmp = "Error Semantico: Importar Linea: "+$$.linea+" ,Columna: "+$$.columna+"-> Las Importaciones solo pueden estar en el encabezado";
+                                                    ERRORES_ANALISIS.push(tmp);
+                                                }
+                                            }
             ;
 
-defIncerteza    :   INCERTEZA DECIMAL NUEVA_LINEA   {
-                                                        console.log("incerteza: "+$2);
-                                                        INCERTEZA_GLOBAL = Number($2);
-                                                    }
+defIncerteza    :   INCERTEZA DECIMAL   {
+                                            if(INCERTEZA_GLOBAL_IS_ASIG){
+                                                console.log("Se sobre escribio la incerteza");
+                                            }
+                                            console.log("incerteza: "+$2);
+                                            INCERTEZA_GLOBAL = Number($2);
+                                            INCERTEZA_GLOBAL_IS_ASIG = true;
+                                        }
                 ;
 
 instrucciones   :   instrucciones instruction   {$$ = agregarInstrucciones($1,$2);}//{$1.push($2);$$ = $1;}
@@ -560,6 +585,7 @@ instrucciones   :   instrucciones instruction   {$$ = agregarInstrucciones($1,$2
 
 instruction     :   instructionGlobal NUEVA_LINEA           {$$ = $1;}
                 |   instruccionFuncionMetodo NUEVA_LINEA    {$$ = $1;}
+                |   intruccionesEncabezado NUEVA_LINEA
                 |   VOID PRINCIPAL '(' ')' ':' NUEVA_LINEA  {
                                                                 $$ = new Principal("",generarSentencias(@2.first_line,(@2.first_column+1)),@2.first_line,(@2.first_column+1));
                                                                 agregadoFuncion($$);
