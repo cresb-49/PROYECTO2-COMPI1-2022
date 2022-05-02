@@ -106,6 +106,10 @@ case 6:
                                             if(INCERTEZA_GLOBAL_IS_ASIG){
                                                 console.log("Se sobre escribio la incerteza");
                                             }
+                                            if(MEMORIA_PRINCIPAL.size() != 0){  
+                                                let tmp = "Error Semantico: Incerteza Linea: "+_$[$0-1].first_line+" ,Columna: "+(_$[$0-1].first_column+1)+"-> La Incertaza solo puede ser definida en el encabezado";
+                                                ERRORES_ANALISIS.push(tmp);
+                                            }
                                             console.log("incerteza: "+$$[$0]);
                                             INCERTEZA_GLOBAL = Number($$[$0]);
                                             INCERTEZA_GLOBAL_IS_ASIG = true;

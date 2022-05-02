@@ -573,6 +573,10 @@ defIncerteza    :   INCERTEZA DECIMAL   {
                                             if(INCERTEZA_GLOBAL_IS_ASIG){
                                                 console.log("Se sobre escribio la incerteza");
                                             }
+                                            if(MEMORIA_PRINCIPAL.size() != 0){  
+                                                let tmp = "Error Semantico: Incerteza Linea: "+@1.first_line+" ,Columna: "+(@1.first_column+1)+"-> La Incertaza solo puede ser definida en el encabezado";
+                                                ERRORES_ANALISIS.push(tmp);
+                                            }
                                             console.log("incerteza: "+$2);
                                             INCERTEZA_GLOBAL = Number($2);
                                             INCERTEZA_GLOBAL_IS_ASIG = true;
