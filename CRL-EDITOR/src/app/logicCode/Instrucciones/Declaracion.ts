@@ -1,5 +1,6 @@
 import { Exprecion } from "../Abstracto/Exprecion";
 import { Instruccion } from "../Abstracto/Instruccion";
+import { TipoString } from "../Abstracto/Retorno";
 import { Scope } from "../Symbolo/Scope";
 
 export class Declaracion extends Instruccion{
@@ -30,7 +31,7 @@ export class Declaracion extends Instruccion{
                 scope.declararVariable(this.id,val.value,val.tipo);
             }else{
                 console.log("El valor a asignar no coinide con el tipo de variable");
-                throw new Error("El valor a asignar es de tipo: "+val.tipo);
+                throw new Error("El valor a asignar es de tipo: "+TipoString[val.tipo]);
             }
         }
     }
