@@ -174,7 +174,7 @@ case 36:
 break;
 case 37:
 
-                                                                                                    this.$ = new Para($$[$0-8],$$[$0-6],$$[$0-4],$$[$0-3],generarSentencias(_$[$0-11].first_line,(_$[$0-11].first_column+1)),_$[$0-11].first_line,(_$[$0-11].first_column+1));
+                                                                                                    this.$ = new Para($$[$0-8],$$[$0-6],$$[$0-4],$$[$0-2],generarSentencias(_$[$0-11].first_line,(_$[$0-11].first_column+1)),_$[$0-11].first_line,(_$[$0-11].first_column+1));
                                                                                                     let varPara = new Declaracion($$[$0-8],Tipo.INT,$$[$0-6],_$[$0-8].first_line,(_$[$0-8].first_column+1));
                                                                                                     this.$.getSentencias().agregarVarsPrecedencia(varPara);
                                                                                                     agregarScope2($$[$0-12],this.$);

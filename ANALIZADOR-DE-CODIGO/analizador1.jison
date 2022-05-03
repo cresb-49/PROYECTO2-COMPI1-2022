@@ -652,7 +652,7 @@ sentenciaMientras   :   IDENTACION MIENTRAS '(' exprecion ')' ':'   {
                     ;
 
 sentenciaPara   :   IDENTACION PARA '('INT ID '=' exprecion ';' exprecion ';' opPara ')' ':'    {
-                                                                                                    $$ = new Para($5,$7,$9,$10,generarSentencias(@2.first_line,(@2.first_column+1)),@2.first_line,(@2.first_column+1));
+                                                                                                    $$ = new Para($5,$7,$9,$11,generarSentencias(@2.first_line,(@2.first_column+1)),@2.first_line,(@2.first_column+1));
                                                                                                     let varPara = new Declaracion($5,Tipo.INT,$7,@5.first_line,(@5.first_column+1));
                                                                                                     $$.getSentencias().agregarVarsPrecedencia(varPara);
                                                                                                     agregarScope2($1,$$);
