@@ -10,8 +10,22 @@ export class ObtenerValFuncion extends Exprecion{
     }
 
     public ejecutar(scope: Scope): Retorno {
-        //TODO:realizar la logica para la llamada de retorno de funciones
-        return{value:0,tipo:Tipo.ERROR};
+        const funcion = scope.obtenerFuncion(this.id);
+        if(funcion == undefined){
+            throw new Error("No existe la funcion \""+this.id+"\" en el programa ,Linea: "+this.linea+" ,Columna: "+this.columna);
+        }else{
+            try {
+                let r = funcion.ejecutarFuncion(this.parametros,scope);
+                // console.log("Verificacion llamada")
+                // console.log(r)
+                return{value:r.value,tipo:r.tipo};
+            } catch (error) {
+                if(error instanceof Error){
+                    throw new Error("Error en ejecucion de funcion ,Linea: "+this.linea+" ,Columna: "+this.columna+" "+error.message);
+                }
+            }
+        }
+        return{value:null,tipo:Tipo.ERROR};
     }
 
 }
