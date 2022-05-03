@@ -8,6 +8,8 @@ export enum Tipo{
     ERROR =6,
 }
 
+export const TipoString =['Double','Boolean','String','Int','Char','Void','error'];
+
 export type Retorno ={
     value: any,
     tipo: Tipo
