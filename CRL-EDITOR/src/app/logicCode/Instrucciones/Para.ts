@@ -22,6 +22,7 @@ export class Para extends Instruccion implements AsigInstrucciones {
         super(linea, columna);
     }
     public ejecutar(scope: Scope):any {
+        let newScope = new Scope(scope);
         let paso;
         if(this.opPara == opcionPara.SUM_PARA){
             paso = 1;
@@ -31,30 +32,30 @@ export class Para extends Instruccion implements AsigInstrucciones {
         let exp1 = new Acceder(this.varIterator,this.linea,this.columna);
         let exp2 = new Literal(paso,this.linea,this.columna,Tipo.INT);
         
-        let value = this.valVar.ejecutar(scope);
-        scope.declararVariable(this.varIterator,value,Tipo.INT);
+        let value = this.valVar.ejecutar(newScope);
+        newScope.declararVariable(this.varIterator,value.value,Tipo.INT);
 
         let newVal = new Operacion(exp1,exp2,OpcionOperacion.SUMA,this.linea,this.columna)
         let asignar = new Asignacion(this.varIterator,newVal,this.linea,this.columna);
 
-        let condicion = this.expr.ejecutar(scope);
+        let condicion = this.expr.ejecutar(newScope);
 
         if(condicion.tipo != Tipo.BOOLEAN){
             throw new Error("La condicion de Para no es Boolean Linea: "+this.linea+" ,Columna: "+this.columna);
         }
         while (condicion.value) {
-            const result = this.sentencias?.ejecutar(scope);
+            const result = this.sentencias?.ejecutarPara(newScope);
             if(result instanceof Detener){
                 break;
             }else if(result instanceof Continuar){
-                asignar.ejecutar(scope);
-                condicion = this.expr.ejecutar(scope);
+                asignar.ejecutar(newScope);
+                condicion = this.expr.ejecutar(newScope);
                 continue;
             }else if(result instanceof Retornar){
-                return result.ejecutar(scope);
+                return result.ejecutar(newScope);
             }
-            asignar.ejecutar(scope)
-            condicion = this.expr.ejecutar(scope);
+            asignar.ejecutar(newScope)
+            condicion = this.expr.ejecutar(newScope);
             if(condicion.tipo != Tipo.BOOLEAN){
                 throw new Error("La condicion de Para no es Boolean Linea: "+this.linea+" ,Columna: "+this.columna);
             }
