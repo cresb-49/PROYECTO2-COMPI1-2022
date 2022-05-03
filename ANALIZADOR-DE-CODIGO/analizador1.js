@@ -900,7 +900,6 @@ _handle_error:
                 }else{
                     let tmp = "Error Semantico: \""+tipo+"\" ,Linea: "+instr.linea+" ,Columna: "+instr.columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
                     ERRORES_ANALISIS.push(tmp);
-                    //TODO: verificar si es necesario meter la instruccion en la pila
                 }
             }
         }
