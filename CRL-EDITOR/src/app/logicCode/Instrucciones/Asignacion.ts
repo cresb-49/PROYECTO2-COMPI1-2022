@@ -9,7 +9,12 @@ export class Asignacion extends Instruccion{
     }
 
     public ejecutar(scope: Scope) {
-        //TODO:Realizar la logica de la asignacion de valor de una variable
+        const result = this.valor.ejecutar(scope);
+        scope.guardar(this.id,result.value,result.tipo);
+    }
+
+    public getId(){
+        return this.id;
     }
     
 }
