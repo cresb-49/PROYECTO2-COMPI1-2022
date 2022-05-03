@@ -21,7 +21,7 @@ export class Si extends Instruccion implements AsigInstrucciones{
     public ejecutar(scope: Scope) {
         const condicion = this.condicion.ejecutar(scope);
         if(condicion.tipo != Tipo.BOOLEAN){
-            throw {error: "La condicion no es booleana", linea: this.linea, columna : this.columna};
+            throw new Error("La condicion de Si no es booleana Linea: "+this.linea+" , Columna: "+this.columna);
         }
         if(condicion.value){
             return this.codeTrue?.ejecutar(scope);
