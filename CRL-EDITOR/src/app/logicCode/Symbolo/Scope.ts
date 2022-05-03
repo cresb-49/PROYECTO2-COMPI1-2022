@@ -13,17 +13,25 @@ export class Scope {
         this.funciones = new Map();
     }
 
-    public guardar(id: string, valor: any, tipo: Tipo) {
-        let scope: Scope | null = this;
-        while (scope != null) {
-            if (scope.variables.has(id)) {
-                scope.variables.set(id, new Simbolo(valor, id, tipo));
-                return;
-            }
-            scope = scope.anterior;
+    public declararVariable(id:string,valor:any,tipo:Tipo){
+        if(!this.variables.has(id)){
+            this.variables.set(id,new Simbolo(valor,id,tipo));
+        }else{
+            console.log("Ya existe la variable en el scope");
         }
-        this.variables.set(id, new Simbolo(valor, id, tipo));
     }
+
+    // public guardar(id: string, valor: any, tipo: Tipo) {
+    //     let scope: Scope | null = this;
+    //     while (scope != null) {
+    //         if (scope.variables.has(id)) {
+    //             scope.variables.set(id, new Simbolo(valor, id, tipo));
+    //             return;
+    //         }
+    //         scope = scope.anterior;
+    //     }
+    //     this.variables.set(id, new Simbolo(valor, id, tipo));
+    // }
 
     public guardarFuncion(id: string, funcion: Funcion) {
         this.funciones.set(id, funcion);
@@ -57,5 +65,16 @@ export class Scope {
             scope = scope.anterior;
         }
         return scope;
+    }
+
+    public print(){
+        let key = this.variables.keys();
+        let values = this.variables.values();
+        for (let k in key) {
+            console.log(k);
+        }
+        for (let v in values) {
+            console.log(v);
+        }
     }
 }

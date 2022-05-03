@@ -11,7 +11,7 @@ export class Principal extends Instruccion implements AsigInstrucciones {
     }
     
     public ejecutar(scope: Scope) {
-        //TODO: Realiozar la logica de la instruccion principal
+        this.sentencias?.ejecutar(scope);
     }
 
     public agregar(instruccion: Instruccion) {

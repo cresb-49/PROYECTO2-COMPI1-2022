@@ -20,16 +20,19 @@ export class Declaracion extends Instruccion{
     }
 
     public ejecutar(scope: Scope) {
-        
         //TODO:Realizar la logica del la declaracion de variables
         
-        
-        // if(this.valor==null){
-        //     scope.guardar(this.id, this.valor,Tipo.ERROR);
-        // }else{
-        //     const val = this.valor.ejecutar(scope);
-        //     scope.guardar(this.id, val.value, val.tipo);
-        // }
+        if(this.valor == null){
+            scope.declararVariable(this.id,null,this.tipo);
+        }else{
+            const val = this.valor.ejecutar(scope);
+            if(val.tipo == this.tipo){
+                scope.declararVariable(this.id,val.value,val.tipo);
+            }else{
+                console.log("El valor a asignar no coinide con el tipo de variable");
+                throw new Error("El valor a asignar es de tipo: "+val.tipo);
+            }
+        }
     }
 
     public getId():string{

@@ -1,3 +1,4 @@
+import { runInThisContext } from "vm";
 import { Exprecion } from "../Abstracto/Exprecion";
 import { Retorno } from "../Abstracto/Retorno";
 import { Scope } from "../Symbolo/Scope";
@@ -9,10 +10,10 @@ export class Acceder extends Exprecion{
     }
 
     public ejecutar(scope: Scope): Retorno {
-        const valor = scope.obtenerVariable(this.id);
-        if(valor==null){
-            throw new Error("La variable no existe");
+        const recuperacion = scope.obtenerVariable(this.id);
+        if(recuperacion==null){
+            throw new Error("La variable \""+this.id+"\" no existe, Linea: "+this.linea+" ,Columna: "+this.columna);
         }
-        return {value: valor.valor,tipo:valor.tipo}
+        return {value: recuperacion.valor,tipo:recuperacion.tipo}
     }
 }

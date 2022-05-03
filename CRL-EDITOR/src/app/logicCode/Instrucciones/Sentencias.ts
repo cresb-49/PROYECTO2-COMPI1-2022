@@ -6,6 +6,7 @@ import { Declaracion } from "./Declaracion";
 export class Sentencias extends Instruccion {
     private instrucciones:Array<Instruccion>;
     private consolaErrores:ConsolaCRLComponent;
+    private viewScope:Scope|null;
 
     private VARAIBLES_DECLARADAS:Declaracion[] = [];
 
@@ -15,6 +16,7 @@ export class Sentencias extends Instruccion {
     }
     public ejecutar(scope: Scope) {
         const newScope = new Scope(scope);
+        this.viewScope = newScope;
         for (const instr of this.instrucciones) {
             try {
                 const elemento = instr.ejecutar(newScope);
@@ -22,7 +24,13 @@ export class Sentencias extends Instruccion {
                     return elemento;
                 }
             } catch (error) {
-                //Agregar la consola de errores
+                if(error instanceof Error){
+                    if(instr instanceof Declaracion){
+                        this.consolaErrores.agregarError("Error al asignar valor a \""+instr.getId()+"\" ,Linea: "+instr.linea+" ,Columna: "+instr.columna+" "+error.message);
+                    }else{
+                        console.log(error.message);
+                    }
+                }
             }
         }
     }
@@ -46,7 +54,6 @@ export class Sentencias extends Instruccion {
     }
 
     public agregarVarsPrecedencia(vars:Declaracion[]){
-        console.log("debuj")
         this.VARAIBLES_DECLARADAS = this.VARAIBLES_DECLARADAS.concat(vars);
     }
 }
