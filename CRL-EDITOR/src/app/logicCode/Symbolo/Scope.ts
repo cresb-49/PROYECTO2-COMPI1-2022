@@ -1,4 +1,4 @@
-import { Tipo } from "../Abstracto/Retorno";
+import { Tipo, TipoString } from "../Abstracto/Retorno";
 import { Funcion } from "../Instrucciones/Funcion";
 import { Simbolo } from "./Simbolo";
 
@@ -17,21 +17,30 @@ export class Scope {
         if(!this.variables.has(id)){
             this.variables.set(id,new Simbolo(valor,id,tipo));
         }else{
-            console.log("Ya existe la variable en el scope");
+            throw new Error("La variable \""+id+"\" ya esta definida en este ambito");
         }
     }
 
-    // public guardar(id: string, valor: any, tipo: Tipo) {
-    //     let scope: Scope | null = this;
-    //     while (scope != null) {
-    //         if (scope.variables.has(id)) {
-    //             scope.variables.set(id, new Simbolo(valor, id, tipo));
-    //             return;
-    //         }
-    //         scope = scope.anterior;
-    //     }
-    //     this.variables.set(id, new Simbolo(valor, id, tipo));
-    // }
+    public guardar(id: string, valor: any, tipo: Tipo) {
+        let scope: Scope | null = this;
+        let bandera = true;
+
+        while (scope != null) {
+            if (scope.variables.has(id)) {
+                let re = scope.variables.get(id);
+                bandera = false;
+                if(re?.tipo == tipo){
+                    re.valor = valor;
+                }else{
+                    throw new Error("No se puede asignar un valor de tipo \""+TipoString[tipo]+"\" a la varaible");
+                }
+            }
+            scope = scope.anterior;
+        }
+        if(bandera){
+            throw new Error("La variable \""+id+"\" no esta definida en el porgrama");
+        }
+    }
 
     public guardarFuncion(id: string, funcion: Funcion) {
         this.funciones.set(id, funcion);
