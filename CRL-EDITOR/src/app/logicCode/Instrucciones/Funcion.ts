@@ -30,4 +30,8 @@ export class Funcion extends Instruccion implements AsigInstrucciones{
     public getSentencias():Sentencias|null{
         return this.sentencias;
     }
+
+    public getTipo(){
+        return this.tipo;
+    }
 }
