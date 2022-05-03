@@ -1,7 +1,11 @@
 import { ConsolaCRLComponent } from "src/app/consola-crl/consola-crl.component";
 import { Instruccion } from "../Abstracto/Instruccion";
 import { Scope } from "../Symbolo/Scope";
+import { Asignacion } from "./Asignacion";
+import { Continuar } from "./Continuar";
 import { Declaracion } from "./Declaracion";
+import { Detener } from "./Detener";
+import { Retornar } from "./Retornar";
 
 export class Sentencias extends Instruccion {
     private instrucciones:Array<Instruccion>;
@@ -14,21 +18,27 @@ export class Sentencias extends Instruccion {
         super(linea,columna);
         this.instrucciones= instrucciones;
     }
-    public ejecutar(scope: Scope) {
+    public ejecutar(scope: Scope):any {
         const newScope = new Scope(scope);
         this.viewScope = newScope;
         for (const instr of this.instrucciones) {
             try {
                 const elemento = instr.ejecutar(newScope);
-                if(elemento != undefined||elemento!=null){
+                if(elemento instanceof Detener){
                     return elemento;
+                }else if(elemento instanceof Continuar){
+                    return elemento;
+                }else if(elemento instanceof Retornar){
+                    return elemento.ejecutar(scope);
                 }
             } catch (error) {
                 if(error instanceof Error){
                     if(instr instanceof Declaracion){
+                        this.consolaErrores.agregarError("Error al declarar variable \""+instr.getId()+"\" ,Linea: "+instr.linea+" ,Columna: "+instr.columna+" "+error.message);
+                    }else if(instr instanceof Asignacion){
                         this.consolaErrores.agregarError("Error al asignar valor a \""+instr.getId()+"\" ,Linea: "+instr.linea+" ,Columna: "+instr.columna+" "+error.message);
                     }else{
-                        console.log(error.message);
+                        this.consolaErrores.agregarError(error.message);
                     }
                 }
             }
