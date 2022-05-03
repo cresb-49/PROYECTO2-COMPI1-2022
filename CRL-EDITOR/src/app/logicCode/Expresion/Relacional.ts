@@ -1,5 +1,5 @@
 import { Exprecion } from "../Abstracto/Exprecion";
-import { Retorno, Tipo } from "../Abstracto/Retorno";
+import { Retorno, Tipo, TipoString } from "../Abstracto/Retorno";
 import { Scope } from "../Symbolo/Scope";
 
 export enum OpcionRelacional{
@@ -20,25 +20,30 @@ export class Relacional extends Exprecion{
         const valorIzquierda = this.izquierda.ejecutar(scope);
         const valorDerecha = this.derecha.ejecutar(scope);
         let result:any;
-
+        if(valorIzquierda.tipo == Tipo.ERROR || valorDerecha.tipo == Tipo.ERROR){
+            throw new Error("Errores previos antes de ralizar la comparacion , Linea: "+this.linea+" ,Columna: "+this.columna);
+        }
+        if(valorIzquierda.tipo != valorDerecha.tipo){
+            throw new Error("No se puede realizar la comparacion de un \""+TipoString[valorIzquierda.tipo]+"\" y un \""+TipoString[valorDerecha.tipo]+"\" , Linea: "+this.linea+" ,Columna: "+this.columna);
+        }
         switch (this.tipo) {
             case OpcionRelacional.IGUAL:
-                result = valorIzquierda == valorDerecha;
+                result = valorIzquierda.value == valorDerecha.value;
                 return{value:result,tipo:Tipo.BOOLEAN};
             case OpcionRelacional.DIFERENTE:
-                result = valorIzquierda != valorDerecha;
+                result = valorIzquierda.value != valorDerecha.value;
                 return{value:result,tipo:Tipo.BOOLEAN};
             case OpcionRelacional.MENOR:
-                result = valorIzquierda < valorDerecha;
+                result = valorIzquierda.value < valorDerecha.value;
                 return{value:result,tipo:Tipo.BOOLEAN};
             case OpcionRelacional.MAYOR:
-                result = valorIzquierda > valorDerecha;
+                result = valorIzquierda.value > valorDerecha.value;
                 return{value:result,tipo:Tipo.BOOLEAN};
             case OpcionRelacional.MENOR_IGUAL:
-                result = valorIzquierda <= valorDerecha;
+                result = valorIzquierda.value <= valorDerecha.value;
                 return{value:result,tipo:Tipo.BOOLEAN};
             case OpcionRelacional.MAYOR_IGUAL:
-                result = valorIzquierda >= valorDerecha;
+                result = valorIzquierda.value >= valorDerecha.value;
                 return{value:result,tipo:Tipo.BOOLEAN};
             case OpcionRelacional.INCERTEZA:
                 result = null;
