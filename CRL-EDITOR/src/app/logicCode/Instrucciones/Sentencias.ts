@@ -8,28 +8,34 @@ import { Detener } from "./Detener";
 import { Retornar } from "./Retornar";
 
 export class Sentencias extends Instruccion {
-    private instrucciones: Array<Instruccion>;
     private consolaErrores: ConsolaCRLComponent;
     private viewScope: Scope | null;
 
     private VARAIBLES_DECLARADAS: Declaracion[] = [];
 
-    constructor(instrucciones: Array<Instruccion>, linea: number, columna: number) {
+    constructor(private instrucciones: Array<Instruccion>, linea: number, columna: number) {
         super(linea, columna);
-        this.instrucciones = instrucciones;
     }
     public ejecutar(scope: Scope): any {
         const newScope = new Scope(scope);
         this.viewScope = newScope;
         for (const instr of this.instrucciones) {
             try {
-                const elemento = instr.ejecutar(newScope);
-                if (elemento instanceof Detener) {
-                    return elemento;
-                } else if (elemento instanceof Continuar) {
-                    return elemento;
-                } else if (elemento instanceof Retornar) {
-                    return elemento.ejecutar(newScope);
+                if (instr instanceof Detener) {
+                    return instr;
+                } else if (instr instanceof Continuar) {
+                    return instr;
+                } else if (instr instanceof Retornar) {
+                    return instr.ejecutar(newScope);
+                }else{
+                    const elemento = instr.ejecutar(newScope);
+                    if(elemento instanceof Detener){
+                        return elemento;
+                    }else if(elemento instanceof Continuar){
+                        return elemento;
+                    }else if(elemento instanceof Retornar){
+                        return elemento;
+                    }
                 }
             } catch (error) {
                 if (error instanceof Error) {
@@ -49,13 +55,21 @@ export class Sentencias extends Instruccion {
         this.viewScope = scope;
         for (const instr of this.instrucciones) {
             try {
-                const elemento = instr.ejecutar(scope);
-                if (elemento instanceof Detener) {
-                    return elemento;
-                } else if (elemento instanceof Continuar) {
-                    return elemento;
-                } else if (elemento instanceof Retornar) {
-                    return elemento.ejecutar(scope);
+                if (instr instanceof Detener) {
+                    return instr;
+                } else if (instr instanceof Continuar) {
+                    return instr;
+                } else if (instr instanceof Retornar) {
+                    return instr.ejecutar(scope);
+                }else{
+                    const elemento = instr.ejecutar(scope);
+                    if(elemento instanceof Detener){
+                        return elemento;
+                    }else if(elemento instanceof Continuar){
+                        return elemento;
+                    }else if(elemento instanceof Retornar){
+                        return elemento;
+                    }
                 }
             } catch (error) {
                 if (error instanceof Error) {
