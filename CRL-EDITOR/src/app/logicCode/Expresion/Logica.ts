@@ -10,9 +10,9 @@ export enum OpcionLogica {
 }
 
 export const andLogico = [
-            /*  0    1 */
-    /*0*/[false, false],
-    /*1*/[false, true],
+        /*  0    1 */
+    /*0*/[false,false],
+    /*1*/[false,true ],
 ];
 
 export const orLogico = [
@@ -40,27 +40,27 @@ export class Logica extends Exprecion {
         let result: any;
         switch (this.tipo) {
             case OpcionLogica.AND:
-                result = andLogico[this.equivaletInt(valorIzquierdo)][this.equivaletInt(valorDerecha)];
+                result = andLogico[this.equivaletInt(valorIzquierdo.value)][this.equivaletInt(valorDerecha.value)];
                 return { value: result, tipo: Tipo.BOOLEAN }
             case OpcionLogica.OR:
-                result = orLogico[this.equivaletInt(valorIzquierdo)][this.equivaletInt(valorDerecha)];
+                result = orLogico[this.equivaletInt(valorIzquierdo.value)][this.equivaletInt(valorDerecha.value)];
                 return { value: result, tipo: Tipo.BOOLEAN }
             case OpcionLogica.XOR:
-                result = xorLogico[this.equivaletInt(valorIzquierdo)][this.equivaletInt(valorDerecha)];
+                result = xorLogico[this.equivaletInt(valorIzquierdo.value)][this.equivaletInt(valorDerecha.value)];
                 return { value: result, tipo: Tipo.BOOLEAN }
             case OpcionLogica.NOT:
-                result = !valorDerecha;
+                result = !valorDerecha.value;
                 return { value: result, tipo: Tipo.BOOLEAN }
             default:
                 return { value: null, tipo: Tipo.ERROR }
         }
     }
     private equivaletInt(value: any): number {
+        let result = 0;
         if (value) {
-            return 1;
-        } else {
-            return 0;
+            result = 1
         }
+        return result;
     }
 
 }
