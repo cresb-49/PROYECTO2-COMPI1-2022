@@ -35,6 +35,7 @@ export class Scope {
                     throw new Error("No se puede asignar un valor de tipo \""+TipoString[tipo]+"\" a la varaible");
                 }
             }
+            console.log("regrese al scope anterior");
             scope = scope.anterior;
         }
         if(bandera){
@@ -46,7 +47,7 @@ export class Scope {
         if(!this.funciones.has(id)){
             this.funciones.set(id,funcion);
         }else{
-            throw new Error("La variable \""+id+"\" ya esta definida en este ambito");
+            throw new Error("La funcion \""+id+"\" ya esta definida en el archivo");
         }
     }
 
@@ -89,5 +90,9 @@ export class Scope {
         for (let v in values) {
             console.log(v);
         }
+    }
+
+    public setMapFunciones(mapFun:Map<string,Funcion>){
+        this.funciones = mapFun;
     }
 }

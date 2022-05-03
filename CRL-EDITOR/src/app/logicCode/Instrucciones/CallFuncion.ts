@@ -8,16 +8,18 @@ export class CallFuncion extends Instruccion{
         super(linea,columna);
     }
 
-
     public ejecutar(scope: Scope) {
-        
-
-
-
-
-
-
-        //TODO: realizar la logica para la llamada de funciones
+        const funcion = scope.obtenerFuncion(this.id);
+        if(funcion == undefined){
+            throw new Error("No existe la funcion \""+this.id+"\" en el programa ,Linea: "+this.linea+" ,Columna: "+this.columna);
+        }else{
+            try {
+                funcion.ejecutarFuncion(this.parametros,scope);
+            } catch (error) {
+                if(error instanceof Error){
+                    throw new Error("Error en ejecucion de funcion ,Linea: "+this.linea+" ,Columna: "+this.columna+" "+error.message);
+                }
+            }
+        }
     }
-    
 }

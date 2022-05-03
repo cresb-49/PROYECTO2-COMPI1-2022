@@ -30,7 +30,6 @@ export class Declaracion extends Instruccion{
             if(val.tipo == this.tipo){
                 scope.declararVariable(this.id,val.value,val.tipo);
             }else{
-                console.log("El valor a asignar no coinide con el tipo de variable");
                 throw new Error("El valor a asignar es de tipo: "+TipoString[val.tipo]);
             }
         }

@@ -13,6 +13,11 @@ export class Asignacion extends Instruccion{
         scope.guardar(this.id,result.value,result.tipo);
     }
 
+    public ejecutarDiferido(scopeGuadardado: Scope,scopeOrigenInfo:Scope) {
+        const result = this.valor.ejecutar(scopeOrigenInfo);
+        scopeGuadardado.guardar(this.id,result.value,result.tipo);
+    }
+
     public getId(){
         return this.id;
     }

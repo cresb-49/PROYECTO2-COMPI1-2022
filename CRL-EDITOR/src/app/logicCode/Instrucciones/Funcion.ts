@@ -10,7 +10,8 @@ import { Sentencias } from "./Sentencias";
 
 export class Funcion extends Instruccion implements AsigInstrucciones{
 
-    private localScope:Scope|null = null;
+    private funcionesAccesible: Map<string,Funcion>;
+    private viewScope:Scope;
       
     constructor(private tipo:number,private id: string, private sentencias:Sentencias|null, private parametros : Array<Declaracion>, liena : number, columna : number){
         super(liena,columna);
@@ -18,15 +19,16 @@ export class Funcion extends Instruccion implements AsigInstrucciones{
     }
     
     public ejecutar(scope: Scope):Retorno {
-        if(scope == null){
-            for (const param of this.parametros) {
-                param.ejecutar(scope);
-            }
-            const result = this.sentencias?.ejecutar(scope);
-            if(result.tipo == this.tipo){
-                return {value:result.valor,tipo:result.tipo};
+        if(scope != null){
+            const result = this.sentencias?.ejecutarPara(scope);
+            if(result != undefined){
+                if(result.tipo == this.tipo){
+                    return {value:result.valor,tipo:result.tipo};
+                }else{
+                    throw new Error("El valor de retorno no coincide con la funcion");
+                }
             }else{
-                throw new Error("El valor de retorno no coincide con la funcion");
+                return {value:null,tipo:Tipo.ERROR};
             }
         }else{
             throw new Error("No esta inicializada la funcion!!!!");
@@ -39,14 +41,23 @@ export class Funcion extends Instruccion implements AsigInstrucciones{
 
     public ejecutarFuncion(valParametros:Exprecion[],scope:Scope):Retorno{
         if(valParametros.length == this.parametros.length){
-            this.localScope = new Scope(scope);
+
+            let newScope = new Scope(null);
+            newScope.setMapFunciones(this.funcionesAccesible);
+            this.viewScope = newScope;
+
+            for (const vari of this.parametros) {
+                vari.ejecutar(newScope);
+            }
+
             for (let index = 0; index < valParametros.length; index++) {
                 const element = new Asignacion(this.parametros[index].getId(),valParametros[index],this.linea,this.columna);
-                element.ejecutar(this.localScope);
+                element.ejecutarDiferido(newScope,scope);
             }
-            return this.ejecutar(this.localScope);
+
+            return this.ejecutar(newScope);
         }else{
-            throw new Error("La funcion solo tiene declarada "+this.parametros.length+" parametros");
+            throw new Error("La funcion tiene declarada: "+this.parametros.length+" parametros y esta enviando "+valParametros.length);
         }
     }
 
@@ -60,5 +71,9 @@ export class Funcion extends Instruccion implements AsigInstrucciones{
 
     public getTipo(){
         return this.tipo;
+    }
+
+    public setRefFuncion(mapFun:Map<string,Funcion>){
+        this.funcionesAccesible = mapFun;
     }
 }
