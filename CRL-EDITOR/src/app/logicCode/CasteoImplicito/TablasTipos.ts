@@ -62,3 +62,15 @@ export const castPot =[
     /*VOID*/    [Tipo.ERROR ,Tipo.ERROR ,Tipo.ERROR,Tipo.ERROR ,Tipo.ERROR ,Tipo.ERROR,Tipo.ERROR],
     /*ERROR*/   [Tipo.ERROR ,Tipo.ERROR ,Tipo.ERROR,Tipo.ERROR ,Tipo.ERROR ,Tipo.ERROR,Tipo.ERROR]
 ];
+
+
+export const castIncerteza =[
+            /*  DOUBLE      BOOLEAN     STRING        INT         CHAR       VOID      ERROR*/
+/*DOUBLE*/  [Tipo.BOOLEAN,Tipo.ERROR,Tipo.ERROR  ,Tipo.BOOLEAN,Tipo.ERROR,Tipo.ERROR,Tipo.ERROR],
+/*BOOLEAN*/ [Tipo.ERROR  ,Tipo.ERROR,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR,Tipo.ERROR,Tipo.ERROR],
+/*STRING*/  [Tipo.ERROR  ,Tipo.ERROR,Tipo.BOOLEAN,Tipo.ERROR  ,Tipo.ERROR,Tipo.ERROR,Tipo.ERROR],
+/*INT*/     [Tipo.BOOLEAN,Tipo.ERROR,Tipo.ERROR  ,Tipo.BOOLEAN,Tipo.ERROR,Tipo.ERROR,Tipo.ERROR],
+/*CHAR*/    [Tipo.ERROR  ,Tipo.ERROR,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR,Tipo.ERROR,Tipo.ERROR],
+/*VOID*/    [Tipo.ERROR  ,Tipo.ERROR ,Tipo.ERROR ,Tipo.ERROR  ,Tipo.ERROR,Tipo.ERROR,Tipo.ERROR],
+/*ERROR*/   [Tipo.ERROR  ,Tipo.ERROR ,Tipo.ERROR ,Tipo.ERROR  ,Tipo.ERROR,Tipo.ERROR,Tipo.ERROR]
+];
