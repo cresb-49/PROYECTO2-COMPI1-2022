@@ -32,7 +32,7 @@ export class Scope {
                 if(re?.tipo == tipo){
                     re.valor = valor;
                 }else{
-                    throw new Error("No se puede asignar un valor de tipo \""+TipoString[tipo]+"\" a la varaible");
+                    throw new Error("No se puede asignar un valor de tipo \""+TipoString[tipo]+"\" a la variable \""+id+"\"");
                 }
             }
             scope = scope.anterior;

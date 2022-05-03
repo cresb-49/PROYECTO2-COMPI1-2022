@@ -1,7 +1,7 @@
 import { AsigInstrucciones } from "../Abstracto/AsigIntrucciones";
 import { Exprecion } from "../Abstracto/Exprecion";
 import { Instruccion } from "../Abstracto/Instruccion";
-import { Retorno, Tipo } from "../Abstracto/Retorno";
+import { Retorno, Tipo, TipoString } from "../Abstracto/Retorno";
 import { Scope } from "../Symbolo/Scope";
 import { Asignacion } from "./Asignacion";
 import { Declaracion } from "./Declaracion";
@@ -23,14 +23,18 @@ export class Funcion extends Instruccion implements AsigInstrucciones{
             const result = this.sentencias?.ejecutarPara(scope);
             // console.log("Verificacion Funcion");
             // console.log(result);
-            if(result != undefined){
-                if(result.tipo == this.tipo){
-                    return {value:result.value,tipo:result.tipo};
-                }else{
-                    throw new Error("El valor de retorno no coincide con la funcion -> sub origen Linea: "+this.linea+" ,Columna: "+this.columna);
-                }
-            }else{
+            if((result == undefined) && (this.tipo == Tipo.VOID)){
                 return {value:null,tipo:Tipo.ERROR};
+            }else{
+                if(result != undefined){
+                    if(result.tipo == this.tipo){
+                        return {value:result.value,tipo:result.tipo};
+                    }else{
+                        throw new Error("El valor de retorno no coincide con la funcion -> sub origen Linea: "+this.linea+" ,Columna: "+this.columna);
+                    }
+                }else{
+                    throw new Error("La funcion debe retornar valor \""+TipoString[this.tipo]+"\" -> sub origen Linea: "+this.linea+" ,Columna: "+this.columna);
+                }
             }
         }else{
             throw new Error("No esta inicializada la funcion!!!!");
@@ -52,14 +56,19 @@ export class Funcion extends Instruccion implements AsigInstrucciones{
                 vari.ejecutar(newScope);
             }
 
-            for (let index = 0; index < valParametros.length; index++) {
-                const element = new Asignacion(this.parametros[index].getId(),valParametros[index],this.linea,this.columna);
-                element.ejecutarDiferido(newScope,scope);
+            try {
+                for (let index = 0; index < valParametros.length; index++) {
+                    const element = new Asignacion(this.parametros[index].getId(),valParametros[index],valParametros[index].linea,valParametros[index].columna);
+                    element.ejecutarDiferido(newScope,scope);
+                }
+            } catch (error) {
+                if(error instanceof Error){
+                    throw new Error("-> sub derivacion -> Linea: "+this.linea+" ,Columna: "+this.columna+" "+error.message);
+                }
             }
-
             return this.ejecutar(newScope);
         }else{
-            throw new Error("La funcion tiene declarada: "+this.parametros.length+" parametros y esta enviando "+valParametros.length);
+            throw new Error("La funcion tiene declarada: "+this.parametros.length+" parametros y esta enviando "+valParametros.length+"-> sub derivacion -> Linea: "+this.linea+" ,Columna: "+this.columna);
         }
     }
 

@@ -1,5 +1,6 @@
 import { Exprecion } from "../Abstracto/Exprecion";
 import { Instruccion } from "../Abstracto/Instruccion";
+import { Tipo } from "../Abstracto/Retorno";
 import { Scope } from "../Symbolo/Scope";
 
 export class CallFuncion extends Instruccion{

@@ -14,14 +14,18 @@ export class ObtenerValFuncion extends Exprecion{
         if(funcion == undefined){
             throw new Error("No existe la funcion \""+this.id+"\" en el programa ,Linea: "+this.linea+" ,Columna: "+this.columna);
         }else{
-            try {
-                let r = funcion.ejecutarFuncion(this.parametros,scope);
-                // console.log("Verificacion llamada")
-                // console.log(r)
-                return{value:r.value,tipo:r.tipo};
-            } catch (error) {
-                if(error instanceof Error){
-                    throw new Error("Error en ejecucion de funcion ,Linea: "+this.linea+" ,Columna: "+this.columna+" "+error.message);
+            if(funcion.getTipo() == Tipo.VOID){
+                throw new Error("No puede llamar a operar con una funcion de tipo Void ,Linea: "+this.linea+" ,Columna: "+this.columna);
+            }else{
+                try {
+                    let r = funcion.ejecutarFuncion(this.parametros,scope);
+                    // console.log("Verificacion llamada")
+                    // console.log(r)
+                    return{value:r.value,tipo:r.tipo};
+                } catch (error) {
+                    if(error instanceof Error){
+                        throw new Error("Error en ejecucion de funcion ,Linea: "+this.linea+" ,Columna: "+this.columna+" "+error.message);
+                    }
                 }
             }
         }
