@@ -11,6 +11,6 @@ export class Retornar extends Instruccion {
 
     public ejecutar(scope: Scope) {
         const valor = this.exprecion.ejecutar(scope);
-        return {linea : this.linea, columna: this.columna, tipo : 'Retorno', valor : valor};
+        return valor.value;
     }
 }
