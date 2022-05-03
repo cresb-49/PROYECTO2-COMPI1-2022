@@ -13,6 +13,7 @@ const Parser = require('./Grammar/analizador1')
 export class Ejecutor {
 
     private SCRIPT:Array<CRL> = [];
+    private errores:boolean = false;
 
     constructor(private codigoCrl: CodigoCRL[], private consola: ConsolaCRLComponent) {
         this.codigoCrl = codigoCrl;
@@ -48,11 +49,18 @@ export class Ejecutor {
         console.log("Resultado Verificar");
         console.log(this.SCRIPT);
 
-        this.SCRIPT[0].ejecutar();
+        if(!this.errores){
+            this.SCRIPT[0].ejecutar();
+        }else{
+            this.consola.agregarError("No se puede ejecutar el Script CRL porque hay errores!!!!")
+        }
 
     }
 
     private pushErrors(element: any[]) {
+        if(element.length != 0){
+            this.errores = true;
+        }
         this.consola.agregarErrores(element);
     }
 
