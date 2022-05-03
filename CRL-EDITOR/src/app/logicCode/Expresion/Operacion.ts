@@ -100,8 +100,6 @@ export class Operacion extends Exprecion{
         }
         return result;
     }
-
-
     public valueSuma(element:any):any{
         if(element.tipo == Tipo.BOOLEAN){
             return this.getBooleanNumeric(element.value);
@@ -111,7 +109,6 @@ export class Operacion extends Exprecion{
             return element.value;
         }
     }
-
     public valueNumeric(element:any):any{
         if(element.tipo == Tipo.BOOLEAN){
             return this.getBooleanNumeric(element.value);
