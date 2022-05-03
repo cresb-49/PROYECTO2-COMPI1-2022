@@ -251,10 +251,22 @@ case 52:
 this.$ = new Asignacion($$[$0-2],$$[$0],_$[$0-2].first_line,(_$[$0-2].first_column+1));agregarScope2($$[$0-3],this.$);addSimpleInst(this.$);
 break;
 case 53:
-this.$ = $$[$0];agregarTipoDeclaracion($$[$0-1],this.$,$$[$0-2]);agregarScope2Declaraciones($$[$0-2],this.$);addSimpleInst(this.$);
+
+                                                            this.$ = $$[$0];
+                                                            verificarTipoVariable($$[$0-1],this.$)
+                                                            agregarTipoDeclaracion($$[$0-1],this.$,$$[$0-2]);
+                                                            agregarScope2Declaraciones($$[$0-2],this.$);
+                                                            addSimpleInst(this.$);
+                                                        
 break;
 case 54:
-this.$ = $$[$0];agregarTipoDeclaracion($$[$0-1],this.$,"");agregarScope2Declaraciones("",this.$);addSimpleInst(this.$);
+
+                                                            this.$ = $$[$0];
+                                                            verificarTipoVariable($$[$0-1],this.$)
+                                                            agregarTipoDeclaracion($$[$0-1],this.$,"");
+                                                            agregarScope2Declaraciones("",this.$);
+                                                            addSimpleInst(this.$);
+                                                        
 break;
 case 55:
 this.$=Tipo.INT;
@@ -950,30 +962,80 @@ _handle_error:
                     let tmp = "Error Semantico Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
                     ERRORES_ANALISIS.push(tmp); 
                 }else{
-                    if(instruccion.getScope2() == (ident+1)){
-                        MEMORIA_PRINCIPAL.peek().agregar(instruccion);
-                    }else if(instruccion.getScope2()<=ident){
-                        let scopePadre = MEMORIA_PRINCIPAL.peek().getScope2();
-                        console.log("Scope padre actual: "+scopePadre);
-                        console.log("La instruccion Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+" no pertenece al scope");
-                        let tmp2 = [];
-                        while(scopePadre==MEMORIA_PRINCIPAL.peek().getScope2()){
-                            tmp2.push(MEMORIA_PRINCIPAL.pop());
+                    let banderaEje = true;
+                    if(instruccion instanceof Continuar){
+                        banderaEje = verificarContinuarDetener();
+                    }else if(instruccion instanceof Detener){
+                        banderaEje = verificarContinuarDetener();
+                    }else if(instruccion instanceof Retornar){
+                        banderaEje = verificarRetornar();
+                    }
+                    if(banderaEje){
+                        if(instruccion.getScope2() == (ident+1)){
+                            MEMORIA_PRINCIPAL.peek().agregar(instruccion);
+                        }else if(instruccion.getScope2()<=ident){
+                            let scopePadre = MEMORIA_PRINCIPAL.peek().getScope2();
+                            console.log("Scope padre actual: "+scopePadre);
+                            console.log("La instruccion Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+" no pertenece al scope");
+                            let tmp2 = [];
+                            while(scopePadre==MEMORIA_PRINCIPAL.peek().getScope2()){
+                                tmp2.push(MEMORIA_PRINCIPAL.pop());
+                            }
+                            console.log("Intrucciones recuperadas: ");
+                            let recuperacion = tmp2.reverse();
+                            console.log(recuperacion);
+                            recuperacion.forEach(ele=>{MEMORIA_PRINCIPAL.peek().agregar(ele);});
+                            console.log("Memoria actual:");
+                            MEMORIA_PRINCIPAL.print();
+                            addSimpleInst(instruccion);
+                        }else{
+                            let tmp = "Error Semantico: Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
+                            ERRORES_ANALISIS.push(tmp);
                         }
-                        console.log("Intrucciones recuperadas: ");
-                        let recuperacion = tmp2.reverse();
-                        console.log(recuperacion);
-                        recuperacion.forEach(ele=>{MEMORIA_PRINCIPAL.peek().agregar(ele);});
-                        console.log("Memoria actual:");
-                        MEMORIA_PRINCIPAL.print();
-                        addSimpleInst(instruccion);
                     }else{
-                        let tmp = "Error Semantico: Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
-                        ERRORES_ANALISIS.push(tmp);
+                        if(instruccion instanceof Detener){
+                            let tmp = "Error Semantico: Detener Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+"-> La instruccion no puede estar en este ambito";
+                            ERRORES_ANALISIS.push(tmp);
+                        }else if(instruccion instanceof Continuar){
+                            let tmp = "Error Semantico: Continuar Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+"-> La instruccion no puede estar en este ambito";
+                            ERRORES_ANALISIS.push(tmp);
+                        }else if(instruccion instanceof Retornar){
+                            let tmp = "Error Semantico: Retorno Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+"-> La instruccion no puede estar en este ambito";
+                            ERRORES_ANALISIS.push(tmp);
+                        }else{
+                            let tmp = "Error Semantico Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+"-> La instruccion no puede estar en este ambito";
+                            ERRORES_ANALISIS.push(tmp);
+                        }
                     }
                 }
             }
         }
+    }
+
+    function verificarContinuarDetener(){
+        let bandera = false;
+        let memory = MEMORIA_PRINCIPAL.getArray();
+        memory.forEach(intr =>{
+            if(intr instanceof Para){
+                bandera = true;
+            }else if(intr instanceof Mientras){
+                bandera = true;
+            }
+        });
+        return bandera;
+    }
+
+    function verificarRetornar(){
+        let bandera = false;
+        let memory = MEMORIA_PRINCIPAL.getArray();
+        memory.forEach(intr =>{
+            if(intr instanceof Funcion){
+                if(intr.getTipo() != Tipo.VOID){
+                    bandera = true;
+                }
+            }
+        });
+        return bandera;
     }
 
     function generarSentencias(linea,columna){
@@ -1057,6 +1119,12 @@ _handle_error:
         }
     }
 
+    function verificarTipoVariable(tipo,vars){
+        if(tipo == Tipo.VOID){
+            let tmp = "Error Semantico Linea: "+vars[0].linea+" ,Columna: "+vars[0].columna+"-> No se pueden declarar variables de tipo Void";
+            ERRORES_ANALISIS.push(tmp);
+        }
+    }
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
 var lexer = ({
