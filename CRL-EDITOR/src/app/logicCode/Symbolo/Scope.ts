@@ -35,7 +35,6 @@ export class Scope {
                     throw new Error("No se puede asignar un valor de tipo \""+TipoString[tipo]+"\" a la varaible");
                 }
             }
-            console.log("regrese al scope anterior");
             scope = scope.anterior;
         }
         if(bandera){
@@ -79,17 +78,6 @@ export class Scope {
             scope = scope.anterior;
         }
         return scope;
-    }
-
-    public print(){
-        let key = this.variables.keys();
-        let values = this.variables.values();
-        for (let k in key) {
-            console.log(k);
-        }
-        for (let v in values) {
-            console.log(v);
-        }
     }
 
     public setMapFunciones(mapFun:Map<string,Funcion>){

@@ -21,11 +21,13 @@ export class Funcion extends Instruccion implements AsigInstrucciones{
     public ejecutar(scope: Scope):Retorno {
         if(scope != null){
             const result = this.sentencias?.ejecutarPara(scope);
+            // console.log("Verificacion Funcion");
+            // console.log(result);
             if(result != undefined){
                 if(result.tipo == this.tipo){
-                    return {value:result.valor,tipo:result.tipo};
+                    return {value:result.value,tipo:result.tipo};
                 }else{
-                    throw new Error("El valor de retorno no coincide con la funcion");
+                    throw new Error("El valor de retorno no coincide con la funcion -> sub origen Linea: "+this.linea+" ,Columna: "+this.columna);
                 }
             }else{
                 return {value:null,tipo:Tipo.ERROR};

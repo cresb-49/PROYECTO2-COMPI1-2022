@@ -26,9 +26,14 @@ export class Sentencias extends Instruccion {
                 } else if (instr instanceof Continuar) {
                     return instr;
                 } else if (instr instanceof Retornar) {
-                    return instr.ejecutar(newScope);
+                    let elemento = instr.ejecutar(newScope);
+                    // console.log("Debuj retorno1");
+                    // console.log(elemento);
+                    return elemento
                 }else{
                     const elemento = instr.ejecutar(newScope);
+                    // console.log("Debuj retorno2");
+                    // console.log(elemento);
                     if(elemento instanceof Detener){
                         return elemento;
                     }else if(elemento instanceof Continuar){
@@ -47,6 +52,7 @@ export class Sentencias extends Instruccion {
                         this.consolaErrores.agregarError(error.message);
                     }
                 }
+                break;
             }
         }
     }
@@ -60,9 +66,14 @@ export class Sentencias extends Instruccion {
                 } else if (instr instanceof Continuar) {
                     return instr;
                 } else if (instr instanceof Retornar) {
-                    return instr.ejecutar(scope);
+                    let elemento = instr.ejecutar(scope);
+                    // console.log("Debuj retorno1-2");
+                    // console.log(elemento);
+                    return elemento;
                 }else{
                     const elemento = instr.ejecutar(scope);
+                    // console.log("Debuj retorno2-2");
+                    // console.log(elemento);
                     if(elemento instanceof Detener){
                         return elemento;
                     }else if(elemento instanceof Continuar){
@@ -81,6 +92,7 @@ export class Sentencias extends Instruccion {
                         this.consolaErrores.agregarError(error.message);
                     }
                 }
+                break;
             }
         }
     }

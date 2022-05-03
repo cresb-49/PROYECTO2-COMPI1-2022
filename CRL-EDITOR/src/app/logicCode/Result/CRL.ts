@@ -24,7 +24,6 @@ export class CRL {
                 }
             }
         }
-
         if(this.principal!=null){
             this.principal.ejecutar(this.scopeGlobal);
         }
