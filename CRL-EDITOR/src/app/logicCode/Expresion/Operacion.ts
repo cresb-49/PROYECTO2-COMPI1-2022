@@ -47,7 +47,8 @@ export class Operacion extends Exprecion{
                 if(resultCast == Tipo.ERROR || resultCast == Tipo.VOID){
                     throw new Error("La resta de un \""+TipoString[valIzquierdo.tipo]+"\" y \""+TipoString[valDerecho.tipo]+"\" no es correcta ,Linea: "+this.linea+" ,Columna: "+this.columna);
                 }else{
-                    let val = valIzquierdo.value-valDerecho.value
+                    //let val = valIzquierdo.value-valDerecho.value
+                    let val = this.valueNumeric(valIzquierdo)-this.valueNumeric(valDerecho)
                     result = {value:val,tipo:resultCast};
                 }
                 break;
@@ -56,7 +57,8 @@ export class Operacion extends Exprecion{
                 if(resultCast == Tipo.ERROR || resultCast == Tipo.VOID){
                     throw new Error("La multiplicacion de un \""+TipoString[valIzquierdo.tipo]+"\" y \""+TipoString[valDerecho.tipo]+"\" no es correcta ,Linea: "+this.linea+" ,Columna: "+this.columna);
                 }else{
-                    let val = valIzquierdo.value*valDerecho.value
+                    // let val = valIzquierdo.value*valDerecho.value
+                    let val = this.valueNumeric(valIzquierdo)*this.valueNumeric(valDerecho)
                     result = {value:val,tipo:resultCast};
                 }
                 break;
@@ -65,7 +67,11 @@ export class Operacion extends Exprecion{
                 if(resultCast == Tipo.ERROR || resultCast == Tipo.VOID){
                     throw new Error("La divicion de un \""+TipoString[valIzquierdo.tipo]+"\" y \""+TipoString[valDerecho.tipo]+"\" no es correcta ,Linea: "+this.linea+" ,Columna: "+this.columna);
                 }else{
-                    let val = valIzquierdo.value/valDerecho.value
+                    if(this.valueNumeric(valDerecho) == 0){
+                        throw new Error("El dividendo no puede tener valor 0 ,Linea: "+this.linea+" ,Columna: "+this.columna);
+                    }
+                    //let val = valIzquierdo.value/valDerecho.value
+                    let val = this.valueNumeric(valIzquierdo)/this.valueNumeric(valDerecho)
                     result = {value:val,tipo:resultCast};
                 }
                 break;
@@ -74,7 +80,8 @@ export class Operacion extends Exprecion{
                 if(resultCast == Tipo.ERROR || resultCast == Tipo.VOID){
                     throw new Error("El modulo de un \""+TipoString[valIzquierdo.tipo]+"\" y \""+TipoString[valDerecho.tipo]+"\" no es correcta ,Linea: "+this.linea+" ,Columna: "+this.columna);
                 }else{
-                    let val = valIzquierdo.value%valDerecho.value
+                    //let val = valIzquierdo.value%valDerecho.value
+                    let val = this.valueNumeric(valIzquierdo)%this.valueNumeric(valDerecho)
                     result = {value:val,tipo:resultCast};
                 }
                 break;
@@ -83,7 +90,7 @@ export class Operacion extends Exprecion{
                 if(resultCast == Tipo.ERROR || resultCast == Tipo.VOID){
                     throw new Error("La potencia de un \""+TipoString[valIzquierdo.tipo]+"\" y \""+TipoString[valDerecho.tipo]+"\" no es correcta ,Linea: "+this.linea+" ,Columna: "+this.columna);
                 }else{
-                    let val = Math.pow(valIzquierdo.value,valDerecho.value);
+                    let val = Math.pow(this.valueNumeric(valIzquierdo),this.valueNumeric(valDerecho));
                     result = {value:val,tipo:resultCast};
                 }
                 break;
@@ -105,6 +112,15 @@ export class Operacion extends Exprecion{
         }
     }
 
+    public valueNumeric(element:any):any{
+        if(element.tipo == Tipo.BOOLEAN){
+            return this.getBooleanNumeric(element.value);
+        }else if(element.tipo == Tipo.CHAR){
+            return this.getCharNumeric(element.value);
+        }else{
+            return element.value;
+        }
+    }
     public getBooleanNumeric(state:boolean){
         if(state){
             return 1;
@@ -113,7 +129,6 @@ export class Operacion extends Exprecion{
             return 0;
         }
     }
-
     public getCharNumeric(caracter:String){
         return caracter.charCodeAt(0);
     }
