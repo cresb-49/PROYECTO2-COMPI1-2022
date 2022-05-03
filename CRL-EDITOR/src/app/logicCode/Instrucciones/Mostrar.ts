@@ -13,12 +13,14 @@ export class Mostrar extends Instruccion{
         this.valor = valor;
         this.expreciones = expreciones;
     }
-
     public ejecutar(scope: Scope) {
         const valor = this.valor.ejecutar(scope);
-        this.consola.agregarPrint(valor.value);
+        if(valor.value == null){
+            this.consola.agregarPrint("null");
+        }else{
+            this.consola.agregarPrint(valor.value);
+        }
     }
-
     public setConsolaCRL(consola:ConsolaCRLComponent){
         this.consola = consola;
     }
