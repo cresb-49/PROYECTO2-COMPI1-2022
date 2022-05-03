@@ -10,6 +10,12 @@ export class CallFuncion extends Instruccion{
 
 
     public ejecutar(scope: Scope) {
+        
+
+
+
+
+
 
         //TODO: realizar la logica para la llamada de funciones
     }

@@ -43,7 +43,11 @@ export class Scope {
     }
 
     public guardarFuncion(id: string, funcion: Funcion) {
-        this.funciones.set(id, funcion);
+        if(!this.funciones.has(id)){
+            this.funciones.set(id,funcion);
+        }else{
+            throw new Error("La variable \""+id+"\" ya esta definida en este ambito");
+        }
     }
 
     public obtenerVariable(id: string): Simbolo | undefined | null {

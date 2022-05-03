@@ -1,5 +1,6 @@
 import { Exprecion } from "../Abstracto/Exprecion";
 import { Instruccion } from "../Abstracto/Instruccion";
+import { Retorno } from "../Abstracto/Retorno";
 import { Scope } from "../Symbolo/Scope";
 
 export class Retornar extends Instruccion {
@@ -9,8 +10,8 @@ export class Retornar extends Instruccion {
         this.exprecion = exprecion;
     }
 
-    public ejecutar(scope: Scope) {
+    public ejecutar(scope: Scope):Retorno {
         const valor = this.exprecion.ejecutar(scope);
-        return valor.value;
+        return {value:valor.value,tipo:valor.tipo};
     }
 }
