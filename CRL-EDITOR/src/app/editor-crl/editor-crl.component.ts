@@ -72,7 +72,6 @@ export class EditorCrlComponent implements AfterViewInit {
     aceEditor.session.selection.on('changeCursor', ()=>{
       this.mostrarUbicacion2(aceEditor.selection.getCursor().row,aceEditor.selection.getCursor().column)
     });
-    this.visibilidad(true);
   }
 
 

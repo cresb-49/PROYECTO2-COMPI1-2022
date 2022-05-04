@@ -30,13 +30,7 @@ export class ContenedorEditorComponent implements AfterContentInit{
     componentRef.instance.setCodeRef(ref)
     componentRef.instance.setCode(code)
     this.editors.push(componentRef.instance)
-    setTimeout(() => {
-      if (this.editors.length === 1) {
-        this.enabledEditor(0);
-      }
-    },100000)
   }
-
 
   addTab(code:string) {
     if (this.tabtitle != '') {
