@@ -420,7 +420,6 @@
     }
 
     function agregarImport(imp){
-        console.log(imp)
         let result = IMPORTACION_ARCHIVOS.filter( i => i.getId() === imp.getId());
         if(result.length >= 1){
             let tmp = "Error Semantico: Linea: "+imp.linea+" ,Columna: "+imp.columna+"-> Ya se hizo referencia anteriormente a \""+imp.getId()+".crl"+"\"";
