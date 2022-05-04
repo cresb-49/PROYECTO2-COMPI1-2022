@@ -8,8 +8,11 @@ export class Importar extends Instruccion{
     }
 
     public ejecutar(scope: Scope) {
-
         //TODO: Realizar la logica para importar
+    }
+
+    public getId(){
+        return this.id;
     }
 
 }

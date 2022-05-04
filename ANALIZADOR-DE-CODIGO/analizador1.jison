@@ -62,6 +62,8 @@
 
     let FUNCIONES_DECLARADAS = [];
 
+    let IMPORTS_USADOS = [];
+
 
 
     function errorAnalisisCodigo(element,er){
@@ -418,7 +420,14 @@
     }
 
     function agregarImport(imp){
-        IMPORTACION_ARCHIVOS.push(imp);
+        console.log(imp)
+        let result = IMPORTACION_ARCHIVOS.filter( i => i.getId() === imp.getId());
+        if(result.length >= 1){
+            let tmp = "Error Semantico: Linea: "+imp.linea+" ,Columna: "+imp.columna+"-> Ya se hizo referencia anteriormente a \""+imp.getId()+".crl"+"\"";
+            ERRORES_ANALISIS.push(tmp);
+        }else{
+            IMPORTACION_ARCHIVOS.push(imp);
+        }
     }
 
     function agregarFPrincipal(f){
@@ -455,6 +464,7 @@
         FUNCION_PRINCIPAL = null;
         FUNCIONES_DECLARADAS = [];
         INCERTEZA_GLOBAL_IS_ASIG = false;
+        IMPORTS_USADOS = [];
 
         return new Result(lista,errorTemp,sentences,mostra,varGlobales,imports,fp);
     }
