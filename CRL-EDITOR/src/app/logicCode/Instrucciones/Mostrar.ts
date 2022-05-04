@@ -18,11 +18,35 @@ export class Mostrar extends Instruccion{
         if(valor.value == null){
             this.consola.agregarPrint("null");
         }else{
-            this.consola.agregarPrint(valor.value);
+            if(this.expreciones.length == 0){
+                console.log("Expreciones 0");
+                this.consola.agregarPrint(valor.value);
+            }else{
+                console.log("Expreciones n");
+                this.consola.agregarPrint(this.arreglarParametros(valor.value,scope));
+            }
         }
     }
     public setConsolaCRL(consola:ConsolaCRLComponent){
         this.consola = consola;
     }
-    
+
+    private arreglarParametros(cadena:any,scope:Scope){
+        let cad:string = String(cadena);
+        let result:string=cad;
+        
+        let index = 0;
+        for (const iterator of this.expreciones) {
+            let valExp = String(iterator.ejecutar(scope));
+            let call = String(index);
+            let expRegex = "{[\s]*"+call+"[\s]*}"
+            result = cad.replace(expRegex,valExp);
+            index++;
+        }
+        return result;
+    }
+
+    public setExpreciones(expreciones:Array<Exprecion>){
+        this.expreciones = expreciones;
+    }
 }

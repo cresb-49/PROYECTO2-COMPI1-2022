@@ -680,7 +680,7 @@ funcionDibujarAST   :   IDENTACION DIBUJAR_AST '(' identificador ')'    {$$ = ne
                     ;
 
 funcionMostrar  :   IDENTACION MOSTRAR '(' exprecion ',' parametrosEnviar ')'   {
-                                                                                    $$ = new Mostrar($4,[],@2.first_line,@2.first_column);
+                                                                                    $$ = new Mostrar($4,$6,@2.first_line,@2.first_column);
                                                                                     agregarScope2($1,$$);
                                                                                     addSimpleInst($$);
                                                                                     OBJ_MOSTRAR.push($$);
