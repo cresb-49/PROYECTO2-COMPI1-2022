@@ -19,10 +19,10 @@ export class Mostrar extends Instruccion{
             this.consola.agregarPrint("null");
         }else{
             if(this.expreciones.length == 0){
-                console.log("Expreciones 0");
+                //console.log("Expreciones 0");
                 this.consola.agregarPrint(valor.value);
             }else{
-                console.log("Expreciones n");
+                //console.log("Expreciones n");
                 this.consola.agregarPrint(this.arreglarParametros(valor.value,scope));
             }
         }
@@ -34,15 +34,6 @@ export class Mostrar extends Instruccion{
     private arreglarParametros(cadena:any,scope:Scope){
         let cad:string = String(cadena);
         let result:string=cad;
-        
-        let index = 0;
-        for (const iterator of this.expreciones) {
-            let valExp = String(iterator.ejecutar(scope));
-            let call = String(index);
-            let expRegex = "{[\s]*"+call+"[\s]*}"
-            result = cad.replace(expRegex,valExp);
-            index++;
-        }
         return result;
     }
 

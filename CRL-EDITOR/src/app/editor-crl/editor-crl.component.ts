@@ -65,12 +65,14 @@ export class EditorCrlComponent implements AfterViewInit {
     aceEditor.setOption("tabSize",4);
     aceEditor.setTheme('ace/theme/twilight');
     aceEditor.session.setMode('ace/mode/python');
+    aceEditor.setValue(this.codeCRL);
     aceEditor.on("change", () => {
       this.codeCRL = aceEditor.getValue();
     });
     aceEditor.session.selection.on('changeCursor', ()=>{
       this.mostrarUbicacion2(aceEditor.selection.getCursor().row,aceEditor.selection.getCursor().column)
     });
+    this.visibilidad(true);
   }
 
 
@@ -100,5 +102,10 @@ export class EditorCrlComponent implements AfterViewInit {
 
   public setCodeRef(nombre: string) {
     this.codigoRef = nombre;
+  }
+
+
+  public setCode(code:string){
+    this.codeCRL = code;
   }
 }

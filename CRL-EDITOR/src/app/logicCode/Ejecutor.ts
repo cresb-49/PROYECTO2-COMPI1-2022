@@ -25,26 +25,28 @@ export class Ejecutor {
 
     public analizar() {
         this.SCRIPT = [];
+        console.log(this.codigoCrl);
         this.consola.clearConsole();
-        this.consola.agregarError("---------------- Inicio analisis archivo "+this.codigoCrl[0].nombre+" ----------------");
-        try {
-            console.log(this.codigoCrl);
-            let result = Parser.parse(this.codigoCrl[0].codigo);
-            this.pushErrors(result.errores);
-            console.log(result);
-            result.instrucciones = this.cleanAst(result.instrucciones);
-            let padres = this.orderAST(result.instrucciones,this.codigoCrl[0].nombre);
-            result.mostra.forEach((element:Mostrar) => {
-                element.setConsolaCRL(this.consola);
-            });
-            result.sentencias.forEach((element:Sentencias) => {
-                element.setConsola(this.consola);
-            });
-            this.SCRIPT.push(new CRL(this.consola,padres,result.principal,result.varaiblesGlobales,result.imports));
-        } catch (error) {
-            this.consola.agregarError("Error al analizar el codigo del archivo");
+        for (const code of this.codigoCrl) {
+            this.consola.agregarError("---------------- Inicio analisis archivo "+code.nombre+" ----------------");
+            try {
+                let result = Parser.parse(code.codigo);
+                this.pushErrors(result.errores);
+                console.log(result);
+                result.instrucciones = this.cleanAst(result.instrucciones);
+                let padres = this.orderAST(result.instrucciones,code.nombre);
+                result.mostra.forEach((element:Mostrar) => {
+                    element.setConsolaCRL(this.consola);
+                });
+                result.sentencias.forEach((element:Sentencias) => {
+                    element.setConsola(this.consola);
+                });
+                this.SCRIPT.push(new CRL(this.consola,padres,result.principal,result.varaiblesGlobales,result.imports));
+            } catch (error) {
+                this.consola.agregarError("Error al analizar el codigo del archivo");
+            }
+            this.consola.agregarError("---------------- Fin analisis archivo "+code.nombre+" ----------------");
         }
-        this.consola.agregarError("---------------- Fin analisis archivo "+this.codigoCrl[0].nombre+" ----------------");
 
         console.log("Resultado Verificar");
         console.log(this.SCRIPT);

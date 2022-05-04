@@ -2,8 +2,8 @@
 <div class="container">
     <div class="input-group">
         <div class="input-acctions" style="margin-top: 10px; border-radius: 4px;">
-            <button class="btn btn-acciones2" style="margin-left: 10px;">Cargar Archivo</button>
-            <input type="file" class="btn" id="btnCargarCRL" name="btnCargarCRL" accept=".crl">
+            <button class="btn btn-acciones2" (click)="setCodigoAPP()" style="margin-left: 10px;">Cargar Archivo</button>
+            <input type="file" class="btn" id="btnCargarCRL" name="btnCargarCRL" multiple="multiple" accept=".crl" (change)="onFileSelected($event)" #inputFile>
         </div>
         <div style="margin-top: 10px;">
         </div>

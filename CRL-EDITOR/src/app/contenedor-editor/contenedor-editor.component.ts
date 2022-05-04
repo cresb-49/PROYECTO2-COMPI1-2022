@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ComponentRef, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { DynamicComponentDirective } from '../directives/dynamic-component.directive';
 import { EditorCrlComponent } from '../editor-crl/editor-crl.component';
@@ -12,34 +12,38 @@ import { CodigoCRL } from '../models/codeCRL';
   templateUrl: './contenedor-editor.component.html',
   styleUrls: ['./contenedor-editor.component.css']
 })
-export class ContenedorEditorComponent implements AfterViewInit {
+export class ContenedorEditorComponent implements AfterContentInit{
   @ViewChild(DynamicComponentDirective) dynamic: DynamicComponentDirective;
-  tabs: string[] = ['main.crl'];
+  tabs: string[] = [];
   editors: EditorCrlComponent[] = [];
   selected = new FormControl(0);
   tabtitle: string = '';
   tipedCode: CodigoCRL[] = [];
 
-  ngAfterViewInit(): void {
-    this.generateComponent();
+  ngAfterContentInit(): void {
+    this.tabtitle='';
   }
 
-  generateComponent() {
+  generateComponent(ref:string,code:string) {
     const viewContainerRef = this.dynamic.viewContainerRef;
     const componentRef = viewContainerRef.createComponent<EditorCrlComponent>(EditorCrlComponent);
+    componentRef.instance.setCodeRef(ref)
+    componentRef.instance.setCode(code)
     this.editors.push(componentRef.instance)
-    if (this.editors.length === 1) {
-      this.enabledEditor(0);
-    }
+    setTimeout(() => {
+      if (this.editors.length === 1) {
+        this.enabledEditor(0);
+      }
+    },100000)
   }
 
 
-  addTab() {
+  addTab(code:string) {
     if (this.tabtitle != '') {
       if (this.verificarRegex(this.tabtitle)) {
         if (!this.verificarExistencia(this.tabtitle)) {
           this.tabs.push(this.tabtitle + '.crl');
-          this.generateComponent();
+          this.generateComponent(this.tabtitle+".crl",code);
           this.tabtitle = '';
         } else {
           alert("Ya existe un archivo " + this.tabtitle);
@@ -77,18 +81,24 @@ export class ContenedorEditorComponent implements AfterViewInit {
   }
 
   verificarExistencia(nameCode: string) {
-    var bandera = false;
-    this.tabs.forEach(element => {
-      if (element.localeCompare(nameCode) === 0) {
-        bandera = true;
-      }
-    });
-    return bandera;
+    let result = this.tabs.filter(x=>x===(nameCode+".crl"));
+    return result.length >= 1;
   }
 
   verificarRegex(nameCode: string) {
     var pattern = new RegExp('^([a-zA-Z_$][a-zA-Z\\d_$]*)$');
     var result = pattern.test(nameCode);
     return result;
+  }
+
+  setCodeEnv(code:CodigoCRL[]){
+    const viewContainerRef = this.dynamic.viewContainerRef;
+    viewContainerRef.clear();
+    this.editors =[]
+    this.tabs =[];
+    code.forEach(element => {
+      this.tabtitle = element.nombre.replace(".crl","");
+      this.addTab(element.codigo);
+    });
   }
 }
