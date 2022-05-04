@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, ViewChild, Output, EventEmitter, Input } from "@angular/core";
 
-//import * as ace from "ace-builds";
-//import { CodigoCRL } from "../models/codeCRL";
+import * as ace from "ace-builds";
+import { CodigoCRL } from "../models/codeCRL";
 
 @Component({
   selector: 'app-editor-crl',
@@ -11,7 +11,7 @@ import { AfterViewInit, Component, ElementRef, ViewChild, Output, EventEmitter, 
 
 export class EditorCrlComponent implements AfterViewInit {
 
-  //@ViewChild("editor") private editor: ElementRef<HTMLInputElement>;
+  @ViewChild("editor") private editor: ElementRef<HTMLInputElement>;
   @ViewChild("textbox") private textbox: ElementRef<HTMLInputElement>;
   @ViewChild("contenedor") private contenedor: ElementRef<HTMLElement>;
 
@@ -27,18 +27,16 @@ export class EditorCrlComponent implements AfterViewInit {
       event.preventDefault();
       var start = this.textbox.nativeElement.selectionStart;
       var end = this.textbox.nativeElement.selectionEnd;
-
       // set textarea value to: text before caret + tab + text after caret
       if (start != null && end != null) {
-
         this.textbox.nativeElement.value = this.textbox.nativeElement.value.substring(0, start) +
           "\t" + this.textbox.nativeElement.value.substring(end);
-
         // put caret at right position again
         this.textbox.nativeElement.selectionStart = this.textbox.nativeElement.selectionEnd = start + 1;
       }
     }
   }
+  
   actualizarCodigo() {
     this.codeCRL = this.textbox.nativeElement.value;
     this.mostrarUbicacion();
@@ -54,9 +52,28 @@ export class EditorCrlComponent implements AfterViewInit {
     }
   }
 
-  ngAfterViewInit(): void {
-    
+
+  mostrarUbicacion2(linea:number,columna:number) {
+    this.ubicacionEditor = "Linea: " + (linea+1) + ", Columna: " + (columna+1);
   }
+
+  ngAfterViewInit(): void {
+    ace.config.set("fontSize", "14px");
+    ace.config.set('basePath', 'https://unpkg.com/ace-builds@1.4.12/src-noconflict');
+    const aceEditor = ace.edit(this.editor.nativeElement);
+    aceEditor.setOption("useSoftTabs",false);
+    aceEditor.setOption("tabSize",4);
+    aceEditor.setTheme('ace/theme/twilight');
+    aceEditor.session.setMode('ace/mode/python');
+    aceEditor.on("change", () => {
+      this.codeCRL = aceEditor.getValue();
+    });
+    aceEditor.session.selection.on('changeCursor', ()=>{
+      this.mostrarUbicacion2(aceEditor.selection.getCursor().row,aceEditor.selection.getCursor().column)
+    });
+  }
+
+
   descargarCodigoEditor() {
     alert("Descargando el codigo");
     console.log(this.codeCRL);
