@@ -39,7 +39,6 @@ export class ContenedorPrincipalComponent implements AfterViewInit {
   onFileSelected(event: any) {
     let code:CodigoCRL[]=[];
     let files = event.srcElement.files;
-    console.log(files);
     for (const iterator of files) {
       let codeCRl = new CodigoCRL("");
       let reader = new FileReader();

@@ -16,6 +16,7 @@
     padding-bottom: 1px;
     padding-top: 1px;
     border-radius: 7px 7px 0px 0px;
+    transform: translate(4px,0px);
     color: white;
 }
 
