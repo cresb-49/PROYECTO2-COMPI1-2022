@@ -9,6 +9,9 @@ import { graphviz }  from 'd3-graphviz';
 })
 export class GraficoComponent implements OnInit {
   titulo:string = 'Grafico .dot';
+
+  grap:string = 'digraph {a -> b}';
+
   constructor() { }
 
   ngOnInit(): void {
@@ -16,7 +19,10 @@ export class GraficoComponent implements OnInit {
   }
 
   d3(){
-    graphviz('#graph').renderDot('digraph {a -> b}');
+    graphviz('#graph').renderDot(this.grap);
   }
 
+  setCodeDot(code:string){
+    this.grap=code;
+  }
 }
