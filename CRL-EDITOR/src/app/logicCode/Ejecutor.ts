@@ -1,6 +1,7 @@
 import { ConsolaCRLComponent } from "../consola-crl/consola-crl.component";
 import { CodigoCRL } from "../models/codeCRL";
 import { Instruccion } from "./Abstracto/Instruccion";
+import { Entorno } from "./Entorno/Entorno";
 import { Mostrar } from "./Instrucciones/Mostrar";
 import { Sentencias } from "./Instrucciones/Sentencias";
 import { Organizar } from "./OrganizarInstrucciones/Organizar";
@@ -41,7 +42,7 @@ export class Ejecutor {
                 result.sentencias.forEach((element:Sentencias) => {
                     element.setConsola(this.consola);
                 });
-                this.SCRIPT.push(new CRL(this.consola,padres,result.principal,result.varaiblesGlobales,result.imports));
+                this.SCRIPT.push(new CRL(code.nombre,padres,result.principal,result.varaiblesGlobales,result.imports));
             } catch (error) {
                 this.consola.agregarError("Error al analizar el codigo del archivo");
             }
@@ -52,7 +53,8 @@ export class Ejecutor {
         console.log(this.SCRIPT);
 
         if(!this.errores){
-            this.SCRIPT[0].ejecutar();
+            let entorno = new Entorno(this.SCRIPT,this.consola);
+            entorno.ejecutar();
         }else{
             this.consola.agregarError("No se puede ejecutar el Script CRL porque hay errores!!!!")
         }

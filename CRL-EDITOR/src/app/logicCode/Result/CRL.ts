@@ -8,7 +8,7 @@ import { Scope } from "../Symbolo/Scope";
 
 export class CRL {
     private scopeGlobal:Scope;
-    constructor(private consoleCRL:ConsolaCRLComponent,private funciones:Instruccion[],private principal:Principal|null,private varaiblesGlobales:Array<Declaracion>,private imports:Array<Importar>){}
+    constructor(private nombre:String,private funciones:Instruccion[],private principal:Principal|null,private varaiblesGlobales:Array<Declaracion>,private imports:Array<Importar>){}
 
     public ejecutar(){
         this.scopeGlobal = new Scope(null);
@@ -27,5 +27,13 @@ export class CRL {
         if(this.principal!=null){
             this.principal.ejecutar(this.scopeGlobal);
         }
+    }
+
+    public getPrincipal(){
+        return this.principal;
+    }
+
+    public getNombre(){
+        return this.nombre;
     }
 }
