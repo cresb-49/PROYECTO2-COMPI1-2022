@@ -1,0 +1,8 @@
+.estilo{
+    text-align: center;
+    border-width: 3px,#1e1e1e;
+}
+
+.contenedorGrafico{
+    transform: translate(0px,20px);
+}

@@ -14,6 +14,9 @@ import { ContenedorEditorComponent } from './contenedor-editor/contenedor-editor
 import { ContenedorPrincipalComponent } from './contenedor-principal/contenedor-principal.component';
 import { ConsolaCRLComponent } from './consola-crl/consola-crl.component';
 import { DynamicComponentDirective } from './directives/dynamic-component.directive';
+import { DynamicComponent2Directive } from './directives/dynamic-component2.directive';
+import { ContenerdorGraficosComponent } from './contenerdor-graficos/contenerdor-graficos.component';
+import { GraficoComponent } from './grafico/grafico.component';
 
 
 @NgModule({
@@ -24,7 +27,10 @@ import { DynamicComponentDirective } from './directives/dynamic-component.direct
     ContenedorEditorComponent,
     ContenedorPrincipalComponent,
     ConsolaCRLComponent,
+    DynamicComponent2Directive,
     DynamicComponentDirective,
+    ContenerdorGraficosComponent,
+    GraficoComponent,
   ],
   imports: [
     BrowserModule, MatTabsModule, BrowserAnimationsModule, MatFormFieldModule, MatCheckboxModule, FormsModule,MatInputModule,ReactiveFormsModule

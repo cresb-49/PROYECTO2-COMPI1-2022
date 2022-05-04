@@ -1,7 +1,9 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ConsolaCRLComponent } from '../consola-crl/consola-crl.component';
 import { ContenedorEditorComponent } from '../contenedor-editor/contenedor-editor.component';
+import { ContenerdorGraficosComponent } from '../contenerdor-graficos/contenerdor-graficos.component';
 import { DynamicComponentDirective } from '../directives/dynamic-component.directive';
+import { DynamicComponent2Directive } from '../directives/dynamic-component2.directive';
 import { Ejecutor } from '../logicCode/Ejecutor';
 import { CodigoCRL } from '../models/codeCRL';
 
@@ -13,18 +15,25 @@ import { CodigoCRL } from '../models/codeCRL';
 })
 export class ContenedorPrincipalComponent implements AfterViewInit {
   @ViewChild(DynamicComponentDirective) dynamic: DynamicComponentDirective;
+  @ViewChild(DynamicComponent2Directive) dynamic2:DynamicComponent2Directive;
   @ViewChild("inputFile") private inputFile: ElementRef<HTMLInputElement>;
 
   private contenedorListaEditor: ContenedorEditorComponent;
   private consolaCRL: ConsolaCRLComponent;
+  private contendorGrafico: ContenerdorGraficosComponent;
   private codeCRL:CodigoCRL[]=[];
 
   ngAfterViewInit(): void {
+    const viewContainerRef2 = this.dynamic2.viewContainerRef;
+    const componentRef3 = viewContainerRef2.createComponent<ContenerdorGraficosComponent>(ContenerdorGraficosComponent);
     const viewContainerRef = this.dynamic.viewContainerRef;
     const componentRef1 = viewContainerRef.createComponent<ContenedorEditorComponent>(ContenedorEditorComponent);
     this.contenedorListaEditor = componentRef1.instance;
     const componentRef2 = viewContainerRef.createComponent<ConsolaCRLComponent>(ConsolaCRLComponent);
     this.consolaCRL = componentRef2.instance;
+    this.contendorGrafico = componentRef3.instance;
+    console.log(this.contendorGrafico);
+    
   }
 
   obtenerCodigo() {
