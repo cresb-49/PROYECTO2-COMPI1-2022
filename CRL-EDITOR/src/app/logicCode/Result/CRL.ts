@@ -1,4 +1,3 @@
-import { ConsolaCRLComponent } from "src/app/consola-crl/consola-crl.component";
 import { Instruccion } from "../Abstracto/Instruccion";
 import { Declaracion } from "../Instrucciones/Declaracion";
 import { Funcion } from "../Instrucciones/Funcion";
@@ -30,11 +29,17 @@ export class CRL {
             if(!(fun instanceof Principal)){
                 if(fun instanceof Funcion){
                     this.scopeGlobal.guardarFuncion(fun.getId(),fun);
-                    fun.setRefFuncion(this.scopeGlobal.funciones);
+                    fun.setRefFuncion(this.scopeGlobal.contenedorFunciones);
                 }
             }
         }
-    }   
+    }
+    
+    public setOtherRefFunciones(){
+        for (const refFunciones of this.refOtherScope) {
+            this.scopeGlobal.contenedorFunciones.agregarRefOtrosArchivos(refFunciones.getScope().contenedorFunciones);
+        }
+    }
 
     public getPrincipal(){
         return this.principal;

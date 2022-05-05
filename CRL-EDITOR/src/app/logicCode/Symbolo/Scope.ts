@@ -1,16 +1,19 @@
 import { Tipo, TipoString } from "../Abstracto/Retorno";
 import { Funcion } from "../Instrucciones/Funcion";
+import { ContenedorFunciones } from "./ContenedorFunciones";
 import { Simbolo } from "./Simbolo";
 
 export class Scope {
     private variables: Map<string, Simbolo>;
-    public funciones: Map<string, Funcion>;
+    //public funciones: Map<string, Funcion>;
+    public contenedorFunciones:ContenedorFunciones;
     public anterior: Scope | null;
 
     constructor(anterior: Scope | null) {
         this.anterior = anterior;
         this.variables = new Map();
-        this.funciones = new Map();
+        //this.funciones = new Map();
+        this.contenedorFunciones = new ContenedorFunciones();
     }
 
     public declararVariable(id:string,valor:any,tipo:Tipo){
@@ -43,12 +46,19 @@ export class Scope {
     }
 
     public guardarFuncion(id: string, funcion: Funcion) {
-        if(!this.funciones.has(id)){
-            this.funciones.set(id,funcion);
+        if(!this.contenedorFunciones.hasLocal(id)){
+            this.contenedorFunciones.set(id,funcion);
         }else{
             throw new Error("La funcion \""+id+"\" ya esta definida en el archivo");
         }
     }
+    // public guardarFuncion(id: string, funcion: Funcion) {
+    //     if(!this.funciones.has(id)){
+    //         this.funciones.set(id,funcion);
+    //     }else{
+    //         throw new Error("La funcion \""+id+"\" ya esta definida en el archivo");
+    //     }
+    // }
 
     public obtenerVariable(id: string): Simbolo | undefined | null {
         let scope: Scope | null = this;
@@ -64,8 +74,8 @@ export class Scope {
     public obtenerFuncion(id:string):Funcion|undefined{
         let scope : Scope | null = this;
         while (scope != null) {
-            if (scope.funciones.has(id)) {
-                return scope.funciones.get(id);
+            if (scope.contenedorFunciones.has(id)) {
+                return scope.contenedorFunciones.get(id);
             }
             scope = scope.anterior;
         }
@@ -80,7 +90,11 @@ export class Scope {
         return scope;
     }
 
-    public setMapFunciones(mapFun:Map<string,Funcion>){
-        this.funciones = mapFun;
+    // public setMapFunciones(mapFun:Map<string,Funcion>){
+    //     this.funciones = mapFun;
+    // }
+
+    public setFunciones(funciones:ContenedorFunciones){
+        this.contenedorFunciones = funciones;
     }
 }

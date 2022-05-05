@@ -2,6 +2,7 @@ import { AsigInstrucciones } from "../Abstracto/AsigIntrucciones";
 import { Exprecion } from "../Abstracto/Exprecion";
 import { Instruccion } from "../Abstracto/Instruccion";
 import { Retorno, Tipo, TipoString } from "../Abstracto/Retorno";
+import { ContenedorFunciones } from "../Symbolo/ContenedorFunciones";
 import { Scope } from "../Symbolo/Scope";
 import { Asignacion } from "./Asignacion";
 import { Declaracion } from "./Declaracion";
@@ -10,7 +11,8 @@ import { Sentencias } from "./Sentencias";
 
 export class Funcion extends Instruccion implements AsigInstrucciones{
 
-    private funcionesAccesible: Map<string,Funcion>;
+    //private funcionesAccesible: Map<string,Funcion>;
+    private funcionesAccesible: ContenedorFunciones;
     private viewScope:Scope;
       
     constructor(private tipo:number,private id: string, private sentencias:Sentencias|null, private parametros : Array<Declaracion>, liena : number, columna : number){
@@ -49,7 +51,7 @@ export class Funcion extends Instruccion implements AsigInstrucciones{
         if(valParametros.length == this.parametros.length){
 
             let newScope = new Scope(null);
-            newScope.setMapFunciones(this.funcionesAccesible);
+            newScope.setFunciones(this.funcionesAccesible);
             this.viewScope = newScope;
 
             for (const vari of this.parametros) {
@@ -84,7 +86,11 @@ export class Funcion extends Instruccion implements AsigInstrucciones{
         return this.tipo;
     }
 
-    public setRefFuncion(mapFun:Map<string,Funcion>){
-        this.funcionesAccesible = mapFun;
+    // public setRefFuncion(mapFun:Map<string,Funcion>){
+    //     this.funcionesAccesible = mapFun;
+    // }
+
+    public setRefFuncion(funciones:ContenedorFunciones){
+        this.funcionesAccesible = funciones;
     }
 }
