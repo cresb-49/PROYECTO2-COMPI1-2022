@@ -1,12 +1,13 @@
 import { ConsolaCRLComponent } from "src/app/consola-crl/consola-crl.component";
+import { ContenerdorGraficosComponent } from "src/app/contenerdor-graficos/contenerdor-graficos.component";
 import { CRL } from "../Result/CRL";
 import { RefScope } from "../Symbolo/RefScope";
 
 export class Entorno {
     private principalCRL: CRL;
-    constructor(private script: Array<CRL>, private consola: ConsolaCRLComponent) { }
+    constructor(private script: Array<CRL>, private consola: ConsolaCRLComponent,private contenedorGrafico:ContenerdorGraficosComponent) { }
 
-    public ejecutar() {
+    public ejecutar(graficos:any[]) {
         //Inicializacion de cada uno de los archivos
         this.script.forEach((crl:CRL)=>{
             crl.inicializar();
@@ -62,6 +63,7 @@ export class Entorno {
                         }
                         console.log(this.script);
                         this.principalCRL.ejecutar();
+                        this.contenedorGrafico.generateGraficos(graficos);
                     }
                 }
             }

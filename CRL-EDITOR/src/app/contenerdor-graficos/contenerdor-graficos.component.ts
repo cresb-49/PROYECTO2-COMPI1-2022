@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DynamicComponentDirective } from '../directives/dynamic-component.directive';
 import { GraficoComponent } from '../grafico/grafico.component';
+import { EncapsuladorGrafico } from '../logicCode/GraficosDot/EncapsuladorGrafico';
 
 @Component({
   selector: 'app-contenerdor-graficos',
@@ -14,11 +15,16 @@ export class ContenerdorGraficosComponent implements OnInit {
 
   public generateGraficos(array:any[]){
     const viewContainerRef2 = this.dynamic.viewContainerRef;
-
-    array.forEach(element => {
-      const componentRef3 = viewContainerRef2.createComponent<GraficoComponent>(GraficoComponent);
-      componentRef3.instance.setCodeDot("");
-    });
-    
+    viewContainerRef2.clear();
+    for (const grap of array) {
+      if(grap instanceof EncapsuladorGrafico){
+        if(grap.drawEXP.ejecutado){
+          const componentRef3 = viewContainerRef2.createComponent<GraficoComponent>(GraficoComponent);
+          componentRef3.instance.id= "grafico"+viewContainerRef2.length;
+          componentRef3.instance.grap=grap.drawEXP.dotCode;
+          componentRef3.instance.titulo="Instruccion DibujarEXP archivo: "+grap.file+" ,Linea: "+grap.drawEXP.linea+" ,Columna: "+grap.drawEXP.columna;
+        }
+      }
+    }
   }
 }

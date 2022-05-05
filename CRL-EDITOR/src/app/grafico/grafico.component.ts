@@ -8,9 +8,10 @@ import { graphviz }  from 'd3-graphviz';
   styleUrls: ['./grafico.component.css']
 })
 export class GraficoComponent implements OnInit {
-  titulo:string = 'Grafico .dot';
+  public titulo:string = 'Grafico .dot';
 
-  grap:string = 'digraph {a -> b}';
+  public grap:string = 'digraph {a -> b}';
+  public id:string = ''
 
   constructor() { }
 
@@ -19,10 +20,6 @@ export class GraficoComponent implements OnInit {
   }
 
   d3(){
-    graphviz('#graph').renderDot(this.grap);
-  }
-
-  setCodeDot(code:string){
-    this.grap=code;
+    graphviz('#'+this.id).renderDot(this.grap);
   }
 }
