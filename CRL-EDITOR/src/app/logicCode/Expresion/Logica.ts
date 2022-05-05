@@ -1,5 +1,6 @@
 import { Exprecion } from "../Abstracto/Exprecion";
 import { Retorno, Tipo } from "../Abstracto/Retorno";
+import { GraficoDot } from "../GraficosDot/GraficoDot";
 import { Scope } from "../Symbolo/Scope";
 
 export enum OpcionLogica {
@@ -11,8 +12,8 @@ export enum OpcionLogica {
 
 export const andLogico = [
         /*  0    1 */
-    /*0*/[false,false],
-    /*1*/[false,true ],
+    /*0*/[false, false],
+    /*1*/[false, true],
 ];
 
 export const orLogico = [
@@ -62,5 +63,16 @@ export class Logica extends Exprecion {
         }
         return result;
     }
-
+    private valOperacion = ['&&', '||', '|&', '!'];
+    public graficar(scope: Scope, graphviz: GraficoDot, padre: string) {
+        let num = graphviz.declaraciones.length + 1;
+        let node = "nodo" + num + '[label="' + this.valOperacion[this.tipo] + '",shape="circle"];';
+        graphviz.declaraciones.push(node);
+        if (padre.length != 0) {
+            let relacion = padre + ' -> ' + "nodo" + num
+            graphviz.relaciones.push(relacion);
+        }
+        this.izquierda.graficar(scope, graphviz, ("nodo" + num));
+        this.derecha.graficar(scope, graphviz, ("nodo" + num));
+    }
 }

@@ -1,5 +1,6 @@
 import { Exprecion } from "../Abstracto/Exprecion";
-import { Retorno, Tipo } from "../Abstracto/Retorno";
+import { Retorno, Tipo, TipoString } from "../Abstracto/Retorno";
+import { GraficoDot } from "../GraficosDot/GraficoDot";
 import { Scope } from "../Symbolo/Scope";
 
 export class Literal extends Exprecion {
@@ -22,6 +23,16 @@ export class Literal extends Exprecion {
                 return { value: this.valor, tipo: Tipo.BOOLEAN }
             default:
                 return { value: null, tipo: Tipo.ERROR }
+        }
+    }
+
+    public graficar(scope: Scope, graphviz: GraficoDot, padre: string) {
+        let num = graphviz.declaraciones.length + 1;
+        let node = "nodo" + num + ' [label="<f0> '+TipoString[this.tipo]+' |<f1> ' + this.valor + '"];';
+        graphviz.declaraciones.push(node);
+        if (padre.length != 0) {
+            let relacion = padre + ' -> ' + "nodo" + num
+            graphviz.relaciones.push(relacion);
         }
     }
 }

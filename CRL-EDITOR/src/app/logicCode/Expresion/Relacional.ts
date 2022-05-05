@@ -1,6 +1,7 @@
 import { Exprecion } from "../Abstracto/Exprecion";
 import { Retorno, Tipo, TipoString } from "../Abstracto/Retorno";
 import { castIncerteza } from "../CasteoImplicito/TablasTipos";
+import { GraficoDot } from "../GraficosDot/GraficoDot";
 import { Scope } from "../Symbolo/Scope";
 
 const Parser = require('./../Grammar/analizador2');
@@ -15,7 +16,10 @@ export enum OpcionRelacional {
     INCERTEZA,
 }
 
+export const TipoRelacional = ['==', '!=', '<', '>', '<=', '>=', '~'];
+
 export class Relacional extends Exprecion {
+
     constructor(private izquierda: Exprecion, private derecha: Exprecion, private tipo: OpcionRelacional, private incerteza: number, linea: number, columna: number) {
         super(linea, columna);
     }
@@ -74,15 +78,15 @@ export class Relacional extends Exprecion {
     }
 
     private calcincerteza2(cad1: any, cad2: any) {
-        let cadV1:string; 
-        let cadV2:string;
-        
+        let cadV1: string;
+        let cadV2: string;
+
         try {
             cadV1 = Parser.parse(String(cad1));
             cadV2 = Parser.parse(String(cad2));
         } catch (error) {
-            cadV1="";
-            cadV2="";
+            cadV1 = "";
+            cadV2 = "";
         }
 
         cadV1 = cadV1.toLowerCase();
@@ -92,5 +96,17 @@ export class Relacional extends Exprecion {
         // console.log("cadv1-"+cadV2+"-");
 
         return cadV1 === cadV2;
+    }
+
+    public graficar(scope: Scope, graphviz: GraficoDot, padre: string) {
+        let num = graphviz.declaraciones.length + 1;
+        let node = "nodo" + num + ' [label="' + TipoRelacional[this.tipo] + '",shape="circle"];';
+        graphviz.declaraciones.push(node);
+        if (padre.length != 0) {
+            let relacion = padre + ' -> ' + "nodo" + num
+            graphviz.relaciones.push(relacion);
+        }
+        this.izquierda.graficar(scope, graphviz, ("nodo" + num));
+        this.derecha.graficar(scope, graphviz, ("nodo" + num));
     }
 }
