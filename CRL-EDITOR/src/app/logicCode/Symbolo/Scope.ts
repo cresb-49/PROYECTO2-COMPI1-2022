@@ -16,9 +16,9 @@ export class Scope {
         this.contenedorFunciones = new ContenedorFunciones();
     }
 
-    public declararVariable(id:string,valor:any,tipo:Tipo){
+    public declararVariable(id:string,valor:any,tipo:Tipo,linea:number,columna:number){
         if(!this.variables.has(id)){
-            this.variables.set(id,new Simbolo(valor,id,tipo));
+            this.variables.set(id,new Simbolo(valor,id,tipo,linea,columna));
         }else{
             throw new Error("La variable \""+id+"\" ya esta definida en este ambito");
         }
@@ -96,5 +96,31 @@ export class Scope {
 
     public setFunciones(funciones:ContenedorFunciones){
         this.contenedorFunciones = funciones;
+    }
+
+    public graficar(linea:number,columna:number):string{
+        let columna1:string[]=[]
+        let columna2:string[]=[]
+        columna1.push("Origen Ejecucion");
+        columna2.push("Linea: "+linea+" ,Columna: "+columna);
+        let keys = this.variables.keys();
+        for (const key of keys) {
+            let val = this.variables.get(key);
+            if(val != undefined){
+                columna1.push(key);
+                columna2.push('Valor: '+val.valor+' ,Linea: '+val.linea+' ,Columna: '+val.columna+' ,Tipo: '+TipoString[val.tipo])
+            }
+        }
+        let c1 ='';
+        let c2 ='';
+        for (const col1 of columna1) {
+            c1+=col1+'|';
+        }
+        for (const col2 of columna2) {
+            c2+=col2+'|';
+        }
+        c1=c1.slice(0,-1);
+        c2=c2.slice(0,-1);
+        return 'digraph TS {node [shape=record];ts [label="{'+c1+'}|{'+c2+'}"];}';
     }
 }

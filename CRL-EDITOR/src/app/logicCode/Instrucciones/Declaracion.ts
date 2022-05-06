@@ -21,14 +21,12 @@ export class Declaracion extends Instruccion{
     }
 
     public ejecutar(scope: Scope) {
-        //TODO:Realizar la logica del la declaracion de variables
-        
         if(this.valor == null){
-            scope.declararVariable(this.id,null,this.tipo);
+            scope.declararVariable(this.id,null,this.tipo,this.linea,this.columna);
         }else{
             const val = this.valor.ejecutar(scope);
             if(val.tipo == this.tipo){
-                scope.declararVariable(this.id,val.value,val.tipo);
+                scope.declararVariable(this.id,val.value,val.tipo,this.linea,this.columna);
             }else{
                 throw new Error("El valor a asignar es de tipo: "+TipoString[val.tipo]);
             }
@@ -39,4 +37,7 @@ export class Declaracion extends Instruccion{
         return this.id;
     }
 
+    public getTipo():number{
+        return this.tipo;
+    }
 }

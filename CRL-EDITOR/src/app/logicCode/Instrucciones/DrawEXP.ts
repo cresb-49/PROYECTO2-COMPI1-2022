@@ -24,6 +24,6 @@ export class DrawEXP extends Instruccion{
         }
         result = result + "}";
         this.dotCode = result;
-        console.log(this.dotCode);
+        //console.log(this.dotCode);
     }    
 }

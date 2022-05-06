@@ -99,11 +99,11 @@ export class Ejecutor {
     private getGraficadores(element:any[],nombre:string){
         for (const iterator of element) {
             if(iterator instanceof DrawAST){
-                this.GRAFICOS.push(iterator);
+                this.GRAFICOS.push(new EncapsuladorGrafico(iterator,nombre));
             }else if(iterator instanceof DrawEXP){
                 this.GRAFICOS.push(new EncapsuladorGrafico(iterator,nombre));
             }else if(iterator instanceof DrawTS){
-                this.GRAFICOS.push(iterator);
+                this.GRAFICOS.push(new EncapsuladorGrafico(iterator,nombre));
             }
         }
     }

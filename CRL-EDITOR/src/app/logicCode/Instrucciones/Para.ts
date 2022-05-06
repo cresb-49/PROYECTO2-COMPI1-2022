@@ -33,7 +33,7 @@ export class Para extends Instruccion implements AsigInstrucciones {
         let exp2 = new Literal(paso,this.linea,this.columna,Tipo.INT);
         
         let value = this.valVar.ejecutar(newScope);
-        newScope.declararVariable(this.varIterator,value.value,Tipo.INT);
+        newScope.declararVariable(this.varIterator,value.value,Tipo.INT,this.linea,this.columna);
 
         let newVal = new Operacion(exp1,exp2,OpcionOperacion.SUMA,this.linea,this.columna)
         let asignar = new Asignacion(this.varIterator,newVal,this.linea,this.columna);
