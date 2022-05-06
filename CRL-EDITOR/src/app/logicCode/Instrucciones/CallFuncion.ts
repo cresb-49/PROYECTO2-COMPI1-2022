@@ -10,6 +10,7 @@ export class CallFuncion extends Instruccion{
     }
 
     public ejecutar(scope: Scope) {
+        let code = this.codigoReferencia(scope);
         const funcion = scope.obtenerFuncion(this.id);
         if(funcion == undefined){
             throw new Error("No existe la funcion \""+this.id+"\" en el programa ,Linea: "+this.linea+" ,Columna: "+this.columna);
@@ -22,5 +23,37 @@ export class CallFuncion extends Instruccion{
                 }
             }
         }
+    }
+
+    public codigoReferencia(scope:Scope):string{
+        let contInt = 0;
+        let contBool = 0;
+        let contChar = 0;
+        let contString = 0;
+        let contDouble = 0;
+
+        for (const param of this.parametros) {
+            const exp = param.ejecutar(scope);
+            switch (exp.tipo) {
+                case Tipo.INT:
+                    contInt++;
+                    break;
+                case Tipo.BOOLEAN:
+                    contBool++;
+                    break;
+                case Tipo.CHAR:
+                    contChar++;
+                    break;
+                case Tipo.STRING:
+                    contString++;
+                    break;
+                case Tipo.DOUBLE:
+                    contDouble++;
+                    break;
+            }
+        }
+        let code = "-"+String(contInt)+String(contBool)+String(contChar)+String(contString)+String(contDouble)
+        console.log("Rev code: "+code);
+        return code;
     }
 }

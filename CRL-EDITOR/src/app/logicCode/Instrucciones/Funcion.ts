@@ -93,4 +93,35 @@ export class Funcion extends Instruccion implements AsigInstrucciones{
     public setRefFuncion(funciones:ContenedorFunciones){
         this.funcionesAccesible = funciones;
     }
+
+    public codigoReferencia():string{
+        let contInt = 0;
+        let contBool = 0;
+        let contChar = 0;
+        let contString = 0;
+        let contDouble = 0;
+
+        for (const param of this.parametros) {
+            switch (param.getTipo()) {
+                case Tipo.INT:
+                    contInt++;
+                    break;
+                case Tipo.BOOLEAN:
+                    contBool++;
+                    break;
+                case Tipo.CHAR:
+                    contChar++;
+                    break;
+                case Tipo.STRING:
+                    contString++;
+                    break;
+                case Tipo.DOUBLE:
+                    contDouble++;
+                    break;
+            }
+        }
+        let code = "-"+String(contInt)+String(contBool)+String(contChar)+String(contString)+String(contDouble)
+        console.log("Rev code: "+code);
+        return code;
+    }
 }
