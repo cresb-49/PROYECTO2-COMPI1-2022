@@ -1,0 +1,4 @@
+digraph structs {
+    node [shape=record];
+    struct3 [label="{ Ejecusion |Variable 1| Variable 2}|{Valor: 10 ,Linea: 15 ,Columna: 20 Tipo:Double|Valor: 10 ,Linea: 15 ,Columna: 20 Tipo:Double|Valor: 10 ,Linea: 15 ,Columna: 20 Tipo:Double}"];
+}

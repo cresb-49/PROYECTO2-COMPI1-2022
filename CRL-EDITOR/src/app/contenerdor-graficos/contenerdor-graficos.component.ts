@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DynamicComponentDirective } from '../directives/dynamic-component.directive';
 import { GraficoComponent } from '../grafico/grafico.component';
 import { EncapsuladorGrafico } from '../logicCode/GraficosDot/EncapsuladorGrafico';
+import { DrawEXP } from '../logicCode/Instrucciones/DrawEXP';
+import { DrawTS } from '../logicCode/Instrucciones/DrawTS';
 
 @Component({
   selector: 'app-contenerdor-graficos',
@@ -18,11 +20,20 @@ export class ContenerdorGraficosComponent implements OnInit {
     viewContainerRef2.clear();
     for (const grap of array) {
       if(grap instanceof EncapsuladorGrafico){
-        if(grap.drawEXP.ejecutado){
-          const componentRef3 = viewContainerRef2.createComponent<GraficoComponent>(GraficoComponent);
-          componentRef3.instance.id= "grafico"+viewContainerRef2.length;
-          componentRef3.instance.grap=grap.drawEXP.dotCode;
-          componentRef3.instance.titulo="Instruccion DibujarEXP archivo: "+grap.file+" ,Linea: "+grap.drawEXP.linea+" ,Columna: "+grap.drawEXP.columna;
+        if(grap.obj instanceof DrawEXP){
+          if(grap.obj.ejecutado){
+            const componentRef3 = viewContainerRef2.createComponent<GraficoComponent>(GraficoComponent);
+            componentRef3.instance.id= "grafico"+viewContainerRef2.length;
+            componentRef3.instance.grap=grap.obj.dotCode;
+            componentRef3.instance.titulo="Instruccion DibujarEXP archivo: "+grap.file+" ,Linea: "+grap.obj.linea+" ,Columna: "+grap.obj.columna;
+          }
+        }else if(grap.obj instanceof DrawTS){
+          if(grap.obj.ejecutado){
+            const componentRef3 = viewContainerRef2.createComponent<GraficoComponent>(GraficoComponent);
+            componentRef3.instance.id= "grafico"+viewContainerRef2.length;
+            componentRef3.instance.grap=grap.obj.dotCode;
+            componentRef3.instance.titulo="Instruccion DibujarTS archivo: "+grap.file+" ,Linea: "+grap.obj.linea+" ,Columna: "+grap.obj.columna;
+          }
         }
       }
     }
