@@ -1117,14 +1117,21 @@ _handle_error:
     }
 
     function verificarExistenciaFuncion(f){
-        let bandera = false;
-        let res = FUNCIONES_DECLARADAS.filter(fu => fu.getId() == f.getId());
+        let ref = f.getId()+"-"+f.codigoReferencia();
+        let res = FUNCIONES_DECLARADAS.filter(fu => fu === ref);
         if(res.length == 0){
-            FUNCIONES_DECLARADAS.push(f);
+            FUNCIONES_DECLARADAS.push(ref);
         }else{
-            let tmp = "Error Semantico: \""+f.getId()+"\" Linea: "+f.linea+" ,Columna: "+f.columna+"-> La funcion ya se declaro con anterioridad";
+            let tmp = "Error Semantico: \""+f.getId()+"\" Linea: "+f.linea+" ,Columna: "+f.columna+"-> Ya hay una funcion con el mismo nombre y parametros de entrada";
             ERRORES_ANALISIS.push(tmp);
         }
+        // let res = FUNCIONES_DECLARADAS.filter(fu => fu.getId() == f.getId());
+        // if(res.length == 0){
+        //     FUNCIONES_DECLARADAS.push(f);
+        // }else{
+        //     let tmp = "Error Semantico: \""+f.getId()+"\" Linea: "+f.linea+" ,Columna: "+f.columna+"-> La funcion ya se declaro con anterioridad";
+        //     ERRORES_ANALISIS.push(tmp);
+        // }
     }
 
     function verificarTipoVariable(tipo,vars){
