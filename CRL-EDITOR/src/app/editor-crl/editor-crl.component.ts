@@ -1,7 +1,5 @@
 import { AfterViewInit, Component, ElementRef, ViewChild, Output, EventEmitter, Input } from "@angular/core";
-
 import * as ace from "ace-builds";
-import { CodigoCRL } from "../models/codeCRL";
 
 @Component({
   selector: 'app-editor-crl',
@@ -37,23 +35,23 @@ export class EditorCrlComponent implements AfterViewInit {
     }
   }
   
-  actualizarCodigo() {
-    this.codeCRL = this.textbox.nativeElement.value;
-    this.mostrarUbicacion();
-  }
+  // actualizarCodigo() {
+  //   this.codeCRL = this.textbox.nativeElement.value;
+  //   this.mostrarUbicacion();
+  // }
 
-  mostrarUbicacion() {
-    let start = this.textbox.nativeElement.selectionStart;
-    if (start != null) {
-      let textLines = this.textbox.nativeElement.value.substr(0, start).split("\n");
-      let currentLineNumber = textLines.length;
-      let currentColumnIndex = textLines[textLines.length - 1].length;
-      this.ubicacionEditor = "Linea: " + (currentLineNumber) + ", Columna: " + (currentColumnIndex + 1);
-    }
-  }
+  // mostrarUbicacion() {
+  //   let start = this.textbox.nativeElement.selectionStart;
+  //   if (start != null) {
+  //     let textLines = this.textbox.nativeElement.value.substr(0, start).split("\n");
+  //     let currentLineNumber = textLines.length;
+  //     let currentColumnIndex = textLines[textLines.length - 1].length;
+  //     this.ubicacionEditor = "Linea: " + (currentLineNumber) + ", Columna: " + (currentColumnIndex + 1);
+  //   }
+  // }
 
 
-  mostrarUbicacion2(linea:number,columna:number) {
+  mostrarUbicacion(linea:number,columna:number) {
     this.ubicacionEditor = "Linea: " + (linea+1) + ", Columna: " + (columna+1);
   }
 
@@ -70,14 +68,17 @@ export class EditorCrlComponent implements AfterViewInit {
       this.codeCRL = aceEditor.getValue();
     });
     aceEditor.session.selection.on('changeCursor', ()=>{
-      this.mostrarUbicacion2(aceEditor.selection.getCursor().row,aceEditor.selection.getCursor().column)
+      this.mostrarUbicacion(aceEditor.selection.getCursor().row,aceEditor.selection.getCursor().column)
     });
   }
 
-
   descargarCodigoEditor() {
-    alert("Descargando el codigo");
-    console.log(this.codeCRL);
+    var blob = new Blob([this.codeCRL], { type: 'text/plain'});
+    var url = window.URL.createObjectURL(blob);
+    var anchor = document.createElement("a");
+    anchor.download = this.codigoRef;
+    anchor.href = url;
+    anchor.click();
   }
 
   public getCodeCRL() {
@@ -102,7 +103,6 @@ export class EditorCrlComponent implements AfterViewInit {
   public setCodeRef(nombre: string) {
     this.codigoRef = nombre;
   }
-
 
   public setCode(code:string){
     this.codeCRL = code;
