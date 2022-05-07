@@ -14,6 +14,5 @@ export class DrawTS extends Instruccion{
         let code = scope.graficar(this.linea,this.columna);
         this.ejecutado = true;
         this.dotCode = code;
-        console.log(this.dotCode);
     }
 }
