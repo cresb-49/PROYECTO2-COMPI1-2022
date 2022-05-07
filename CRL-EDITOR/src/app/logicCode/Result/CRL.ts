@@ -24,7 +24,6 @@ export class CRL {
         this.varaiblesGlobales.forEach(variable => {
             variable.ejecutar(this.scopeGlobal);
         });
-
         // for (let fun of this.funciones) {
         //     if(!(fun instanceof Principal)){
         //         if(fun instanceof Funcion){
@@ -38,6 +37,7 @@ export class CRL {
             if(!(fun instanceof Principal)){
                 if(fun instanceof Funcion){
                     this.scopeGlobal.saveFuncion(fun);
+                    fun.scopeGlobalArchivoOrigen = this.scopeGlobal;
                     fun.addRefFuncion(this.scopeGlobal.funciones);
                 }
             }

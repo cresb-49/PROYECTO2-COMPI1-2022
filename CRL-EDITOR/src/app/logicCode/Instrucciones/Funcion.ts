@@ -16,6 +16,7 @@ export class Funcion extends Instruccion implements AsigInstrucciones{
     private funcionesAccesible: ContenedorFunciones;
     private funtionsAccesibles: Almacenador;
     private viewScope:Scope;
+    public scopeGlobalArchivoOrigen:Scope|null = null;
       
     constructor(private tipo:number,private id: string, private sentencias:Sentencias|null, private parametros : Array<Declaracion>, liena : number, columna : number){
         super(liena,columna);
@@ -52,7 +53,7 @@ export class Funcion extends Instruccion implements AsigInstrucciones{
     public ejecutarFuncion(valParametros:Exprecion[],scope:Scope):Retorno{
         if(valParametros.length == this.parametros.length){
 
-            let newScope = new Scope(null);
+            let newScope = new Scope(this.scopeGlobalArchivoOrigen);
             newScope.setFunciones(this.funcionesAccesible);
             this.viewScope = newScope;
 
