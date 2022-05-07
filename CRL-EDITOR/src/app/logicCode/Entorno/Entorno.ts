@@ -60,6 +60,7 @@ export class Entorno {
                     if (bandera2) {
                         for (const crl of this.script) {
                             crl.setOtherRefFunciones();
+                            crl.addOtherRefFunciones();
                         }
                         console.log(this.script);
                         this.principalCRL.ejecutar();

@@ -1,6 +1,6 @@
 import { Exprecion } from "../Abstracto/Exprecion";
 import { Instruccion } from "../Abstracto/Instruccion";
-import { TipoString } from "../Abstracto/Retorno";
+import { Tipo, TipoString } from "../Abstracto/Retorno";
 import { Scope } from "../Symbolo/Scope";
 
 export class Declaracion extends Instruccion{
@@ -25,8 +25,13 @@ export class Declaracion extends Instruccion{
             scope.declararVariable(this.id,null,this.tipo,this.linea,this.columna);
         }else{
             const val = this.valor.ejecutar(scope);
-            if(val.tipo == this.tipo){
-                scope.declararVariable(this.id,val.value,val.tipo,this.linea,this.columna);
+            let tipo = tablaAsignacion[this.tipo][val.tipo];
+            if(tipo !=Tipo.ERROR){
+                if(this.tipo == tipo){
+                    scope.declararVariable(this.id,val.value,tipo,this.linea,this.columna);
+                }else{
+                    throw new Error("El valor a asignar es de tipo: "+TipoString[val.tipo]);
+                }
             }else{
                 throw new Error("El valor a asignar es de tipo: "+TipoString[val.tipo]);
             }
@@ -41,3 +46,14 @@ export class Declaracion extends Instruccion{
         return this.tipo;
     }
 }
+
+export const tablaAsignacion =[
+            /*  DOUBLE      BOOLEAN     STRING        INT         CHAR       VOID      ERROR*/
+/*DOUBLE*/  [Tipo.DOUBLE ,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.DOUBLE ,Tipo.ERROR,Tipo.ERROR,Tipo.ERROR],
+/*BOOLEAN*/ [Tipo.ERROR  ,Tipo.BOOLEAN,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR,Tipo.ERROR,Tipo.ERROR],
+/*STRING*/  [Tipo.ERROR  ,Tipo.ERROR  ,Tipo.STRING ,Tipo.ERROR  ,Tipo.ERROR,Tipo.ERROR,Tipo.ERROR],
+/*INT*/     [Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.INT    ,Tipo.ERROR,Tipo.ERROR,Tipo.ERROR],
+/*CHAR*/    [Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.CHAR ,Tipo.ERROR,Tipo.ERROR],
+/*VOID*/    [Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR,Tipo.ERROR,Tipo.ERROR],
+/*ERROR*/   [Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR,Tipo.ERROR,Tipo.ERROR]
+];

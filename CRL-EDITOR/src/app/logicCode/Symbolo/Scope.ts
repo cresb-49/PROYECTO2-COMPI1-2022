@@ -1,5 +1,8 @@
 import { Tipo, TipoString } from "../Abstracto/Retorno";
+import { Contenedor } from "../EDD/Contenedor";
+import { tablaAsignacion } from "../Instrucciones/Declaracion";
 import { Funcion } from "../Instrucciones/Funcion";
+import { Almacenador } from "./Almacenador";
 import { ContenedorFunciones } from "./ContenedorFunciones";
 import { Simbolo } from "./Simbolo";
 
@@ -7,11 +10,13 @@ export class Scope {
     private variables: Map<string, Simbolo>;
     //public funciones: Map<string, Funcion>;
     public contenedorFunciones:ContenedorFunciones;
+    public funciones:Almacenador;
     public anterior: Scope | null;
 
     constructor(anterior: Scope | null) {
         this.anterior = anterior;
         this.variables = new Map();
+        this.funciones = new Almacenador();
         //this.funciones = new Map();
         this.contenedorFunciones = new ContenedorFunciones();
     }
@@ -32,10 +37,17 @@ export class Scope {
             if (scope.variables.has(id)) {
                 let re = scope.variables.get(id);
                 bandera = false;
-                if(re?.tipo == tipo){
-                    re.valor = valor;
-                }else{
-                    throw new Error("No se puede asignar un valor de tipo \""+TipoString[tipo]+"\" a la variable \""+id+"\"");
+                if(re!=undefined){
+                    let tipoAsig = tablaAsignacion[re.tipo][tipo];
+                    if(tipoAsig!=Tipo.ERROR){
+                        if(re.tipo == tipoAsig){
+                            re.valor = valor;
+                        }else{
+                            throw new Error("No se puede asignar un valor de tipo \""+TipoString[tipo]+"\" a la variable \""+id+"\"");
+                        }
+                    }else{
+                        throw new Error("No se puede asignar un valor de tipo \""+TipoString[tipo]+"\" a la variable \""+id+"\"");
+                    }
                 }
             }
             scope = scope.anterior;
@@ -52,6 +64,17 @@ export class Scope {
             throw new Error("La funcion \""+id+"\" ya esta definida en el archivo");
         }
     }
+    
+    public saveFuncion(funcion:Funcion){
+        let refCode = funcion.codigoReferencia();
+        let id = funcion.getId();
+        if(!this.funciones.hasLocal(id,refCode)){
+            this.funciones.set(id,refCode,funcion);
+        }else{
+            throw new Error("La funcion \""+id+"\" ya esta definida en el archivo");
+        }
+    }
+
     // public guardarFuncion(id: string, funcion: Funcion) {
     //     if(!this.funciones.has(id)){
     //         this.funciones.set(id,funcion);
@@ -82,12 +105,15 @@ export class Scope {
         return undefined;
     }
 
-    public obtenerGlobal():Scope{
-        let scope : Scope | null = this;
-        while (scope?.anterior!= null) {
+    public getFuncion(id:string,ref:string):Funcion|undefined{
+        let scope:Scope|null=this;
+        while(scope != null){
+            if(scope.funciones.has(id,ref)){
+                return scope.funciones.get(id,ref);
+            }
             scope = scope.anterior;
         }
-        return scope;
+        return undefined;
     }
 
     // public setMapFunciones(mapFun:Map<string,Funcion>){

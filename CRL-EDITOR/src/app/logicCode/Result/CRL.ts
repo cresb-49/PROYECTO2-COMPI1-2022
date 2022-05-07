@@ -25,11 +25,20 @@ export class CRL {
             variable.ejecutar(this.scopeGlobal);
         });
 
+        // for (let fun of this.funciones) {
+        //     if(!(fun instanceof Principal)){
+        //         if(fun instanceof Funcion){
+        //             this.scopeGlobal.guardarFuncion(fun.getId(),fun);
+        //             fun.setRefFuncion(this.scopeGlobal.contenedorFunciones);
+        //         }
+        //     }
+        // }
+
         for (let fun of this.funciones) {
             if(!(fun instanceof Principal)){
                 if(fun instanceof Funcion){
-                    this.scopeGlobal.guardarFuncion(fun.getId(),fun);
-                    fun.setRefFuncion(this.scopeGlobal.contenedorFunciones);
+                    this.scopeGlobal.saveFuncion(fun);
+                    fun.addRefFuncion(this.scopeGlobal.funciones);
                 }
             }
         }
@@ -38,6 +47,12 @@ export class CRL {
     public setOtherRefFunciones(){
         for (const refFunciones of this.refOtherScope) {
             this.scopeGlobal.contenedorFunciones.agregarRefOtrosArchivos(refFunciones.getScope().contenedorFunciones);
+        }
+    }
+
+    public addOtherRefFunciones(){
+        for (const refFunciones of this.refOtherScope) {
+            this.scopeGlobal.funciones.agregarRefOtrosArchivos(refFunciones.getScope().funciones);
         }
     }
 

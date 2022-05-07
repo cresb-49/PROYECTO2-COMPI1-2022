@@ -15,6 +15,11 @@ export class Contenedor<T> {
         return this.drive.get(key1)?.get(key2);
     }
     public set(key1:string,key2:string,value:T){
-        this.drive.get(key1)?.set(key2,value);
+        if(this.drive.has(key1)){
+            this.drive.get(key1)?.set(key2,value);
+        }else{
+            this.drive.set(key1,new Map());
+            this.drive.get(key1)?.set(key2,value);
+        }
     }
 }

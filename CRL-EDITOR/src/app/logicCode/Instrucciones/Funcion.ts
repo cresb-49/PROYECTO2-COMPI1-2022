@@ -2,6 +2,7 @@ import { AsigInstrucciones } from "../Abstracto/AsigIntrucciones";
 import { Exprecion } from "../Abstracto/Exprecion";
 import { Instruccion } from "../Abstracto/Instruccion";
 import { Retorno, Tipo, TipoString } from "../Abstracto/Retorno";
+import { Almacenador } from "../Symbolo/Almacenador";
 import { ContenedorFunciones } from "../Symbolo/ContenedorFunciones";
 import { Scope } from "../Symbolo/Scope";
 import { Asignacion } from "./Asignacion";
@@ -13,6 +14,7 @@ export class Funcion extends Instruccion implements AsigInstrucciones{
 
     //private funcionesAccesible: Map<string,Funcion>;
     private funcionesAccesible: ContenedorFunciones;
+    private funtionsAccesibles: Almacenador;
     private viewScope:Scope;
       
     constructor(private tipo:number,private id: string, private sentencias:Sentencias|null, private parametros : Array<Declaracion>, liena : number, columna : number){
@@ -94,12 +96,16 @@ export class Funcion extends Instruccion implements AsigInstrucciones{
         this.funcionesAccesible = funciones;
     }
 
+    public addRefFuncion(funciones:Almacenador){
+        this.funtionsAccesibles = funciones;
+    }
+
     public codigoReferencia():string{
         let contInt = 0;
+        let contDouble = 0;
         let contBool = 0;
         let contChar = 0;
         let contString = 0;
-        let contDouble = 0;
 
         for (const param of this.parametros) {
             switch (param.getTipo()) {
@@ -120,8 +126,7 @@ export class Funcion extends Instruccion implements AsigInstrucciones{
                     break;
             }
         }
-        let code = "-"+String(contInt)+String(contBool)+String(contChar)+String(contString)+String(contDouble)
-        console.log("Rev code: "+code);
+        let code = String(contInt)+String(contDouble)+String(contBool)+String(contChar)+String(contString);
         return code;
     }
 }
