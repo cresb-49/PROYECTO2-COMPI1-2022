@@ -12,7 +12,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "ngl":"node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng serve",
+    "nglo":"node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng -o serve"
   },
   "private": true,
   "dependencies": {
