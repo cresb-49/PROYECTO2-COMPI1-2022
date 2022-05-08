@@ -116,6 +116,18 @@ export class Scope {
         return undefined;
     }
 
+
+    public getFunciones(id:string):Map<string,Funcion>|undefined{
+        let scope:Scope|null=this;
+        while(scope != null){
+            if(scope.funciones.has2(id)){
+                return scope.funciones.get2(id);
+            }
+            scope = scope.anterior;
+        }
+        return undefined;
+    }
+
     // public setMapFunciones(mapFun:Map<string,Funcion>){
     //     this.funciones = mapFun;
     // }

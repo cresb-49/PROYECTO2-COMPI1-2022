@@ -16,11 +16,29 @@ export class Almacenador {
         return false;
     }
 
-    public get(id:string,ref:string):Funcion|undefined{
 
+    public has2(id:string){
+        for(const con of this.funciones){
+            if(con.has2(id)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public get(id:string,ref:string):Funcion|undefined{
         for(const con of this.funciones){
             if(con.has(id,ref)){
                 return con.get(id,ref);
+            }
+        }
+        return undefined;
+    }
+
+    public get2(id:string):Map<string,Funcion>|undefined{
+        for(const con of this.funciones){
+            if(con.has2(id)){
+                return con.get2(id);
             }
         }
         return undefined;

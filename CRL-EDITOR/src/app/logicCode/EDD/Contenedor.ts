@@ -11,8 +11,19 @@ export class Contenedor<T> {
         }
         return false;
     }
+
+    public has2(key1:string){
+        if(this.drive.has(key1)){
+            return true;
+        }
+        return false;
+    }
     public get(key1:string,key2:string){
         return this.drive.get(key1)?.get(key2);
+    }
+
+    public get2(key1:string){
+        return this.drive.get(key1);
     }
     public set(key1:string,key2:string,value:T){
         if(this.drive.has(key1)){
