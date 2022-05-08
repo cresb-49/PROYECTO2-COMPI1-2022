@@ -43,6 +43,7 @@
 
     let INCERTEZA_GLOBAL = 0.5;
     let INCERTEZA_GLOBAL_IS_ASIG = false;
+    let lienaUbicacion =1;
 
     //let RESULT_STRING_LEC = new StringBuilder();
     let ERRORES_ANALISIS=[];
@@ -267,13 +268,13 @@
                         VARIABLES_GLOBALES.push(ele);
                     });
                 }else{
-                    let tmp = "Error Semantico: Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+"-> No se esperaba una identacion";
+                    let tmp = "Error Semantico: Declaracion ,Linea: "+instruccion[0].linea+" ,Columna: "+instruccion[0].columna+"-> No se esperaba una identacion";
                     ERRORES_ANALISIS.push(tmp);
                 }
             }else{
                 let ident = MEMORIA_PRINCIPAL.peek().getScope2();
                 if(instruccion[0].getScope2() == 0){
-                    let tmp = "Error Semantico Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+"-> La instruccion solo puede estar dentro de una funcion o metodo";
+                    let tmp = "Error Semantico Linea: "+instruccion[0].linea+" ,Columna: "+instruccion[0].columna+"-> La instruccion solo puede estar dentro de una funcion o metodo";
                     ERRORES_ANALISIS.push(tmp);
                 }else{
                     if(instruccion[0].getScope2() == (ident+1)){
@@ -300,14 +301,14 @@
                         MEMORIA_PRINCIPAL.print();
                         addSimpleInst(instruccion);
                     }else{
-                        let tmp = "Error Semantico: Linea: "+instruccion[0].linea+" ,Columna: "+instruccion[0].columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
+                        let tmp = "Error Semantico: Declaracion Linea: "+instruccion[0].linea+" ,Columna: "+instruccion[0].columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
                         ERRORES_ANALISIS.push(tmp);
                     }
                 }
             }            
         }else{
             if(MEMORIA_PRINCIPAL.size()==0){
-                let tmp = "Error Semantico: Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+"-> La instruccion solo puede estar dentro de una funcion o metodo";
+                let tmp = "Error Semantico: Instruccion Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+"-> La instruccion solo puede estar dentro de una funcion o metodo";
                 ERRORES_ANALISIS.push(tmp);
             }else{
                 let ident = MEMORIA_PRINCIPAL.peek().getScope2();
@@ -342,7 +343,7 @@
                             MEMORIA_PRINCIPAL.print();
                             addSimpleInst(instruccion);
                         }else{
-                            let tmp = "Error Semantico: Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
+                            let tmp = "Error Semantico: Intruccion Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
                             ERRORES_ANALISIS.push(tmp);
                         }
                     }else{
@@ -422,7 +423,7 @@
     function agregarImport(imp){
         let result = IMPORTACION_ARCHIVOS.filter( i => i.getId() === imp.getId());
         if(result.length >= 1){
-            let tmp = "Error Semantico: Linea: "+imp.linea+" ,Columna: "+imp.columna+"-> Ya se hizo referencia anteriormente a \""+imp.getId()+".crl"+"\"";
+            let tmp = "Error Semantico: Importar Linea: "+imp.linea+" ,Columna: "+imp.columna+"-> Ya se hizo referencia anteriormente a \""+imp.getId()+".crl"+"\"";
             ERRORES_ANALISIS.push(tmp);
         }else{
             IMPORTACION_ARCHIVOS.push(imp);
@@ -433,7 +434,7 @@
         if(FUNCION_PRINCIPAL == null){
             FUNCION_PRINCIPAL = f;
         }else{
-            let tmp = "Error Semantico: Linea: "+f.linea+" ,Columna: "+f.columna+"-> Solo puede existir una funcion principal";
+            let tmp = "Error Semantico: Principal Linea: "+f.linea+" ,Columna: "+f.columna+"-> Solo puede existir una funcion principal";
             ERRORES_ANALISIS.push(tmp);
         }
     }
@@ -520,6 +521,9 @@ comentMultip ((\'\'\')([^']*)(\'\'\'))
 \s                  {
                         /*ingnorado*/
                     }
+\r                  {
+                        /*ingnorado*/
+                    }   
 [0-9]+"."[0-9]+     {return 'DECIMAL';}
 [0-9]+              {return 'ENTERO';}
 (\"[^"]*\")         {return 'CADENA';}
@@ -668,7 +672,7 @@ instruction     :   instructionGlobal NUEVA_LINEA           {$$ = $1;}
                                                             }
                 |   NUEVA_LINEA
                 |   IDENTACION NUEVA_LINEA
-                |   error                                   {errorAnalisisCodigo(this,$1);}
+                |   error                                   {errorAnalisisCodigo(this,$1);console.log("Error");console.log(this._$);console.log(@2.last_line);}
                 ;
 
 instructionGlobal   :   instruccionDeclarar
@@ -692,7 +696,7 @@ funcionDibujarTs    :   IDENTACION DIBUJAR_TS '('')'    {$$ = new DrawTS(-1,-1,@
 funcionDibujarExp   :   IDENTACION DIBUJAR_EXP '(' exprecion ')'    {$$ = new DrawEXP($4,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
                     ;
 
-funcionDibujarAST   :   IDENTACION DIBUJAR_AST '(' identificador ')'    {$$ = new DrawAST($4,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
+funcionDibujarAST   :   IDENTACION DIBUJAR_AST '(' ID ')'   {$$ = new DrawAST($4,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
                     ;
 
 funcionMostrar  :   IDENTACION MOSTRAR '(' exprecion ',' parametrosEnviar ')'   {
