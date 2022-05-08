@@ -53,6 +53,7 @@ export class Ejecutor {
                 this.SCRIPT.push(new CRL(code.nombre,padres,result.principal,result.varaiblesGlobales,result.imports));
             } catch (error) {
                 this.consola.agregarError("Error al analizar el codigo del archivo");
+                console.log(error);
             }
             this.consola.agregarError("---------------- Fin analisis archivo "+code.nombre+" ----------------");
         }

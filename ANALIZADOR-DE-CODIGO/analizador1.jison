@@ -67,15 +67,14 @@
 
 
 
-    function errorAnalisisCodigo(element,er){
-        //console.log("Error sintactico: "+er+" en la liena: "+element._$.first_line+" ,en la columna: "+(element._$.first_column+1)+" ,Esperados: "+element._$);
+    function errorAnalisisCodigo(element,er,linea){
         let simbolo = er;
         if(er == '\n'){
             simbolo = '\\n';
         }else if(er == '\t'){
             simbolo = '\\t';
         }
-        let tmp = "Error sintactico: \""+simbolo+"\" ,Linea: "+element._$.first_line+" ,Columna: "+(element._$.first_column+1);
+        let tmp = "Error sintactico: \""+simbolo+"\" ,Linea: "+(linea+1)+" ,Columna: "+(element._$.first_column+1);
         console.log(tmp);
         ERRORES_ANALISIS.push(tmp);
     }
@@ -493,6 +492,17 @@
             ERRORES_ANALISIS.push(tmp);
         }
     }
+
+    let UBICACION_LINEA = 1;
+    function contarLineas(cadena){
+        let carateres = cadena.split('');
+        for(const c of cadena){
+            if(c == '\n'){
+                UBICACION_LINEA++;
+            }
+        }
+    }
+
 %}
 
 
@@ -509,6 +519,7 @@ comentMultip ((\'\'\')([^']*)(\'\'\'))
 {comentMultip}      {/*Ingonorar un comentario multiple*/}
 
 \t+\n+              {
+                        contarLineas(yytext);
                         return 'NUEVA_LINEA';
                     }
 \t+                 {
@@ -516,6 +527,7 @@ comentMultip ((\'\'\')([^']*)(\'\'\'))
                         return 'IDENTACION';
                     }
 \n+                 {
+                        contarLineas(yytext);
                         return 'NUEVA_LINEA';
                     }
 \s                  {
@@ -585,7 +597,11 @@ comentMultip ((\'\'\')([^']*)(\'\'\'))
 {identificador} {return 'ID';}
 <<EOF>>         {return 'EOF';}
 
-.               {console.log('Se encontro un error lexico:'+ yytext);}
+.               {
+                    let tmp = "Error Lexico "+yytext+" Linea: "+yylloc.first_line+" , Columna: "+yylloc.first_column;
+                    console.log(tmp);
+                    ERRORES_ANALISIS.push(tmp);
+                }
 
 /lex
 
@@ -672,7 +688,9 @@ instruction     :   instructionGlobal NUEVA_LINEA           {$$ = $1;}
                                                             }
                 |   NUEVA_LINEA
                 |   IDENTACION NUEVA_LINEA
-                |   error                                   {errorAnalisisCodigo(this,$1);console.log("Error");console.log(this._$);console.log(@2.last_line);}
+                |   error                                   {
+                                                                errorAnalisisCodigo(this,$1,yylineno);
+                                                            }
                 ;
 
 instructionGlobal   :   instruccionDeclarar

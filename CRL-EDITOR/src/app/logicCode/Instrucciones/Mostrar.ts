@@ -36,7 +36,6 @@ export class Mostrar extends Instruccion{
     private arreglarParametros(cadena:any,scope:Scope){
         let cad:string = String(cadena);
         let result= Parser.parse(cad);
-        console.log(result)
         let procesado:any[]=[]
         result.forEach((contenido:any) => {
             if(contenido instanceof Key){
@@ -52,7 +51,6 @@ export class Mostrar extends Instruccion{
             }
         });
         let res ="";
-        console.log(procesado)
         for (const it of procesado) {
             res = res + it;
         }
