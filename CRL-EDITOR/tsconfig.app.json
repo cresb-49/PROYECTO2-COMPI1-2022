@@ -37,7 +37,8 @@
     "src/app/logicCode/Result/Result.ts",
     "src/app/logicCode/Abstracto/Retorno.ts",
     "src/app/logicCode/EDD/Pila.ts",
-    "src/app/logicCode/Symbolo/Simbolo.ts"
+    "src/app/logicCode/Symbolo/Simbolo.ts",
+    "src/app/logicCode/Mostrar/RemplazoCadena.ts"
   ],
   "include": [
     "src/**/*.d.ts"
