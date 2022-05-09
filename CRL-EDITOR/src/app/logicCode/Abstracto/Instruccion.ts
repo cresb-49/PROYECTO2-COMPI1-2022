@@ -1,3 +1,4 @@
+import { GraficoDot } from "../GraficosDot/GraficoDot";
 import {Scope} from "../Symbolo/Scope";
 
 export abstract class Instruccion {
@@ -27,4 +28,5 @@ export abstract class Instruccion {
     }
     
     public abstract ejecutar(scope :Scope):any;
+    public abstract graficar(scope:Scope,graphviz:GraficoDot,subNameNode:string,padre:string):any;
 }

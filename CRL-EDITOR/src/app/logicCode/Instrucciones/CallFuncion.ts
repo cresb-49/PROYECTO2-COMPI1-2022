@@ -1,9 +1,13 @@
 import { Exprecion } from "../Abstracto/Exprecion";
 import { Instruccion } from "../Abstracto/Instruccion";
 import { Tipo, TipoString } from "../Abstracto/Retorno";
+import { GraficoDot } from "../GraficosDot/GraficoDot";
 import { Scope } from "../Symbolo/Scope";
 
 export class CallFuncion extends Instruccion{
+    public graficar(scope: Scope, graphviz: GraficoDot, subNameNode: string, padre: string) {
+        throw new Error("Method not implemented.");
+    }
 
     private arrayTipos:string[]=[];
 

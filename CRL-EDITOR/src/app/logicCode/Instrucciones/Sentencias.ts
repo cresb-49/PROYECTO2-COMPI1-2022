@@ -1,5 +1,6 @@
 import { ConsolaCRLComponent } from "src/app/consola-crl/consola-crl.component";
 import { Instruccion } from "../Abstracto/Instruccion";
+import { GraficoDot } from "../GraficosDot/GraficoDot";
 import { Scope } from "../Symbolo/Scope";
 import { Asignacion } from "./Asignacion";
 import { Continuar } from "./Continuar";
@@ -8,6 +9,7 @@ import { Detener } from "./Detener";
 import { Retornar } from "./Retornar";
 
 export class Sentencias extends Instruccion {
+    
     private consolaErrores: ConsolaCRLComponent;
     private viewScope: Scope | null;
 
@@ -117,5 +119,9 @@ export class Sentencias extends Instruccion {
 
     public agregarVarsPrecedencia(vars: Declaracion[]) {
         this.VARAIBLES_DECLARADAS = this.VARAIBLES_DECLARADAS.concat(vars);
+    }
+
+    public graficar(scope: Scope, graphviz: GraficoDot, subNameNode: string, padre: string) {
+        
     }
 }

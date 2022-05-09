@@ -2,6 +2,7 @@ import { AsigInstrucciones } from "../Abstracto/AsigIntrucciones";
 import { Exprecion } from "../Abstracto/Exprecion";
 import { Instruccion } from "../Abstracto/Instruccion";
 import { Retorno, Tipo, TipoString } from "../Abstracto/Retorno";
+import { GraficoDot } from "../GraficosDot/GraficoDot";
 import { Almacenador } from "../Symbolo/Almacenador";
 import { ContenedorFunciones } from "../Symbolo/ContenedorFunciones";
 import { Scope } from "../Symbolo/Scope";
@@ -11,6 +12,9 @@ import { Declaracion } from "./Declaracion";
 import { Sentencias } from "./Sentencias";
 
 export class Funcion extends Instruccion implements AsigInstrucciones{
+    public graficar(scope: Scope, graphviz: GraficoDot, subNameNode: string, padre: string) {
+        throw new Error("Method not implemented.");
+    }
 
     //private funcionesAccesible: Map<string,Funcion>;
     private funcionesAccesible: ContenedorFunciones;

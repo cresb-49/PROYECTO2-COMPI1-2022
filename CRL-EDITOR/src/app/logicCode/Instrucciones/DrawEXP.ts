@@ -4,6 +4,9 @@ import { GraficoDot } from "../GraficosDot/GraficoDot";
 import { Scope } from "../Symbolo/Scope";
 
 export class DrawEXP extends Instruccion{
+    public graficar(scope: Scope, graphviz: GraficoDot, subNameNode: string, padre: string) {
+        throw new Error("Method not implemented.");
+    }
     public ejecutado:boolean = false
     public dotCode:string ='';
 

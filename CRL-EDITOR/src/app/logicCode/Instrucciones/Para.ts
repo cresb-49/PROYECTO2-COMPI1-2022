@@ -5,6 +5,7 @@ import { Tipo } from "../Abstracto/Retorno";
 import { Acceder } from "../Expresion/Acceder";
 import { Literal } from "../Expresion/Literal";
 import { OpcionOperacion, Operacion } from "../Expresion/Operacion";
+import { GraficoDot } from "../GraficosDot/GraficoDot";
 import { Scope } from "../Symbolo/Scope";
 import { Asignacion } from "./Asignacion";
 import { Continuar } from "./Continuar";
@@ -17,6 +18,9 @@ export enum opcionPara {
     RES_PARA
 }
 export class Para extends Instruccion implements AsigInstrucciones {
+    public graficar(scope: Scope, graphviz: GraficoDot, subNameNode: string, padre: string) {
+        throw new Error("Method not implemented.");
+    }
 
     constructor(private varIterator: string, private valVar: Exprecion, private expr: Exprecion, private opPara: number,private sentencias:Sentencias|null,linea: number, columna: number) {
         super(linea, columna);

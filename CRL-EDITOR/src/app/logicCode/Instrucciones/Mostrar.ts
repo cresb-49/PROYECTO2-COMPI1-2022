@@ -3,9 +3,13 @@ import {Exprecion} from "../Abstracto/Exprecion";
 import { Scope } from "../Symbolo/Scope";
 import {ConsolaCRLComponent} from "../../consola-crl/consola-crl.component";
 import { Key, Text } from "../Mostrar/RemplazoCadena";
+import { GraficoDot } from "../GraficosDot/GraficoDot";
 const Parser = require('./../Grammar/cadenas')
 
 export class Mostrar extends Instruccion{
+    public graficar(scope: Scope, graphviz: GraficoDot, subNameNode: string, padre: string) {
+        
+    }
     private valor:Exprecion;
     private expreciones:Array<Exprecion>;
     public consola:ConsolaCRLComponent;
