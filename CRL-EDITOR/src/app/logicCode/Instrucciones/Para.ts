@@ -18,10 +18,7 @@ export enum opcionPara {
     RES_PARA
 }
 export class Para extends Instruccion implements AsigInstrucciones {
-    public graficar(scope: Scope, graphviz: GraficoDot, subNameNode: string, padre: string) {
-        throw new Error("Method not implemented.");
-    }
-
+    
     constructor(private varIterator: string, private valVar: Exprecion, private expr: Exprecion, private opPara: number,private sentencias:Sentencias|null,linea: number, columna: number) {
         super(linea, columna);
     }
@@ -38,10 +35,10 @@ export class Para extends Instruccion implements AsigInstrucciones {
         
         let value = this.valVar.ejecutar(newScope);
         newScope.declararVariable(this.varIterator,value.value,Tipo.INT,this.linea,this.columna);
-
+        
         let newVal = new Operacion(exp1,exp2,OpcionOperacion.SUMA,this.linea,this.columna)
         let asignar = new Asignacion(this.varIterator,newVal,this.linea,this.columna);
-
+        
         let condicion = this.expr.ejecutar(newScope);
 
         if(condicion.tipo != Tipo.BOOLEAN){
@@ -71,5 +68,14 @@ export class Para extends Instruccion implements AsigInstrucciones {
     }
     public getSentencias():Sentencias|null{
         return this.sentencias;
+    }
+
+    public graficar(scope: Scope, graphviz: GraficoDot, subNameNode: string, padre: string) {
+        let nume = graphviz.declaraciones.length + 1;
+        let node = "nodo-" + subNameNode + "-" + nume;
+        let decl = node + '[label = "<n>Para"];'
+        graphviz.declaraciones.push(decl);
+        graphviz.relaciones.push((padre + ':n -> ' + node + ':n'));
+        this.sentencias?.graficar(scope,graphviz,subNameNode,node);
     }
 }

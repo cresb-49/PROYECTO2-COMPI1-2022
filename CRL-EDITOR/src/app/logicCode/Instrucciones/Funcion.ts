@@ -12,10 +12,7 @@ import { Declaracion } from "./Declaracion";
 import { Sentencias } from "./Sentencias";
 
 export class Funcion extends Instruccion implements AsigInstrucciones{
-    public graficar(scope: Scope, graphviz: GraficoDot, subNameNode: string, padre: string) {
-        throw new Error("Method not implemented.");
-    }
-
+    
     //private funcionesAccesible: Map<string,Funcion>;
     private funcionesAccesible: ContenedorFunciones;
     private funtionsAccesibles: Almacenador;
@@ -133,5 +130,21 @@ export class Funcion extends Instruccion implements AsigInstrucciones{
         }
         let code = String(contInt)+String(contDouble)+String(contBool)+String(contChar)+String(contString);
         return code;
+    }
+
+    public graficar(scope: Scope, graphviz: GraficoDot, subNameNode: string, padre: string) {
+        let subName = this.codigoReferencia();
+        let node = "nodo-"+subName+"-"+"0";
+        let decl = node+'[label = "<n>'+this.id+'('+this.arrayTipos()+')"];'
+        graphviz.declaraciones.push(decl);
+        this.sentencias?.graficar(scope,graphviz,subName,node);
+    }
+
+    private arrayTipos():string{
+        let t:string[]=[];
+        for (const iterator of this.parametros) {
+            t.push(TipoString[iterator.getTipo()]);
+        }
+        return t.toString();
     }
 }

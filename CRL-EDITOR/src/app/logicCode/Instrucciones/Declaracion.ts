@@ -5,10 +5,7 @@ import { GraficoDot } from "../GraficosDot/GraficoDot";
 import { Scope } from "../Symbolo/Scope";
 
 export class Declaracion extends Instruccion{
-    public graficar(scope: Scope, graphviz: GraficoDot, subNameNode: string, padre: string) {
-        throw new Error("Method not implemented.");
-    }
-
+    
     private id : string;
     private valor : Exprecion;
     private tipo:number;
@@ -19,11 +16,11 @@ export class Declaracion extends Instruccion{
         this.valor = valor;
         this.tipo=tipo;
     }
-
+    
     public setTipo(tipo:number){
         this.tipo=tipo;
     }
-
+    
     public ejecutar(scope: Scope) {
         if(this.valor == null){
             scope.declararVariable(this.id,null,this.tipo,this.linea,this.columna);
@@ -41,7 +38,7 @@ export class Declaracion extends Instruccion{
             }
         }
     }
-
+    
     public getId():string{
         return this.id;
     }
@@ -49,15 +46,23 @@ export class Declaracion extends Instruccion{
     public getTipo():number{
         return this.tipo;
     }
+
+    public graficar(scope: Scope, graphviz: GraficoDot, subNameNode: string, padre: string) {
+        let nume = graphviz.declaraciones.length + 1;
+        let node = "nodo-" + subNameNode + "-" + nume;
+        let decl = node + '[label = "<n>Declaracion"];'
+        graphviz.declaraciones.push(decl);
+        graphviz.relaciones.push((padre + ':n -> ' + node + ':n'));
+    }
 }
 
 export const tablaAsignacion =[
             /*  DOUBLE      BOOLEAN     STRING        INT         CHAR       VOID      ERROR*/
-/*DOUBLE*/  [Tipo.DOUBLE ,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.DOUBLE ,Tipo.ERROR,Tipo.ERROR,Tipo.ERROR],
-/*BOOLEAN*/ [Tipo.ERROR  ,Tipo.BOOLEAN,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR,Tipo.ERROR,Tipo.ERROR],
-/*STRING*/  [Tipo.ERROR  ,Tipo.ERROR  ,Tipo.STRING ,Tipo.ERROR  ,Tipo.ERROR,Tipo.ERROR,Tipo.ERROR],
-/*INT*/     [Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.INT    ,Tipo.ERROR,Tipo.ERROR,Tipo.ERROR],
-/*CHAR*/    [Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.CHAR ,Tipo.ERROR,Tipo.ERROR],
-/*VOID*/    [Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR,Tipo.ERROR,Tipo.ERROR],
-/*ERROR*/   [Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR,Tipo.ERROR,Tipo.ERROR]
-];
+            /*DOUBLE*/  [Tipo.DOUBLE ,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.DOUBLE ,Tipo.ERROR,Tipo.ERROR,Tipo.ERROR],
+            /*BOOLEAN*/ [Tipo.ERROR  ,Tipo.BOOLEAN,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR,Tipo.ERROR,Tipo.ERROR],
+            /*STRING*/  [Tipo.ERROR  ,Tipo.ERROR  ,Tipo.STRING ,Tipo.ERROR  ,Tipo.ERROR,Tipo.ERROR,Tipo.ERROR],
+            /*INT*/     [Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.INT    ,Tipo.ERROR,Tipo.ERROR,Tipo.ERROR],
+            /*CHAR*/    [Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.CHAR ,Tipo.ERROR,Tipo.ERROR],
+            /*VOID*/    [Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR,Tipo.ERROR,Tipo.ERROR],
+            /*ERROR*/   [Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR  ,Tipo.ERROR,Tipo.ERROR,Tipo.ERROR]
+        ];

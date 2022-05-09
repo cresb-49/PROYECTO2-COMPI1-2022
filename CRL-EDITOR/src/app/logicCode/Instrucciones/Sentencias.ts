@@ -122,6 +122,8 @@ export class Sentencias extends Instruccion {
     }
 
     public graficar(scope: Scope, graphviz: GraficoDot, subNameNode: string, padre: string) {
-        
+        for (const intructions of this.instrucciones) {
+            intructions.graficar(scope,graphviz,subNameNode,padre);
+        }
     }
 }

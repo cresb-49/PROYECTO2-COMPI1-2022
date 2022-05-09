@@ -5,16 +5,20 @@ import { GraficoDot } from "../GraficosDot/GraficoDot";
 import { Scope } from "../Symbolo/Scope";
 
 export class CallFuncion extends Instruccion{
-    public graficar(scope: Scope, graphviz: GraficoDot, subNameNode: string, padre: string) {
-        throw new Error("Method not implemented.");
-    }
-
+    
     private arrayTipos:string[]=[];
-
+    
     constructor(private id:string,private parametros:Array<Exprecion>,linea:number,columna:number){
         super(linea,columna);
     }
-
+    
+    public graficar(scope: Scope, graphviz: GraficoDot, subNameNode: string, padre: string) {
+        let nume = graphviz.declaraciones.length + 1;
+        let node = "nodo-" + subNameNode + "-" + nume;
+        let decl = node + '[label = "<n>Llamar Funcion "'+this.id+'"];'
+        graphviz.declaraciones.push(decl);
+        graphviz.relaciones.push((padre + ':n -> ' + node + ':n'));
+    }
     public ejecutar(scope: Scope) {
         this.arrayTipos=[];
         //const funcion = scope.obtenerFuncion(this.id);

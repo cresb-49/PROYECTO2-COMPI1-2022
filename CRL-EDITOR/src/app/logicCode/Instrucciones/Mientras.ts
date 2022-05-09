@@ -15,9 +15,6 @@ export class Mientras extends Instruccion implements AsigInstrucciones{
         super(linea, columna);
     }
     
-    public graficar(scope: Scope, graphviz: GraficoDot, subNameNode: string, padre: string) {
-        
-    }
     
     public ejecutar(scope: Scope):any{
         let condicion = this.condicion.ejecutar(scope);
@@ -47,4 +44,12 @@ export class Mientras extends Instruccion implements AsigInstrucciones{
         return this.sentencias;
     }
     
+    public graficar(scope: Scope, graphviz: GraficoDot, subNameNode: string, padre: string) {
+        let nume = graphviz.declaraciones.length + 1;
+        let node = "nodo-" + subNameNode + "-" + nume;
+        let decl = node + '[label = "<n>Mientras"];'
+        graphviz.declaraciones.push(decl);
+        graphviz.relaciones.push((padre + ':n -> ' + node + ':n'));    
+        this.sentencias?.graficar(scope,graphviz,subNameNode,node);
+    }
 }
