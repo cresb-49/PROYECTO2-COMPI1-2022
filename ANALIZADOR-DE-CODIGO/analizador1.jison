@@ -132,7 +132,7 @@
         }else{
             let ident = MEMORIA_PRINCIPAL.peek().getScope2();
             if(si.getScope2() == 0){
-                console.log("Debuj al sacar elemento de la pila if");
+                //console.log("Debuj al sacar elemento de la pila if");
                 let tmp = "Error Semantico: \"Si\" ,Linea: "+si.linea+" ,Columna: "+si.columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
                 ERRORES_ANALISIS.push(tmp);
             }else{
@@ -142,18 +142,18 @@
                         PILA_ANALISIS_SI.push(si);
                     }else if(si.getScope2() < ident){
                         let scopePadre = MEMORIA_PRINCIPAL.peek().getScope2();
-                        console.log("Scope padre actual: "+scopePadre);
-                        console.log("La instruccion Linea: "+si.linea+" ,Columna: "+si.columna+" no pertenece al scope");
+                        //console.log("Scope padre actual: "+scopePadre);
+                        //console.log("La instruccion Linea: "+si.linea+" ,Columna: "+si.columna+" no pertenece al scope");
                         let tmp = [];
                         while(scopePadre == MEMORIA_PRINCIPAL.peek().getScope2()){
                             tmp.push(MEMORIA_PRINCIPAL.pop());
                         }
-                        console.log("Intrucciones recuperadas: ");
+                        //console.log("Intrucciones recuperadas: ");
                         let recuperacion = tmp.reverse();
-                        console.log(recuperacion);
+                        //console.log(recuperacion);
                         recuperacion.forEach(ele=>{MEMORIA_PRINCIPAL.peek().agregar(ele);});
-                        console.log("Memoria actual:")
-                        MEMORIA_PRINCIPAL.print();
+                        //console.log("Memoria actual:")
+                        //MEMORIA_PRINCIPAL.print();
                         addInstruccionSi(si);
                     }else{
                         let tmp = "Error Semantico: \"Si\" ,Linea: "+si.linea+" ,Columna: "+si.columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
@@ -178,36 +178,32 @@
                                 if(si.getScope2() < ident){
                                     PILA_ANALISIS_SI.pop();
                                     let scopePadre = MEMORIA_PRINCIPAL.peek().getScope2();
-                                    console.log("Scope padre actual: "+scopePadre);
-                                    console.log("La instruccion Linea: "+si.linea+" ,Columna: "+si.columna+" no pertenece al scope");
+                                    //console.log("Scope padre actual: "+scopePadre);
+                                    //console.log("La instruccion Linea: "+si.linea+" ,Columna: "+si.columna+" no pertenece al scope");
                                     let tmp = [];
                                     while(scopePadre == MEMORIA_PRINCIPAL.peek().getScope2()){
                                         tmp.push(MEMORIA_PRINCIPAL.pop());
                                     }
-                                    console.log("Intrucciones recuperadas: ");
+                                    //console.log("Intrucciones recuperadas: ");
                                     let recuperacion = tmp.reverse();
-                                    console.log(recuperacion);
+                                    //console.log(recuperacion);
                                     recuperacion.forEach(ele=>{MEMORIA_PRINCIPAL.peek().agregar(ele);});
-                                    console.log("Memoria actual:");
-                                    MEMORIA_PRINCIPAL.print();
+                                    //console.log("Memoria actual:");
+                                    //MEMORIA_PRINCIPAL.print();
                                     addInstruccionSi(si);
                                 }else{
-                                    console.log("debuj1");
                                     let tmp = "Error Semantico: \"Sino\" ,Linea: "+si.linea+" ,Columna: "+si.columna+"-> La identacion de la intruccion es incorrecta se esperaba: "+ident+" - "(ident+1);
                                     ERRORES_ANALISIS.push(tmp);    
                                 }                                
                             }else{
-                                console.log("debuj2");
                                 let tmp = "Error Semantico: \"Sino\" ,Linea: "+si.linea+" ,Columna: "+si.columna+"-> La intruccion necesita de la precedencia de la instruccion Si";
                                 ERRORES_ANALISIS.push(tmp);
                             }
                         }else{
-                            console.log("debuj3");
                             let tmp = "Error Semantico: \"Sino\" ,Linea: "+si.linea+" ,Columna: "+si.columna+"-> La intruccion necesita de la precedencia de la instruccion Si";
                             ERRORES_ANALISIS.push(tmp);
                         }
                     }else{
-                        console.log("debuj4");
                         let tmp = "Error Semantico: \"Sino\" ,Linea: "+si.linea+" ,Columna: "+si.columna+"-> La intruccion necesita de la precedencia de la instruccion Si";
                         ERRORES_ANALISIS.push(tmp);
                     }
@@ -238,18 +234,18 @@
                     MEMORIA_PRINCIPAL.push(instr);
                 }else if(instr.getScope2() < ident){
                     let scopePadre = MEMORIA_PRINCIPAL.peek().getScope2();
-                    console.log("Scope padre actual: "+scopePadre);
-                    console.log("La instruccion Linea: "+instr.linea+" ,Columna: "+instr.columna+" no pertenece al scope");
+                    //console.log("Scope padre actual: "+scopePadre);
+                    //console.log("La instruccion Linea: "+instr.linea+" ,Columna: "+instr.columna+" no pertenece al scope");
                     let tmp = [];
                     while(scopePadre==MEMORIA_PRINCIPAL.peek().getScope2()){
                         tmp.push(MEMORIA_PRINCIPAL.pop());
                     }
-                    console.log("Instrucciones recuperadas");
+                    //console.log("Instrucciones recuperadas");
                     let recuperacion = tmp.reverse();
-                    console.log(recuperacion);
+                    //console.log(recuperacion);
                     recuperacion.forEach(ele=>{MEMORIA_PRINCIPAL.peek().agregar(ele);});
-                    console.log("Memoria actual: ");
-                    MEMORIA_PRINCIPAL.print();
+                    //console.log("Memoria actual: ");
+                    //MEMORIA_PRINCIPAL.print();
                     addIntruccionMientrasPara(instr);
                 }else{
                     let tmp = "Error Semantico: \""+tipo+"\" ,Linea: "+instr.linea+" ,Columna: "+instr.columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
@@ -286,18 +282,18 @@
                         });
                     }else if (instruccion[0].getScope2() <= (ident+1)){
                         let scopePadre = MEMORIA_PRINCIPAL.peek().getScope2();
-                        console.log("Scope padre actual: "+scopePadre);
-                        console.log("La instruccion Linea: "+instruccion[0].linea+" ,Columna: "+instruccion[0].columna+" no pertenece al scope");
+                        //console.log("Scope padre actual: "+scopePadre);
+                        //console.log("La instruccion Linea: "+instruccion[0].linea+" ,Columna: "+instruccion[0].columna+" no pertenece al scope");
                         let tmp2 = [];
                         while(scopePadre==MEMORIA_PRINCIPAL.peek().getScope2()){
                             tmp2.push(MEMORIA_PRINCIPAL.pop());
                         }
-                        console.log("Intrucciones recuperadas: ");
+                        //console.log("Intrucciones recuperadas: ");
                         let recuperacion = tmp2.reverse();
-                        console.log(recuperacion);
+                        //console.log(recuperacion);
                         recuperacion.forEach(ele=>{MEMORIA_PRINCIPAL.peek().agregar(ele);});
-                        console.log("Memoria actual:");
-                        MEMORIA_PRINCIPAL.print();
+                        //console.log("Memoria actual:");
+                        //MEMORIA_PRINCIPAL.print();
                         addSimpleInst(instruccion);
                     }else{
                         let tmp = "Error Semantico: Declaracion Linea: "+instruccion[0].linea+" ,Columna: "+instruccion[0].columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
@@ -328,18 +324,18 @@
                             MEMORIA_PRINCIPAL.peek().agregar(instruccion);
                         }else if(instruccion.getScope2()<=ident){
                             let scopePadre = MEMORIA_PRINCIPAL.peek().getScope2();
-                            console.log("Scope padre actual: "+scopePadre);
-                            console.log("La instruccion Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+" no pertenece al scope");
+                            //console.log("Scope padre actual: "+scopePadre);
+                            //console.log("La instruccion Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+" no pertenece al scope");
                             let tmp2 = [];
                             while(scopePadre==MEMORIA_PRINCIPAL.peek().getScope2()){
                                 tmp2.push(MEMORIA_PRINCIPAL.pop());
                             }
-                            console.log("Intrucciones recuperadas: ");
+                            //console.log("Intrucciones recuperadas: ");
                             let recuperacion = tmp2.reverse();
-                            console.log(recuperacion);
+                            //console.log(recuperacion);
                             recuperacion.forEach(ele=>{MEMORIA_PRINCIPAL.peek().agregar(ele);});
-                            console.log("Memoria actual:");
-                            MEMORIA_PRINCIPAL.print();
+                            //console.log("Memoria actual:");
+                            //MEMORIA_PRINCIPAL.print();
                             addSimpleInst(instruccion);
                         }else{
                             let tmp = "Error Semantico: Intruccion Linea: "+instruccion.linea+" ,Columna: "+instruccion.columna+"-> La instruccion esta mal identada, la identacion esperada: "+ident+" - "+(ident+1);
@@ -401,17 +397,17 @@
         if(MEMORIA_PRINCIPAL.size() != 0){
             let scopePadre = MEMORIA_PRINCIPAL.peek().getScope2();
             if(scopePadre != 0){
-                console.log("Scope padre actual: "+scopePadre);
+                //console.log("Scope padre actual: "+scopePadre);
                 let tmp = [];
                 while(scopePadre == MEMORIA_PRINCIPAL.peek().getScope2()){
                     tmp.push(MEMORIA_PRINCIPAL.pop());
                 }
-                console.log("Intrucciones recuperadas: ");
+                //console.log("Intrucciones recuperadas: ");
                 let recuperacion = tmp.reverse();
-                console.log(recuperacion);
+                //console.log(recuperacion);
                 recuperacion.forEach(ele=>{MEMORIA_PRINCIPAL.peek().agregar(ele);});
-                console.log("Memoria actual:");
-                MEMORIA_PRINCIPAL.print();
+                //console.log("Memoria actual:");
+                //MEMORIA_PRINCIPAL.print();
                 plegarPila();
             }
         }else{
@@ -849,24 +845,78 @@ listaIds    :   listaIds ',' ID                 {
             ;
 
 
-exprecion   :   '-' exprecion %prec UMINUS  {console.log("- uninus"); $$ = new Operacion(new Literal("-1",@1.first_line, (@1.first_column+1),3),$2,2,@1.first_line, (@1.first_column+1));}
-            |   exprecion '+' exprecion     {console.log("+"); $$ = new Operacion($1,$3,0,@1.first_line, (@1.first_column+1));}
-            |   exprecion '-' exprecion     {console.log("-"); $$ = new Operacion($1,$3,1,@1.first_line, (@1.first_column+1));}
-            |   exprecion '/' exprecion     {console.log("/"); $$ = new Operacion($1,$3,3,@1.first_line, (@1.first_column+1));}
-            |   exprecion '^' exprecion     {console.log("^"); $$ = new Operacion($1,$3,5,@1.first_line, (@1.first_column+1));}
-            |   exprecion '*' exprecion     {console.log("*"); $$ = new Operacion($1,$3,2,@1.first_line, (@1.first_column+1));}
-            |   exprecion '%' exprecion     {console.log("%"); $$ = new Operacion($1,$3,4,@1.first_line, (@1.first_column+1));}
-            |   exprecion '>' exprecion     {console.log(">"); $$ = new Relacional($1,$3,3,INCERTEZA_GLOBAL,@1.first_line, (@1.first_column+1));}
-            |   exprecion '<' exprecion     {console.log("<"); $$ = new Relacional($1,$3,2,INCERTEZA_GLOBAL,@1.first_line, (@1.first_column+1));}
-            |   exprecion '>=' exprecion    {console.log(">="); $$ = new Relacional($1,$3,5,INCERTEZA_GLOBAL,@1.first_line, (@1.first_column+1));}
-            |   exprecion '<=' exprecion    {console.log("<="); $$ = new Relacional($1,$3,4,INCERTEZA_GLOBAL,@1.first_line, (@1.first_column+1));}
-            |   exprecion '!=' exprecion    {console.log("!="); $$ = new Relacional($1,$3,1,INCERTEZA_GLOBAL,@1.first_line, (@1.first_column+1));}
-            |   exprecion '==' exprecion    {console.log("=="); $$ = new Relacional($1,$3,0,INCERTEZA_GLOBAL,@1.first_line, (@1.first_column+1));}
-            |   exprecion '~' exprecion     {console.log("~"); $$ = new Relacional($1,$3,6,INCERTEZA_GLOBAL,@1.first_line, (@1.first_column+1));}
-            |   exprecion '||' exprecion    {console.log("||"); $$ = new Logica($1,$3,1,@1.first_line, (@1.first_column+1));}
-            |   exprecion '|&' exprecion    {console.log("|&"); $$ = new Logica($1,$3,2,@1.first_line, (@1.first_column+1));}
-            |   exprecion '&&' exprecion    {console.log("&&"); $$ = new Logica($1,$3,0,@1.first_line, (@1.first_column+1));}
-            |   '!' exprecion               {console.log("!"); $$ = new Logica($1,$3,3,@1.first_line, (@1.first_column+1));}
+exprecion   :   '-' exprecion %prec UMINUS  {
+                                                //console.log("- uninus"); 
+                                                $$ = new Operacion(new Literal("-1",@1.first_line, (@1.first_column+1),3),$2,2,@1.first_line, (@1.first_column+1));
+                                            }
+            |   exprecion '+' exprecion     {
+                                                //console.log("+");
+                                                $$ = new Operacion($1,$3,0,@1.first_line, (@1.first_column+1));
+                                            }
+            |   exprecion '-' exprecion     {
+                                                //console.log("-");
+                                                $$ = new Operacion($1,$3,1,@1.first_line, (@1.first_column+1));
+                                            }
+            |   exprecion '/' exprecion     {   
+                                                //console.log("/");
+                                                $$ = new Operacion($1,$3,3,@1.first_line, (@1.first_column+1));
+                                            }
+            |   exprecion '^' exprecion     {
+                                                //console.log("^");
+                                                $$ = new Operacion($1,$3,5,@1.first_line, (@1.first_column+1));
+                                            }
+            |   exprecion '*' exprecion     {
+                                                //console.log("*");
+                                                $$ = new Operacion($1,$3,2,@1.first_line, (@1.first_column+1));
+                                            }
+            |   exprecion '%' exprecion     {
+                                                //console.log("%");
+                                                $$ = new Operacion($1,$3,4,@1.first_line, (@1.first_column+1));
+                                            }
+            |   exprecion '>' exprecion     {
+                                                //console.log(">");
+                                                $$ = new Relacional($1,$3,3,INCERTEZA_GLOBAL,@1.first_line, (@1.first_column+1));
+                                            }
+            |   exprecion '<' exprecion     {
+                                                //console.log("<");
+                                                $$ = new Relacional($1,$3,2,INCERTEZA_GLOBAL,@1.first_line, (@1.first_column+1));
+                                            }
+            |   exprecion '>=' exprecion    {
+                                                //console.log(">=");
+                                                $$ = new Relacional($1,$3,5,INCERTEZA_GLOBAL,@1.first_line, (@1.first_column+1));
+                                            }
+            |   exprecion '<=' exprecion    {
+                                                //console.log("<=");
+                                                $$ = new Relacional($1,$3,4,INCERTEZA_GLOBAL,@1.first_line, (@1.first_column+1));
+                                            }
+            |   exprecion '!=' exprecion    {
+                                                //console.log("!=");
+                                                $$ = new Relacional($1,$3,1,INCERTEZA_GLOBAL,@1.first_line, (@1.first_column+1));
+                                            }
+            |   exprecion '==' exprecion    {
+                                                //console.log("==");
+                                                $$ = new Relacional($1,$3,0,INCERTEZA_GLOBAL,@1.first_line, (@1.first_column+1));
+                                            }
+            |   exprecion '~' exprecion     {
+                                                //console.log("~");
+                                                $$ = new Relacional($1,$3,6,INCERTEZA_GLOBAL,@1.first_line, (@1.first_column+1));
+                                            }
+            |   exprecion '||' exprecion    {
+                                                //console.log("||");
+                                                $$ = new Logica($1,$3,1,@1.first_line, (@1.first_column+1));
+                                            }
+            |   exprecion '|&' exprecion    {
+                                                //console.log("|&");
+                                                $$ = new Logica($1,$3,2,@1.first_line, (@1.first_column+1));
+                                            }
+            |   exprecion '&&' exprecion    {   
+                                                //console.log("&&");
+                                                $$ = new Logica($1,$3,0,@1.first_line, (@1.first_column+1));
+                                            }
+            |   '!' exprecion               {
+                                                //console.log("!");
+                                                $$ = new Logica($1,$3,3,@1.first_line, (@1.first_column+1));
+                                            }
             |   f                           {$$=$1;}
             ;
 
