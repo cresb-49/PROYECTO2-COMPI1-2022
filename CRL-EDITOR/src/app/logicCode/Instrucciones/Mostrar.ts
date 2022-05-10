@@ -24,10 +24,10 @@ export class Mostrar extends Instruccion{
         }else{
             if(this.expreciones.length == 0){
                 //console.log("Expreciones 0");
-                this.consola.agregarPrint(valor.value);
+                this.consola.agregarPrint(">> "+valor.value);
             }else{
                 //console.log("Expreciones n");
-                this.consola.agregarPrint(this.arreglarParametros(valor.value,scope));
+                this.consola.agregarPrint(">> "+this.arreglarParametros(valor.value,scope));
             }
         }
     }
