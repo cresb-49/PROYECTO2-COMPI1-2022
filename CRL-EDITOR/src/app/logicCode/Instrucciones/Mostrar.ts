@@ -20,7 +20,7 @@ export class Mostrar extends Instruccion{
     public ejecutar(scope: Scope) {
         const valor = this.valor.ejecutar(scope);
         if(valor.value == null){
-            this.consola.agregarPrint("null");
+            this.consola.agregarPrint(">> null");
         }else{
             if(this.expreciones.length == 0){
                 //console.log("Expreciones 0");
