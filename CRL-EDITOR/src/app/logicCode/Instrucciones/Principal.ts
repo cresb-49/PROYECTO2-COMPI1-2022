@@ -14,7 +14,13 @@ export class Principal extends Instruccion implements AsigInstrucciones {
     public graficar(scope: Scope, graphviz: GraficoDot, subNameNode: string, padre: string) {}
     
     public ejecutar(scope: Scope) {
-        this.sentencias?.ejecutar(scope);
+        try {
+            this.sentencias?.ejecutar(scope);
+        } catch (error) {
+            if(error instanceof Error){
+                throw new Error(error.message);
+            }
+        }
     }
 
     public agregar(instruccion: Instruccion) {

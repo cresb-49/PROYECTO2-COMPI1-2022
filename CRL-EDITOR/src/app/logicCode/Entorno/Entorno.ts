@@ -63,7 +63,12 @@ export class Entorno {
                             crl.addOtherRefFunciones();
                         }
                         console.log(this.script);
-                        this.principalCRL.ejecutar();
+                        try {
+                            this.principalCRL.ejecutar();
+                        } catch (error) {
+                            if(error instanceof Error)
+                                this.consola.agregarError(error.message)
+                        }
                         this.contenedorGrafico.generateGraficos(graficos);
                     }
                 }

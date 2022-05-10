@@ -15,7 +15,13 @@ export class CRL {
 
     public ejecutar(){
         if(this.principal!=null){
-            this.principal.ejecutar(this.scopeGlobal);
+            try {
+                this.principal.ejecutar(this.scopeGlobal);
+            } catch (error) {
+                if(error instanceof Error){
+                    throw new Error(error.message);
+                }
+            }
         }
     }
 

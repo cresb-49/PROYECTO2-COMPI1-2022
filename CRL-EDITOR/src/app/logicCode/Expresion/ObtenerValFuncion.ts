@@ -28,7 +28,7 @@ export class ObtenerValFuncion extends Exprecion {
                     return { value: r.value, tipo: r.tipo };
                 } catch (error) {
                     if (error instanceof Error) {
-                        throw new Error("Error en ejecucion de funcion ,Linea: " + this.linea + " ,Columna: " + this.columna + " " + error.message);
+                        throw new Error('Error en ejecucion de funcion "'+this.id+'" ,Linea: '+this.linea+" ,Columna: "+this.columna+" , -> "+error.message);
                     }
                 }
             }

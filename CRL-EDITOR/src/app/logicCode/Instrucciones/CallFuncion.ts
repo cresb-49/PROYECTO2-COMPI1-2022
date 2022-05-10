@@ -30,7 +30,7 @@ export class CallFuncion extends Instruccion{
                 funcion.ejecutarFuncion(this.parametros,scope);
             } catch (error) {
                 if(error instanceof Error){
-                    throw new Error("Error en ejecucion de funcion ,Linea: "+this.linea+" ,Columna: "+this.columna+" "+error.message);
+                    throw new Error('Error en ejecucion de funcion "'+this.id+'" ,Linea: '+this.linea+" ,Columna: "+this.columna+" , -> "+error.message);
                 }
             }
         }
