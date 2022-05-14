@@ -85,6 +85,12 @@
         });
     }
 
+    function agregarValorDeclaracion(declaraciones,exprecion){
+        declaraciones.forEach(declaracion=>{
+            declaracion.setValor(exprecion);
+        });
+    }
+
     function agregarScope2Declaraciones(identacion,instr){
         instr.forEach(ele=>{
             ele.setScope2(identacion.length);
@@ -811,6 +817,14 @@ instruccionDeclarar :   IDENTACION tipoDato listaIds    {
                                                             agregarScope2Declaraciones($1,$$);
                                                             addSimpleInst($$);
                                                         }
+                    |   IDENTACION tipoDato listaIds '=' exprecion  {
+                                                                        $$ = $3;
+                                                                        verificarTipoVariable($2,$$)
+                                                                        agregarTipoDeclaracion($2,$$,$1);
+                                                                        agregarValorDeclaracion($$,$5);
+                                                                        agregarScope2Declaraciones($1,$$);
+                                                                        addSimpleInst($$);
+                                                                    }
                     |   tipoDato listaIds               {
                                                             $$ = $2;
                                                             verificarTipoVariable($1,$$)
@@ -818,6 +832,15 @@ instruccionDeclarar :   IDENTACION tipoDato listaIds    {
                                                             agregarScope2Declaraciones("",$$);
                                                             addSimpleInst($$);
                                                         }
+                    |   tipoDato listaIds '=' exprecion {
+                                                            $$ = $2;
+                                                            verificarTipoVariable($1,$$)
+                                                            agregarTipoDeclaracion($1,$$,"");
+                                                            agregarValorDeclaracion($$,$4);
+                                                            agregarScope2Declaraciones("",$$);
+                                                            addSimpleInst($$);
+                                                        }
+                    
                     ;
                 
 tipoDato    :   INT         {$$=Tipo.INT;}
@@ -832,15 +855,8 @@ listaIds    :   listaIds ',' ID                 {
                                                     $1.push(new Declaracion($3,-1,null,@3.first_line,(@3.first_column+1)));
                                                     $$ = $1;
                                                 }
-            |   listaIds ',' ID '=' exprecion   {
-                                                    $1.push(new Declaracion($3,-1,$5,@3.first_line,(@3.first_column+1)));
-                                                    $$ = $1;
-                                                }
             |   ID                              {
                                                     $$ = [new Declaracion($1,-1,null,@1.first_line,(@1.first_column+1))];
-                                                }
-            |   ID '=' exprecion                {
-                                                    $$ = [new Declaracion($1,-1,$3,@1.first_line,(@1.first_column+1))];
                                                 }
             ;
 

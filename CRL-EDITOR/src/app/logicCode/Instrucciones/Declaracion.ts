@@ -20,6 +20,10 @@ export class Declaracion extends Instruccion{
     public setTipo(tipo:number){
         this.tipo=tipo;
     }
+
+    public setValor(valor:Exprecion){
+        this.valor = valor;
+    }
     
     public ejecutar(scope: Scope) {
         if(this.valor == null){
