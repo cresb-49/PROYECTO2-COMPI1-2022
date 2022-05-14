@@ -520,7 +520,7 @@ comentMultip ((\'\'\')([^']*)(\'\'\'))
 {comentSimple}      {/*Ingonorar un comentario simple*/}
 {comentMultip}      {/*Ingonorar un comentario multiple*/}
 
-\t+\n+              {
+\t+\n               {
                         contarLineas(yytext);
                         return 'NUEVA_LINEA';
                     }
@@ -528,7 +528,7 @@ comentMultip ((\'\'\')([^']*)(\'\'\'))
                         //console.log('Identacion');
                         return 'IDENTACION';
                     }
-\n+                 {
+\n                  {
                         contarLineas(yytext);
                         return 'NUEVA_LINEA';
                     }
