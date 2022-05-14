@@ -135,7 +135,7 @@ export class Funcion extends Instruccion implements AsigInstrucciones{
     public graficar(scope: Scope, graphviz: GraficoDot, subNameNode: string, padre: string) {
         let subName = this.codigoReferencia();
         let node = "nodo_"+subName+"_"+"0";
-        let decl = node+'[label = "<n>'+this.id+'('+this.arrayTipos()+')"];'
+        let decl = node+'[label = "<n>'+TipoString[this.tipo]+':'+this.id+'('+this.arrayTipos()+')"];'
         graphviz.declaraciones.push("node [shape=record,width=.1,height=.1];");
         graphviz.declaraciones.push(decl);
         this.sentencias?.graficar(scope,graphviz,subName,node);
