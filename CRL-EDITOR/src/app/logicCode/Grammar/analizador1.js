@@ -126,7 +126,7 @@ this.$ = $$[$0-1];
 break;
 case 12:
 
-                                                                this.$ = new Principal("",generarSentencias(_$[$0-4].first_line,(_$[$0-4].first_column+1)),_$[$0-4].first_line,(_$[$0-4].first_column+1));
+                                                                this.$ = new Principal("",generarSentencias(_$[$0-5].first_line,(_$[$0-4].first_column+1)),_$[$0-5].first_line,(_$[$0-4].first_column+1));
                                                                 agregadoFuncion(this.$);
                                                                 agregarFPrincipal(this.$);
                                                             
@@ -137,17 +137,17 @@ case 15:
                                                             
 break;
 case 29:
-this.$ = new DrawTS(-1,-1,_$[$0-2].first_line,(_$[$0-2].first_column+1));agregarScope2($$[$0-3],this.$);addSimpleInst(this.$);
+this.$ = new DrawTS(-1,-1,_$[$0-3].first_line,(_$[$0-2].first_column+1));agregarScope2($$[$0-3],this.$);addSimpleInst(this.$);
 break;
 case 30:
-this.$ = new DrawEXP($$[$0-1],_$[$0-3].first_line,(_$[$0-3].first_column+1));agregarScope2($$[$0-4],this.$);addSimpleInst(this.$);
+this.$ = new DrawEXP($$[$0-1],_$[$0-4].first_line,(_$[$0-3].first_column+1));agregarScope2($$[$0-4],this.$);addSimpleInst(this.$);
 break;
 case 31:
-this.$ = new DrawAST($$[$0-1],_$[$0-3].first_line,(_$[$0-3].first_column+1));agregarScope2($$[$0-4],this.$);addSimpleInst(this.$);
+this.$ = new DrawAST($$[$0-1],_$[$0-4].first_line,(_$[$0-3].first_column+1));agregarScope2($$[$0-4],this.$);addSimpleInst(this.$);
 break;
 case 32:
 
-                                                                                    this.$ = new Mostrar($$[$0-3],$$[$0-1],_$[$0-5].first_line,_$[$0-5].first_column);
+                                                                                    this.$ = new Mostrar($$[$0-3],$$[$0-1],_$[$0-6].first_line,_$[$0-5].first_column);
                                                                                     agregarScope2($$[$0-6],this.$);
                                                                                     addSimpleInst(this.$);
                                                                                     OBJ_MOSTRAR.push(this.$);
@@ -155,29 +155,29 @@ case 32:
 break;
 case 33:
 
-                                                                this.$ = new Mostrar($$[$0-1],[],_$[$0-3].first_line,_$[$0-3].first_column);
+                                                                this.$ = new Mostrar($$[$0-1],[],_$[$0-4].first_line,_$[$0-3].first_column);
                                                                 agregarScope2($$[$0-4],this.$);
                                                                 addSimpleInst(this.$);
                                                                 OBJ_MOSTRAR.push(this.$);
                                                             
 break;
 case 34:
-this.$ = new Continuar(_$[$0].first_line,(_$[$0].first_column+1));agregarScope2($$[$0-1],this.$);addSimpleInst(this.$);
+this.$ = new Continuar(_$[$0-1].first_line,(_$[$0].first_column+1));agregarScope2($$[$0-1],this.$);addSimpleInst(this.$);
 break;
 case 35:
-this.$ = new Detener(_$[$0].first_line,(_$[$0].first_column+1));agregarScope2($$[$0-1],this.$);addSimpleInst(this.$);
+this.$ = new Detener(_$[$0-1].first_line,(_$[$0].first_column+1));agregarScope2($$[$0-1],this.$);addSimpleInst(this.$);
 break;
 case 36:
    
-                                                                        this.$ = new Mientras($$[$0-2],generarSentencias(_$[$0-4].first_line,(_$[$0-4].first_column+1)),_$[$0-4].first_line,(_$[$0-4].first_column+1));
+                                                                        this.$ = new Mientras($$[$0-2],generarSentencias(_$[$0-5].first_line,(_$[$0-4].first_column+1)),_$[$0-5].first_line,(_$[$0-4].first_column+1));
                                                                         agregarScope2($$[$0-5],this.$);
                                                                         addIntruccionMientrasPara(this.$);
                                                                     
 break;
 case 37:
 
-                                                                                                    this.$ = new Para($$[$0-8],$$[$0-6],$$[$0-4],$$[$0-2],generarSentencias(_$[$0-11].first_line,(_$[$0-11].first_column+1)),_$[$0-11].first_line,(_$[$0-11].first_column+1));
-                                                                                                    let varPara = new Declaracion($$[$0-8],Tipo.INT,$$[$0-6],_$[$0-8].first_line,(_$[$0-8].first_column+1));
+                                                                                                    this.$ = new Para($$[$0-8],$$[$0-6],$$[$0-4],$$[$0-2],generarSentencias(_$[$0-12].first_line,(_$[$0-11].first_column+1)),_$[$0-12].first_line,(_$[$0-11].first_column+1));
+                                                                                                    let varPara = new Declaracion($$[$0-8],Tipo.INT,$$[$0-6],_$[$0-12].first_line,(_$[$0-8].first_column+1));
                                                                                                     this.$.getSentencias().agregarVarsPrecedencia(varPara);
                                                                                                     agregarScope2($$[$0-12],this.$);
                                                                                                     addIntruccionMientrasPara(this.$);
@@ -191,26 +191,26 @@ this.$ = 1;
 break;
 case 40:
 
-                                                        this.$ = new Si($$[$0-2],generarSentencias(_$[$0-4].first_line,(_$[$0-4].first_column+1)),null,_$[$0-4].first_line,(_$[$0-4].first_column+1));                                                        
+                                                        this.$ = new Si($$[$0-2],generarSentencias(_$[$0-5].first_line,(_$[$0-4].first_column+1)),null,_$[$0-5].first_line,(_$[$0-4].first_column+1));                                                        
                                                         agregarScope2($$[$0-5],this.$);
                                                         addInstruccionSi(this.$);
                                                     
 break;
 case 41:
 
-                                                        this.$ = new Sino(generarSentencias(_$[$0-1].first_line,(_$[$0-1].first_column+1)),_$[$0-1].first_line,(_$[$0-1].first_column+1));
+                                                        this.$ = new Sino(generarSentencias(_$[$0-2].first_line,(_$[$0-1].first_column+1)),_$[$0-2].first_line,(_$[$0-1].first_column+1));
                                                         agregarScope2($$[$0-2],this.$);
                                                         addInstruccionSi(this.$);
                                                     
 break;
 case 42:
-this.$ = new Retornar($$[$0],_$[$0-1].first_line,(_$[$0-1].first_column+1));agregarScope2($$[$0-2],this.$);addSimpleInst(this.$);
+this.$ = new Retornar($$[$0],_$[$0-2].first_line,(_$[$0-1].first_column+1));agregarScope2($$[$0-2],this.$);addSimpleInst(this.$);
 break;
 case 43:
-this.$ = new CallFuncion($$[$0-3],$$[$0-1],_$[$0-3].first_line,(_$[$0-3].first_column+1));agregarScope2($$[$0-4],this.$);addSimpleInst(this.$);
+this.$ = new CallFuncion($$[$0-3],$$[$0-1],_$[$0-4].first_line,(_$[$0-3].first_column+1));agregarScope2($$[$0-4],this.$);addSimpleInst(this.$);
 break;
 case 44:
-this.$ = new CallFuncion($$[$0-2],[],_$[$0-2].first_line,(_$[$0-2].first_column+1));agregarScope2($$[$0-3],this.$);addSimpleInst(this.$);
+this.$ = new CallFuncion($$[$0-2],[],_$[$0-3].first_line,(_$[$0-2].first_column+1));agregarScope2($$[$0-3],this.$);addSimpleInst(this.$);
 break;
 case 45:
 $$[$0-2].push($$[$0]);this.$=$$[$0-2];
@@ -220,7 +220,7 @@ this.$=[$$[$0]];
 break;
 case 47:
 
-                                                                        this.$ = new Funcion($$[$0-5],$$[$0-4],generarSentencias(_$[$0-4].first_line,(_$[$0-4].first_column+1)),$$[$0-2],_$[$0-4].first_line,(_$[$0-4].first_column+1));
+                                                                        this.$ = new Funcion($$[$0-5],$$[$0-4],generarSentencias(_$[$0-5].first_line,(_$[$0-4].first_column+1)),$$[$0-2],_$[$0-5].first_line,(_$[$0-4].first_column+1));
                                                                         verificarExistenciaFuncion(this.$);
                                                                         this.$.getSentencias().agregarVarsPrecedencia($$[$0-2]);
                                                                         agregadoFuncion(this.$);
@@ -228,14 +228,14 @@ case 47:
 break;
 case 48:
 
-                                                            this.$ = new Funcion($$[$0-4],$$[$0-3],generarSentencias(_$[$0-3].first_line,(_$[$0-3].first_column+1)),[],_$[$0-3].first_line,(_$[$0-3].first_column+1));
+                                                            this.$ = new Funcion($$[$0-4],$$[$0-3],generarSentencias(_$[$0-4].first_line,(_$[$0-3].first_column+1)),[],_$[$0-4].first_line,(_$[$0-3].first_column+1));
                                                             verificarExistenciaFuncion(this.$);
                                                             agregadoFuncion(this.$);
                                                         
 break;
 case 49:
 
-                                                let tmpD = new Declaracion($$[$0],$$[$0-1],null,_$[$0].first_line,(_$[$0].first_column+1));
+                                                let tmpD = new Declaracion($$[$0],$$[$0-1],null,_$[$0-3].first_line,(_$[$0].first_column+1));
                                                 verificarVarFuncion($$[$0-3],tmpD);
                                                 $$[$0-3].push(tmpD);
                                                 this.$ = $$[$0-3];
@@ -243,14 +243,14 @@ case 49:
 break;
 case 50:
 
-                                this.$=[new Declaracion($$[$0],$$[$0-1],null,_$[$0].first_line,(_$[$0].first_column+1))];
+                                this.$=[new Declaracion($$[$0],$$[$0-1],null,_$[$0-1].first_line,(_$[$0].first_column+1))];
                             
 break;
 case 51:
 this.$ = new Asignacion($$[$0-2],$$[$0],_$[$0-2].first_line,(_$[$0-2].first_column+1));agregarScope2("",this.$);addSimpleInst(this.$);
 break;
 case 52:
-this.$ = new Asignacion($$[$0-2],$$[$0],_$[$0-2].first_line,(_$[$0-2].first_column+1));agregarScope2($$[$0-3],this.$);addSimpleInst(this.$);
+this.$ = new Asignacion($$[$0-2],$$[$0],_$[$0-3].first_line,(_$[$0-2].first_column+1));agregarScope2($$[$0-3],this.$);addSimpleInst(this.$);
 break;
 case 53:
 
@@ -310,7 +310,7 @@ this.$=Tipo.VOID;
 break;
 case 63:
 
-                                                    $$[$0-2].push(new Declaracion($$[$0],-1,null,_$[$0].first_line,(_$[$0].first_column+1)));
+                                                    $$[$0-2].push(new Declaracion($$[$0],-1,null,_$[$0-2].first_line,(_$[$0].first_column+1)));
                                                     this.$ = $$[$0-2];
                                                 
 break;
