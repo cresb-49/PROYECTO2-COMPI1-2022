@@ -1,9 +1,9 @@
 <br>
 <div class="container estilo">
     <li style="color: white;" >{{titulo}}</li>
-    <br>
-    <button class="btn btn-light" (click)="d3()">Mostrar</button>
-    <button class="btn btn-light" (click)="download()">Descargar</button>
-    <br>
-    <div class="contenedorGrafico" id="{{id}}"></div>
+    <button class="btn btn-light" [style]="this.visualMostrar" (click)="d3()">Mostrar</button>
+    <div #controlador [style]="this.visualGrafico">
+        <button class="btn btn-light" (click)="download()">Descargar</button>
+        <div class="contenedorGrafico" id="{{id}}"></div>
+    </div>
 </div>

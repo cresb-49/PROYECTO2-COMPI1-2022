@@ -13,14 +13,17 @@ export class GraficoComponent implements OnInit {
   public grap:string = 'digraph {a -> b}';
   public id:string = ''
 
+  public visualGrafico:string ='visibility: hidden;'
+  public visualMostrar:string ='visibility: visible;'
+
   constructor() { }
 
-  ngOnInit(): void {
-    
-  }
+  ngOnInit(): void {}
 
   d3(){
     graphviz('#'+this.id).renderDot(this.grap);
+    this.visualGrafico = 'visibility: visible;'
+    this.visualMostrar = 'display: none;'
   }
 
   download(){
@@ -35,5 +38,9 @@ export class GraficoComponent implements OnInit {
       anchor.href = url;
       anchor.click();
     }
+  }
+
+  public ejecutarVisualizar(){
+    this.d3();
   }
 }
