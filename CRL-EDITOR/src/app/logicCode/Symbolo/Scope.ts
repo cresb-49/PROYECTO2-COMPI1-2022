@@ -40,8 +40,9 @@ export class Scope {
                 if(re!=undefined){
                     let tipoAsig = tablaAsignacion[re.tipo][tipo];
                     if(tipoAsig!=Tipo.ERROR){
+                        const valFinal = this.resultAsignacion(re.tipo,tipo,valor);
                         if(re.tipo == tipoAsig){
-                            re.valor = valor;
+                            re.valor = valFinal;
                         }else{
                             throw new Error("No se puede asignar un valor de tipo \""+TipoString[tipo]+"\" a la variable \""+id+"\"");
                         }
@@ -160,5 +161,61 @@ export class Scope {
         c1=c1.slice(0,-1);
         c2=c2.slice(0,-1);
         return 'digraph TS {node [shape=record];ts [label="{'+c1+'}|{'+c2+'}"];}';
+    }
+
+    private resultAsignacion(tipoVar:number,tipoAsig:number,valor:any):any{
+        switch (tipoVar) {
+            case Tipo.DOUBLE:
+                if(tipoAsig == Tipo.CHAR){
+                    return this.getCharNumeric(valor);
+                }else if(tipoAsig == Tipo.BOOLEAN){
+                    return this.getBooleanNumeric(valor);
+                }else if(tipoAsig == Tipo.INT){
+                    return valor
+                }else if(tipoAsig == Tipo.DOUBLE){
+                    return valor;
+                }
+                break;
+            case Tipo.BOOLEAN:
+                return valor;
+            case Tipo.STRING:
+                if(tipoAsig == Tipo.CHAR){
+                    return String(valor);
+                }else if(tipoAsig == Tipo.BOOLEAN){
+                    return String(this.getBooleanNumeric(valor));
+                }else if(tipoAsig == Tipo.INT){
+                    return String(valor);
+                }else if(tipoAsig == Tipo.DOUBLE){
+                    return String(valor);
+                }
+                return valor;
+            case Tipo.INT:
+                if(tipoAsig == Tipo.CHAR){
+                    return this.getCharNumeric(valor);
+                }else if(tipoAsig == Tipo.BOOLEAN){
+                    return this.getBooleanNumeric(valor);
+                }else if(tipoAsig == Tipo.INT){
+                    return valor;
+                }else if(tipoAsig == Tipo.DOUBLE){
+                    return Math.trunc(valor);
+                }
+                break;
+            case Tipo.CHAR:
+                if(tipoAsig == Tipo.INT){
+                    return String.fromCharCode(valor);
+                }
+                return valor;
+        }
+    }
+    private getBooleanNumeric(state: boolean) {
+        if (state) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }
+    private getCharNumeric(caracter: String) {
+        return caracter.charCodeAt(0);
     }
 }
