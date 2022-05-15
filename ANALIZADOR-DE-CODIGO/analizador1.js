@@ -104,7 +104,8 @@ break;
 case 6:
 
                                             if(INCERTEZA_GLOBAL_IS_ASIG){
-                                                console.log("Se sobre escribio la incerteza");
+                                                let tmp = "Error Semantico: Incerteza Linea: "+_$[$0-1].first_line+" ,Columna: "+(_$[$0-1].first_column+1)+"-> La Incertaza solo puede ser definida una vez en el archivo";
+                                                ERRORES_ANALISIS.push(tmp);
                                             }
                                             if(MEMORIA_PRINCIPAL.size() != 0){  
                                                 let tmp = "Error Semantico: Incerteza Linea: "+_$[$0-1].first_line+" ,Columna: "+(_$[$0-1].first_column+1)+"-> La Incertaza solo puede ser definida en el encabezado";
