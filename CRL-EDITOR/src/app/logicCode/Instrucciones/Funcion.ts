@@ -2,12 +2,13 @@ import { AsigInstrucciones } from "../Abstracto/AsigIntrucciones";
 import { Exprecion } from "../Abstracto/Exprecion";
 import { Instruccion } from "../Abstracto/Instruccion";
 import { Retorno, Tipo, TipoString } from "../Abstracto/Retorno";
+import { CAST_IMPLICITO, tablaAsignacion } from "../CasteoImplicito/CasteoImplicito";
 import { GraficoDot } from "../GraficosDot/GraficoDot";
 import { Almacenador } from "../Symbolo/Almacenador";
 import { ContenedorFunciones } from "../Symbolo/ContenedorFunciones";
 import { Scope } from "../Symbolo/Scope";
 import { Asignacion } from "./Asignacion";
-import { Declaracion } from "./Declaracion";
+import { Declaracion} from "./Declaracion";
 
 import { Sentencias } from "./Sentencias";
 
@@ -33,13 +34,15 @@ export class Funcion extends Instruccion implements AsigInstrucciones{
                 return {value:null,tipo:Tipo.ERROR};
             }else{
                 if(result != undefined){
-                    if(result.tipo == this.tipo){
-                        return {value:result.value,tipo:result.tipo};
+                    let tipo = tablaAsignacion[this.tipo][result.tipo];
+                    if(tipo != Tipo.ERROR){
+                        const valFinal = CAST_IMPLICITO(this.tipo,result.tipo,result.value);
+                        return {value:valFinal,tipo:tipo};
                     }else{
-                        throw new Error("El valor de retorno no coincide con la funcion -> sub origen Linea: "+this.linea+" ,Columna: "+this.columna);
+                        throw new Error("El valor de retorno es de tipo: \""+TipoString[result.tipo]+"\",no es compatible con el retono \""+TipoString[this.tipo]+"\" de la funcion -> sub origen Linea: "+this.linea+" ,Columna: "+this.columna);
                     }
                 }else{
-                    throw new Error("La funcion debe retornar valor \""+TipoString[this.tipo]+"\" -> sub origen Linea: "+this.linea+" ,Columna: "+this.columna);
+                    throw new Error("El valor de retorno es indefinido ,no es compatible con el retono \""+TipoString[this.tipo]+"\" de la funcion -> sub origen Linea: "+this.linea+" ,Columna: "+this.columna);
                 }
             }
         }else{
