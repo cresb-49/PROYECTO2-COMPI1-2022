@@ -20,6 +20,10 @@ export class Declaracion extends Instruccion{
     public setTipo(tipo:number){
         this.tipo=tipo;
     }
+
+    public setValor(valor:Exprecion){
+        this.valor = valor;
+    }
     
     public ejecutar(scope: Scope) {
         if(this.valor == null){
@@ -50,7 +54,7 @@ export class Declaracion extends Instruccion{
 
     public graficar(scope: Scope, graphviz: GraficoDot, subNameNode: string, padre: string) {
         let nume = graphviz.declaraciones.length + 1;
-        let node = "nodo-" + subNameNode + "-" + nume;
+        let node = "nodo_" + subNameNode + "_" + nume;
         let decl = node + '[label = "<n>Declaracion"];'
         graphviz.declaraciones.push(decl);
         graphviz.relaciones.push((padre + ':n -> ' + node + ':n'));

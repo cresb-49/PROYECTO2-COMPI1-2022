@@ -85,12 +85,6 @@
         });
     }
 
-    function agregarValorDeclaracion(declaraciones,exprecion){
-        declaraciones.forEach(declaracion=>{
-            declaracion.setValor(exprecion);
-        });
-    }
-
     function agregarScope2Declaraciones(identacion,instr){
         instr.forEach(ele=>{
             ele.setScope2(identacion.length);
@@ -520,7 +514,7 @@ comentMultip ((\'\'\')([^']*)(\'\'\'))
 {comentSimple}      {/*Ingonorar un comentario simple*/}
 {comentMultip}      {/*Ingonorar un comentario multiple*/}
 
-\t+\n               {
+\t+\n+              {
                         contarLineas(yytext);
                         return 'NUEVA_LINEA';
                     }
@@ -528,7 +522,7 @@ comentMultip ((\'\'\')([^']*)(\'\'\'))
                         //console.log('Identacion');
                         return 'IDENTACION';
                     }
-\n                  {
+\n+                 {
                         contarLineas(yytext);
                         return 'NUEVA_LINEA';
                     }
@@ -684,7 +678,7 @@ instruction     :   instructionGlobal NUEVA_LINEA           {$$ = $1;}
                 |   instruccionFuncionMetodo NUEVA_LINEA    {$$ = $1;}
                 |   intruccionesEncabezado NUEVA_LINEA
                 |   VOID PRINCIPAL '(' ')' ':' NUEVA_LINEA  {
-                                                                $$ = new Principal("",generarSentencias(@1.first_line,(@2.first_column+1)),@1.first_line,(@2.first_column+1));
+                                                                $$ = new Principal("",generarSentencias(@2.first_line,(@2.first_column+1)),@2.first_line,(@2.first_column+1));
                                                                 agregadoFuncion($$);
                                                                 agregarFPrincipal($$);
                                                             }
@@ -710,45 +704,45 @@ instructionGlobal   :   instruccionDeclarar
                     |   funcionDibujarTs
                     ;
 
-funcionDibujarTs    :   IDENTACION DIBUJAR_TS '('')'    {$$ = new DrawTS(-1,-1,@1.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
+funcionDibujarTs    :   IDENTACION DIBUJAR_TS '('')'    {$$ = new DrawTS(-1,-1,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
                     ;
 
-funcionDibujarExp   :   IDENTACION DIBUJAR_EXP '(' exprecion ')'    {$$ = new DrawEXP($4,@1.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
+funcionDibujarExp   :   IDENTACION DIBUJAR_EXP '(' exprecion ')'    {$$ = new DrawEXP($4,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
                     ;
 
-funcionDibujarAST   :   IDENTACION DIBUJAR_AST '(' ID ')'   {$$ = new DrawAST($4,@1.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
+funcionDibujarAST   :   IDENTACION DIBUJAR_AST '(' ID ')'   {$$ = new DrawAST($4,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
                     ;
 
 funcionMostrar  :   IDENTACION MOSTRAR '(' exprecion ',' parametrosEnviar ')'   {
-                                                                                    $$ = new Mostrar($4,$6,@1.first_line,@2.first_column);
+                                                                                    $$ = new Mostrar($4,$6,@2.first_line,@2.first_column);
                                                                                     agregarScope2($1,$$);
                                                                                     addSimpleInst($$);
                                                                                     OBJ_MOSTRAR.push($$);
                                                                                 }
                 |   IDENTACION MOSTRAR '(' exprecion ')'    {
-                                                                $$ = new Mostrar($4,[],@1.first_line,@2.first_column);
+                                                                $$ = new Mostrar($4,[],@2.first_line,@2.first_column);
                                                                 agregarScope2($1,$$);
                                                                 addSimpleInst($$);
                                                                 OBJ_MOSTRAR.push($$);
                                                             }
                 ;
 
-sentenciaContinuar  :   IDENTACION CONTINUAR    {$$ = new Continuar(@1.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
+sentenciaContinuar  :   IDENTACION CONTINUAR    {$$ = new Continuar(@2.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
                     ;
 
-sentenciaDetener    :   IDENTACION DETENER  {$$ = new Detener(@1.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
+sentenciaDetener    :   IDENTACION DETENER  {$$ = new Detener(@2.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
                     ;
 
 sentenciaMientras   :   IDENTACION MIENTRAS '(' exprecion ')' ':'   {   
-                                                                        $$ = new Mientras($4,generarSentencias(@1.first_line,(@2.first_column+1)),@1.first_line,(@2.first_column+1));
+                                                                        $$ = new Mientras($4,generarSentencias(@2.first_line,(@2.first_column+1)),@2.first_line,(@2.first_column+1));
                                                                         agregarScope2($1,$$);
                                                                         addIntruccionMientrasPara($$);
                                                                     }
                     ;
 
 sentenciaPara   :   IDENTACION PARA '('INT ID '=' exprecion ';' exprecion ';' opPara ')' ':'    {
-                                                                                                    $$ = new Para($5,$7,$9,$11,generarSentencias(@1.first_line,(@2.first_column+1)),@1.first_line,(@2.first_column+1));
-                                                                                                    let varPara = new Declaracion($5,Tipo.INT,$7,@1.first_line,(@5.first_column+1));
+                                                                                                    $$ = new Para($5,$7,$9,$11,generarSentencias(@2.first_line,(@2.first_column+1)),@2.first_line,(@2.first_column+1));
+                                                                                                    let varPara = new Declaracion($5,Tipo.INT,$7,@5.first_line,(@5.first_column+1));
                                                                                                     $$.getSentencias().agregarVarsPrecedencia(varPara);
                                                                                                     agregarScope2($1,$$);
                                                                                                     addIntruccionMientrasPara($$);
@@ -760,22 +754,22 @@ opPara  :   '++'    {$$ = 0;}
         ;
 
 sentenciaSi :   IDENTACION SI '(' exprecion ')' ':' {
-                                                        $$ = new Si($4,generarSentencias(@1.first_line,(@2.first_column+1)),null,@1.first_line,(@2.first_column+1));                                                        
+                                                        $$ = new Si($4,generarSentencias(@2.first_line,(@2.first_column+1)),null,@2.first_line,(@2.first_column+1));                                                        
                                                         agregarScope2($1,$$);
                                                         addInstruccionSi($$);
                                                     }
             |   IDENTACION SINO ':'                 {
-                                                        $$ = new Sino(generarSentencias(@1.first_line,(@2.first_column+1)),@1.first_line,(@2.first_column+1));
+                                                        $$ = new Sino(generarSentencias(@2.first_line,(@2.first_column+1)),@2.first_line,(@2.first_column+1));
                                                         agregarScope2($1,$$);
                                                         addInstruccionSi($$);
                                                     }
             ;
 
-instruccionRetorno  :   IDENTACION RETORNO exprecion    {$$ = new Retornar($3,@1.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
+instruccionRetorno  :   IDENTACION RETORNO exprecion    {$$ = new Retornar($3,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
                     ;
 
-llamarFuncion   :   IDENTACION ID '(' parametrosEnviar ')'  {$$ = new CallFuncion($2,$4,@1.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
-                |   IDENTACION ID '(' ')'   {$$ = new CallFuncion($2,[],@1.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
+llamarFuncion   :   IDENTACION ID '(' parametrosEnviar ')'  {$$ = new CallFuncion($2,$4,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
+                |   IDENTACION ID '(' ')'   {$$ = new CallFuncion($2,[],@2.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
                 ;
 
 parametrosEnviar    :   parametrosEnviar ',' exprecion  {$1.push($3);$$=$1;}
@@ -783,31 +777,31 @@ parametrosEnviar    :   parametrosEnviar ',' exprecion  {$1.push($3);$$=$1;}
                     ;
 
 instruccionFuncionMetodo    :   tipoDato ID '(' parametros ')' ':'  {
-                                                                        $$ = new Funcion($1,$2,generarSentencias(@1.first_line,(@2.first_column+1)),$4,@1.first_line,(@2.first_column+1));
+                                                                        $$ = new Funcion($1,$2,generarSentencias(@2.first_line,(@2.first_column+1)),$4,@2.first_line,(@2.first_column+1));
                                                                         verificarExistenciaFuncion($$);
                                                                         $$.getSentencias().agregarVarsPrecedencia($4);
                                                                         agregadoFuncion($$);
                                                                     }
                             |   tipoDato ID '(' ')' ':' {
-                                                            $$ = new Funcion($1,$2,generarSentencias(@1.first_line,(@2.first_column+1)),[],@1.first_line,(@2.first_column+1));
+                                                            $$ = new Funcion($1,$2,generarSentencias(@2.first_line,(@2.first_column+1)),[],@2.first_line,(@2.first_column+1));
                                                             verificarExistenciaFuncion($$);
                                                             agregadoFuncion($$);
                                                         }
                             ;
 
 parametros  :   parametros ',' tipoDato ID  {
-                                                let tmpD = new Declaracion($4,$3,null,@1.first_line,(@4.first_column+1));
+                                                let tmpD = new Declaracion($4,$3,null,@4.first_line,(@4.first_column+1));
                                                 verificarVarFuncion($1,tmpD);
                                                 $1.push(tmpD);
                                                 $$ = $1;
                                             }
             |   tipoDato ID {
-                                $$=[new Declaracion($2,$1,null,@1.first_line,(@2.first_column+1))];
+                                $$=[new Declaracion($2,$1,null,@2.first_line,(@2.first_column+1))];
                             }
             ;
 
 instruccionAsignar  :   ID '=' exprecion                {$$ = new Asignacion($1,$3,@1.first_line,(@1.first_column+1));agregarScope2("",$$);addSimpleInst($$);}
-                    |   IDENTACION ID '=' exprecion     {$$ = new Asignacion($2,$4,@1.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
+                    |   IDENTACION ID '=' exprecion     {$$ = new Asignacion($2,$4,@2.first_line,(@2.first_column+1));agregarScope2($1,$$);addSimpleInst($$);}
                     ;
 
 instruccionDeclarar :   IDENTACION tipoDato listaIds    {
@@ -817,14 +811,6 @@ instruccionDeclarar :   IDENTACION tipoDato listaIds    {
                                                             agregarScope2Declaraciones($1,$$);
                                                             addSimpleInst($$);
                                                         }
-                    |   IDENTACION tipoDato listaIds '=' exprecion  {
-                                                                        $$ = $3;
-                                                                        verificarTipoVariable($2,$$)
-                                                                        agregarTipoDeclaracion($2,$$,$1);
-                                                                        agregarValorDeclaracion($$,$5);
-                                                                        agregarScope2Declaraciones($1,$$);
-                                                                        addSimpleInst($$);
-                                                                    }
                     |   tipoDato listaIds               {
                                                             $$ = $2;
                                                             verificarTipoVariable($1,$$)
@@ -832,15 +818,6 @@ instruccionDeclarar :   IDENTACION tipoDato listaIds    {
                                                             agregarScope2Declaraciones("",$$);
                                                             addSimpleInst($$);
                                                         }
-                    |   tipoDato listaIds '=' exprecion {
-                                                            $$ = $2;
-                                                            verificarTipoVariable($1,$$)
-                                                            agregarTipoDeclaracion($1,$$,"");
-                                                            agregarValorDeclaracion($$,$4);
-                                                            agregarScope2Declaraciones("",$$);
-                                                            addSimpleInst($$);
-                                                        }
-                    
                     ;
                 
 tipoDato    :   INT         {$$=Tipo.INT;}
@@ -852,11 +829,18 @@ tipoDato    :   INT         {$$=Tipo.INT;}
             ;
 
 listaIds    :   listaIds ',' ID                 {
-                                                    $1.push(new Declaracion($3,-1,null,@1.first_line,(@3.first_column+1)));
+                                                    $1.push(new Declaracion($3,-1,null,@3.first_line,(@3.first_column+1)));
+                                                    $$ = $1;
+                                                }
+            |   listaIds ',' ID '=' exprecion   {
+                                                    $1.push(new Declaracion($3,-1,$5,@3.first_line,(@3.first_column+1)));
                                                     $$ = $1;
                                                 }
             |   ID                              {
                                                     $$ = [new Declaracion($1,-1,null,@1.first_line,(@1.first_column+1))];
+                                                }
+            |   ID '=' exprecion                {
+                                                    $$ = [new Declaracion($1,-1,$3,@1.first_line,(@1.first_column+1))];
                                                 }
             ;
 

@@ -14,7 +14,7 @@ export class CallFuncion extends Instruccion{
     
     public graficar(scope: Scope, graphviz: GraficoDot, subNameNode: string, padre: string) {
         let nume = graphviz.declaraciones.length + 1;
-        let node = "nodo-" + subNameNode + "-" + nume;
+        let node = "nodo_" + subNameNode + "_" + nume;
         let decl = node + '[label = "<n>Llamar Funcion "'+this.id+'"];'
         graphviz.declaraciones.push(decl);
         graphviz.relaciones.push((padre + ':n -> ' + node + ':n'));
@@ -30,7 +30,7 @@ export class CallFuncion extends Instruccion{
                 funcion.ejecutarFuncion(this.parametros,scope);
             } catch (error) {
                 if(error instanceof Error){
-                    throw new Error("Error en ejecucion de funcion ,Linea: "+this.linea+" ,Columna: "+this.columna+" "+error.message);
+                    throw new Error('Error en ejecucion de funcion "'+this.id+'" ,Linea: '+this.linea+" ,Columna: "+this.columna+" , -> "+error.message);
                 }
             }
         }

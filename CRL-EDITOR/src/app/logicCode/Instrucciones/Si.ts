@@ -45,14 +45,14 @@ export class Si extends Instruccion implements AsigInstrucciones {
 
     public graficar(scope: Scope, graphviz: GraficoDot, subNameNode: string, padre: string) {
         let nume = graphviz.declaraciones.length + 1;
-        let nodeSi = "nodo-" + subNameNode + "-" + nume;
+        let nodeSi = "nodo_" + subNameNode + "_" + nume;
         let decl = nodeSi + '[label = "<n>Si"];'
         graphviz.declaraciones.push(decl);
         graphviz.relaciones.push((padre + ':n -> ' + nodeSi + ':n'));
         this.codeTrue?.graficar(scope, graphviz, subNameNode, nodeSi);
         if (this.codeFalse != null) {
             let nume = graphviz.declaraciones.length + 1;
-            let nodeSino = "nodo-" + subNameNode + "-" + nume;
+            let nodeSino = "nodo_" + subNameNode + "_" + nume;
             let decl = nodeSino + '[label = "<n>Sino"];'
             graphviz.declaraciones.push(decl);
             graphviz.relaciones.push((nodeSi + ':n -> ' + nodeSino + ':n'));

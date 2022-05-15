@@ -47,11 +47,14 @@ export class Sentencias extends Instruccion {
             } catch (error) {
                 if (error instanceof Error) {
                     if (instr instanceof Declaracion) {
-                        this.consolaErrores.agregarError("Error al declarar variable \"" + instr.getId() + "\" ,Linea: " + instr.linea + " ,Columna: " + instr.columna + " " + error.message);
+                        //this.consolaErrores.agregarError("Error al declarar variable \"" + instr.getId() + "\" ,Linea: " + instr.linea + " ,Columna: " + instr.columna + " " + error.message);
+                        throw new Error("Error al declarar variable \"" + instr.getId() + "\" ,Linea: " + instr.linea + " ,Columna: " + instr.columna + " " + error.message);
                     } else if (instr instanceof Asignacion) {
-                        this.consolaErrores.agregarError("Error al asignar valor a \"" + instr.getId() + "\" ,Linea: " + instr.linea + " ,Columna: " + instr.columna + " " + error.message);
+                        //this.consolaErrores.agregarError("Error al asignar valor a \"" + instr.getId() + "\" ,Linea: " + instr.linea + " ,Columna: " + instr.columna + " " + error.message);
+                        throw new Error("Error al asignar valor a \"" + instr.getId() + "\" ,Linea: " + instr.linea + " ,Columna: " + instr.columna + " " + error.message);
                     } else {
-                        this.consolaErrores.agregarError(error.message);
+                        //this.consolaErrores.agregarError(error.message);
+                        throw new Error(error.message);
                     }
                 }
                 break;
@@ -87,11 +90,14 @@ export class Sentencias extends Instruccion {
             } catch (error) {
                 if (error instanceof Error) {
                     if (instr instanceof Declaracion) {
-                        this.consolaErrores.agregarError("Error al declarar variable \"" + instr.getId() + "\" ,Linea: " + instr.linea + " ,Columna: " + instr.columna + " " + error.message);
+                        //this.consolaErrores.agregarError("Error al declarar variable \"" + instr.getId() + "\" ,Linea: " + instr.linea + " ,Columna: " + instr.columna + " " + error.message);
+                        throw new Error("Error al declarar variable \"" + instr.getId() + "\" ,Linea: " + instr.linea + " ,Columna: " + instr.columna + " " + error.message);
                     } else if (instr instanceof Asignacion) {
-                        this.consolaErrores.agregarError("Error al asignar valor a \"" + instr.getId() + "\" ,Linea: " + instr.linea + " ,Columna: " + instr.columna + " " + error.message);
+                        //this.consolaErrores.agregarError("Error al asignar valor a \"" + instr.getId() + "\" ,Linea: " + instr.linea + " ,Columna: " + instr.columna + " " + error.message);
+                        throw new Error("Error al asignar valor a \"" + instr.getId() + "\" ,Linea: " + instr.linea + " ,Columna: " + instr.columna + " " + error.message);
                     } else {
-                        this.consolaErrores.agregarError(error.message);
+                        //this.consolaErrores.agregarError(error.message);
+                        throw new Error(error.message);
                     }
                 }
                 break;

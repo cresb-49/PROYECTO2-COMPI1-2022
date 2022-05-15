@@ -20,14 +20,14 @@ export class Mostrar extends Instruccion{
     public ejecutar(scope: Scope) {
         const valor = this.valor.ejecutar(scope);
         if(valor.value == null){
-            this.consola.agregarPrint("null");
+            this.consola.agregarPrint(">> null");
         }else{
             if(this.expreciones.length == 0){
                 //console.log("Expreciones 0");
-                this.consola.agregarPrint(valor.value);
+                this.consola.agregarPrint(">> "+valor.value);
             }else{
                 //console.log("Expreciones n");
-                this.consola.agregarPrint(this.arreglarParametros(valor.value,scope));
+                this.consola.agregarPrint(">> "+this.arreglarParametros(valor.value,scope));
             }
         }
     }
@@ -65,7 +65,7 @@ export class Mostrar extends Instruccion{
 
     public graficar(scope: Scope, graphviz: GraficoDot, subNameNode: string, padre: string) {
         let nume = graphviz.declaraciones.length + 1;
-        let node = "nodo-" + subNameNode + "-" + nume;
+        let node = "nodo_" + subNameNode + "_" + nume;
         let decl = node + '[label = "<n>Mostrar(Exprecion)"];'
         graphviz.declaraciones.push(decl);
         graphviz.relaciones.push((padre + ':n -> ' + node + ':n'));

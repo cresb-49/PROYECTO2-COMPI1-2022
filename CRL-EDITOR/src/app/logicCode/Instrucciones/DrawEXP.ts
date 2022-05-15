@@ -29,7 +29,7 @@ export class DrawEXP extends Instruccion{
 
     public graficar(scope: Scope, graphviz: GraficoDot, subNameNode: string, padre: string) {
         let nume = graphviz.declaraciones.length + 1;
-        let node = "nodo-" + subNameNode + "-" + nume;
+        let node = "nodo_" + subNameNode + "_" + nume;
         let decl = node + '[label = "<n>DibujarEXP"];'
         graphviz.declaraciones.push(decl);
         graphviz.relaciones.push((padre + ':n -> ' + node + ':n'));
