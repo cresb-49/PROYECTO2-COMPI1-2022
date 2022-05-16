@@ -38,6 +38,19 @@ export class Logica extends Exprecion {
     public ejecutar(scope: Scope): Retorno {
         const valorIzquierdo = this.izquierda.ejecutar(scope);
         const valorDerecha = this.derecha.ejecutar(scope);
+        if(this.tipo == OpcionLogica.NOT){
+            if(valorDerecha.tipo!=Tipo.BOOLEAN){
+                throw new Error("Para realizar una operacion logica se necesita de un valor booleano al lado derecho ,Linea: "+this.linea+" ,Columna: "+this.columna);
+            }
+        }else{
+            if(valorIzquierdo.tipo!=Tipo.BOOLEAN){
+                throw new Error("Para realizar una operacion logica se necesita de un valor booleano al lado izquierdo ,Linea: "+this.linea+" ,Columna: "+this.columna);
+            }
+            if(valorDerecha.tipo!=Tipo.BOOLEAN){
+                throw new Error("Para realizar una operacion logica se necesita de un valor booleano al lado derecho ,Linea: "+this.linea+" ,Columna: "+this.columna);
+            }
+        }
+
         let result: any;
         switch (this.tipo) {
             case OpcionLogica.AND:
@@ -50,7 +63,7 @@ export class Logica extends Exprecion {
                 result = xorLogico[this.equivaletInt(valorIzquierdo.value)][this.equivaletInt(valorDerecha.value)];
                 return { value: result, tipo: Tipo.BOOLEAN }
             case OpcionLogica.NOT:
-                result = !valorDerecha.value;
+                result = !valorIzquierdo.value;
                 return { value: result, tipo: Tipo.BOOLEAN }
             default:
                 return { value: null, tipo: Tipo.ERROR }

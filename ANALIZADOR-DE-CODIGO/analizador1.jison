@@ -612,13 +612,12 @@ comentMultip ((\'\'\')([^']*)(\'\'\'))
 %left   '+','-'
 %left   '*','/','%'
 %right  '^'
-%left   '<','>','<=','>='
-%left   '==','!=','~'
+%left UMINUS
+%left   '<','>','<=','>=','==','!=','~'
 %left   '||'
 %left   '|&'
 %left   '&&'
 %left   '!'
-%left UMINUS
 
 //mas precendecia 
 %start Init
@@ -932,7 +931,7 @@ exprecion   :   '-' exprecion %prec UMINUS  {
                                             }
             |   '!' exprecion               {
                                                 //console.log("!");
-                                                $$ = new Logica($1,$3,3,@1.first_line, (@1.first_column+1));
+                                                $$ = new Logica($2,$2,3,@1.first_line, (@1.first_column+1));
                                             }
             |   f                           {$$=$1;}
             ;
