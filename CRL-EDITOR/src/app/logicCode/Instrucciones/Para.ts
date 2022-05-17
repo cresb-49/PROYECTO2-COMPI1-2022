@@ -53,7 +53,7 @@ export class Para extends Instruccion implements AsigInstrucciones {
                 condicion = this.expr.ejecutar(newScope);
                 continue;
             }else if(result instanceof Retornar){
-                return result.ejecutar(newScope);
+                return result;
             }
             asignar.ejecutar(newScope)
             condicion = this.expr.ejecutar(newScope);

@@ -29,7 +29,7 @@ export class Mientras extends Instruccion implements AsigInstrucciones{
                 condicion = this.condicion.ejecutar(scope);
                 continue;
             }else if(result instanceof Retornar){
-                return result.ejecutar(scope);
+                return result;
             }
             condicion = this.condicion.ejecutar(scope);
             if(condicion.tipo != Tipo.BOOLEAN){

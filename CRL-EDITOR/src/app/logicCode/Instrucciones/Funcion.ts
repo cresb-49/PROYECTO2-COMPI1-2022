@@ -9,6 +9,7 @@ import { ContenedorFunciones } from "../Symbolo/ContenedorFunciones";
 import { Scope } from "../Symbolo/Scope";
 import { Asignacion } from "./Asignacion";
 import { Declaracion} from "./Declaracion";
+import { Retornar } from "./Retornar";
 
 import { Sentencias } from "./Sentencias";
 
@@ -34,12 +35,19 @@ export class Funcion extends Instruccion implements AsigInstrucciones{
                 return {value:null,tipo:Tipo.ERROR};
             }else{
                 if(result != undefined){
-                    let tipo = tablaAsignacion[this.tipo][result.tipo];
-                    if(tipo != Tipo.ERROR){
-                        const valFinal = CAST_IMPLICITO(this.tipo,result.tipo,result.value);
-                        return {value:valFinal,tipo:tipo};
+                    if(result instanceof Retornar){
+                        
+                        let val = result.ejecutar(scope)
+                        
+                        let tipo = tablaAsignacion[this.tipo][val.tipo];
+                        if(tipo != Tipo.ERROR){
+                            const valFinal = CAST_IMPLICITO(this.tipo,val.tipo,val.value);
+                            return {value:valFinal,tipo:tipo};
+                        }else{
+                            throw new Error("El valor de retorno es de tipo: \""+TipoString[val.tipo]+"\",no es compatible con el retono \""+TipoString[this.tipo]+"\" de la funcion -> sub origen Linea: "+this.linea+" ,Columna: "+this.columna);
+                        }
                     }else{
-                        throw new Error("El valor de retorno es de tipo: \""+TipoString[result.tipo]+"\",no es compatible con el retono \""+TipoString[this.tipo]+"\" de la funcion -> sub origen Linea: "+this.linea+" ,Columna: "+this.columna);
+                        return {value:null,tipo:Tipo.VOID};
                     }
                 }else{
                     throw new Error("El valor de retorno es indefinido ,no es compatible con el retono \""+TipoString[this.tipo]+"\" de la funcion -> sub origen Linea: "+this.linea+" ,Columna: "+this.columna);
