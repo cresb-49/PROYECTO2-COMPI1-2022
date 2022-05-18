@@ -44,13 +44,13 @@ export class Funcion extends Instruccion implements AsigInstrucciones{
                             const valFinal = CAST_IMPLICITO(this.tipo,val.tipo,val.value);
                             return {value:valFinal,tipo:tipo};
                         }else{
-                            throw new Error("El valor de retorno es de tipo: \""+TipoString[val.tipo]+"\",no es compatible con el retono \""+TipoString[this.tipo]+"\" de la funcion -> sub origen Linea: "+this.linea+" ,Columna: "+this.columna);
+                            throw new Error("El valor de retorno es de tipo: \""+TipoString[val.tipo]+"\",no es compatible con el retorno \""+TipoString[this.tipo]+"\" de la funcion -> sub origen Linea: "+this.linea+" ,Columna: "+this.columna);
                         }
                     }else{
                         return {value:null,tipo:Tipo.VOID};
                     }
                 }else{
-                    throw new Error("El valor de retorno es indefinido ,no es compatible con el retono \""+TipoString[this.tipo]+"\" de la funcion -> sub origen Linea: "+this.linea+" ,Columna: "+this.columna);
+                    throw new Error("El valor de retorno es indefinido ,no es compatible con el retorno \""+TipoString[this.tipo]+"\" de la funcion -> sub origen Linea: "+this.linea+" ,Columna: "+this.columna);
                 }
             }
         }else{
