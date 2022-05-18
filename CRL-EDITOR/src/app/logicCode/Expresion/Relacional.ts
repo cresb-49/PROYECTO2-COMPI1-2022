@@ -44,7 +44,10 @@ export class Relacional extends Exprecion {
             if (valorIzquierda.tipo == Tipo.ERROR || valorDerecha.tipo == Tipo.ERROR) {
                 throw new Error("Errores previos antes de ralizar la comparacion , Linea: " + this.linea + " ,Columna: " + this.columna);
             }
-            if (valorIzquierda.tipo != valorDerecha.tipo) {
+            // if (valorIzquierda.tipo != valorDerecha.tipo) {
+            //     throw new Error("No se puede realizar la comparacion de un \"" + TipoString[valorIzquierda.tipo] + "\" y un \"" + TipoString[valorDerecha.tipo] + "\" , Linea: " + this.linea + " ,Columna: " + this.columna);
+            // }
+            if (!(validarComparacion[valorIzquierda.tipo][valorDerecha.tipo])) {
                 throw new Error("No se puede realizar la comparacion de un \"" + TipoString[valorIzquierda.tipo] + "\" y un \"" + TipoString[valorDerecha.tipo] + "\" , Linea: " + this.linea + " ,Columna: " + this.columna);
             }
             switch (this.tipo) {
@@ -110,3 +113,14 @@ export class Relacional extends Exprecion {
         this.derecha.graficar(scope, graphviz, ("nodo" + num));
     }
 }
+
+export const validarComparacion =[
+            /*  DOUBLE      BOOLEAN     STRING        INT         CHAR       VOID      ERROR*/
+/*DOUBLE*/  [    true,       false,     false,        true,       false,     false,    false],
+/*BOOLEAN*/ [   false,       true,      false,       false,       false,     false,    false],
+/*STRING*/  [   false,       false,      true,       false,       false,     false,    false],
+/*INT*/     [    true,       false,     false,        true,       false,     false,    false],
+/*CHAR*/    [   false,       false,     false,       false,        true,     false,    false],
+/*VOID*/    [   false,       false,     false,       false,       false,     false,    false],
+/*ERROR*/   [   false,       false,     false,       false,       false,     false,    false],
+];
