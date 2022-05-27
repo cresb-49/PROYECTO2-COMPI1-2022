@@ -1,0 +1,58 @@
+!!Aqui estoy declarando una incerteza.
+Incerteza 0.5
+
+
+!!Funcion para comprobar el elevado correcto
+Int Elevar(Int Base, Int Exp):
+	Int contador=1
+	Int elevado=1
+	Mientras(contador<=Exp):
+		elevado = elevado*Base
+		contador=contador+1
+					
+	Int comparar=Base^Exp
+	Si ( comparar==elevado):
+		Retorno elevado
+	Retorno 0
+
+
+!!Ciclo con 2 prints:
+!!Esperadas=5, Resultantes=2
+Void Det_ener(Int Esperadas, Int Resultantes):
+	Int Contador=0
+	Mientras (Contador<Esperadas):
+		Si(Contador==Resultantes):
+			Detener
+		Mostrar ("iteracion NO: {0}", Contador)
+		Contador=Contador+1
+
+
+
+!!Ciclo con 3 prints:
+!!Esperadas=4, Resultantes=2
+Void Conti_nuar(Int Esperadas, Int Resultantes):
+	Para (Int i=0; i<Esperadas; ++):
+		Si(i==Resultantes):
+			Continuar
+		Mostrar ("iteracion NO: {0}", i)
+
+
+
+!!Ciclo Anidado
+!!A=2, B=2, C=1
+String concatenar(Int A, Int B,Int C):
+	String con=""
+	Int Cont=0
+	Mientras(Cont<=A):
+		Para (Int i=1; i<=B; ++):
+
+			Int Cont_2=0
+			
+			Mientras(Cont_2<=C):
+
+				con=con+"Hola: "+(Cont_2)+" "
+				Cont_2=Cont_2+1
+		Cont=Cont+1
+		Mostrar("{0}", con)
+		con=""
+	Retorno "Exito"

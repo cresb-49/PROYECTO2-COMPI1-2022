@@ -1,0 +1,98 @@
+Importar SiAnidado.crl
+Incerteza 2.5
+'''
+Este es el cuerpo principal de la funcion:
+Donde se ejecutara todo
+'''
+Double A=10.9
+Double B=11.1
+Double C=12.01
+
+String A_1=" hola"
+String B_1="hola"
+String C_1="hola "
+
+Int A_2=5
+Int B_2=4
+Int C_2=2
+
+Void Principal():
+	Ordenar(A,B,C)
+	'''
+	Se espera esta salida:
+	>Ejecuccion FInal
+	>El mayor es: 12, el medio es: 11, el menor es 10.
+	'''
+
+	Ordenar(A_1,B_1,C_1)
+	'''
+	Se espera esta salida:
+	>Ejecuccion FInal
+	>El mayor es: hola , el medio es: hola, el menor es  hola.
+	>Las cadenas son semejantes
+	'''
+
+	Int anio=AnioActual(A_2,B_2,C_2)
+	Int anio_anterior=2021
+	Si(anio~anio_anterior):
+		Mostrar("El anio actual es: {0}",anio)
+	'''
+	Se espera la salida
+	>El anio actual es 2022
+	'''
+
+	Det_ener(5, 2)
+	'''
+	Se espera la salida
+	>iteracion NO: 0
+	>iteracion NO: 1
+	'''
+	Conti_nuar(4,2)
+	'''
+	Se espera la salida
+	>iteracion NO: 0
+	>iteracion NO: 1
+	>iteracion NO: 3
+	'''
+
+	String resultado=concatenar(2,2,1)
+	Mostrar("{0}",resultado)
+	'''
+	Se espera la salida
+	>Hola: 0 Hola: 1 Hola: 0 Hola: 1
+	>Hola: 0 Hola: 1 Hola: 0 Hola: 1
+	>Hola: 0 Hola: 1 Hola: 0 Hola: 1
+	>Exito
+	'''
+
+	DibujarAST(Ordenar)
+	'''
+	Se espera la salida: de 2 imagenes con flujos muy similares aunque la segunda tendra
+	el calculo de la incerteza de cadenas.
+	'''
+
+	Int dib=50+50-20*5/4-6+2+(100*2+50)
+	DibujarEXP(50+50-20*5/4-6+2+(100*2+50))
+	Mostrar ("El resultado de dib es: {0}", dib)
+	'''
+	Se espera la salida: de 1 imagene
+	>El resultado de dib es: 321
+	'''
+
+
+	Si (true):
+		DibujarTS()
+		Double l, m=10
+		String cad_1="Hola mundo"
+		Si (l==10):
+			Boolean val=true
+		Char letra='x'
+
+	'''
+	Se espera la salida de una tabla de simbolos
+	Ámbito			  Funcion_Principal_SubAmbito_Si
+	Variable l		  Valor:10 Línea 85 Columna 20, TIpo:Double
+	Variable m		  Valor:10 Línea 85 Columna 20, TIpo:Double
+	Variable cad_1	  Valor:”Hola mundo” Línea 86 Columna 20, TIpo:String
+	Variable letra	  Valor:”x” Línea 89 Columna 14, TIpo:Char
+	'''

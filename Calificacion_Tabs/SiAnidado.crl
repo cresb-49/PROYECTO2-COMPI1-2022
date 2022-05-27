@@ -1,0 +1,88 @@
+!!Aqui estoy declarando una incerteza.
+Importar CicloAnidado.crl
+Incerteza 1.5
+
+!!10.9,11.1,12.01
+Void Ordenar (Double A, Double B, Double C):
+	Int Mayor, Medio, Menor=0
+	Si((A>B) && (A>C)):
+		Mayor=A
+		Si(B>C):
+			Medio=B
+			Menor=C
+		Sino:
+
+			Medio=C
+			Menor=B
+	Sino:
+		Si((B>A) && (B>C)):
+			Mayor=B
+			Si(A>C):
+				Medio=A
+				Menor=C
+			Sino:
+				Medio=C
+				Menor=A
+		Sino:
+			Mayor=C
+			Si(A>B):
+				Medio=A
+				Menor=B
+			Sino:
+				Medio=B
+				
+				Menor=A
+				Mostrar ("Ejecuccion Final")
+	Mostrar ("El mayor es: {0}, el medio es: {1}, el menor es {2}.", C, B, A)
+
+
+!!Funcion para comparar
+!! hola,hola,hola .
+Void Ordenar (String A, String B, String C):
+	String Mayor, Medio, Menor=0
+	Si( (A>B) && (A>C)):
+		Mayor=A
+		Si(B>C):
+			Medio=B
+			Menor=C
+		Sino:
+			Medio=C
+			Menor=B
+	Sino:
+		Si((B>A) && (B>C)):
+			Mayor=B
+			Si(A>C):
+				Medio=A
+				Menor=C
+			Sino:
+				Medio=C
+				Menor=A
+		Sino:
+			Mayor=C
+			Si(A>B):
+				Medio=A
+				Menor=B
+			Sino:
+				Medio=B
+				Menor=A
+				Mostrar ("Ejecuccion Final")
+	Mostrar ("El mayor es: {0}, el medio es: {1}, el menor es {2}.", C, B, A)
+
+	!!Calculo de una incerteza
+	Boolean bandera1=A~B
+	Boolean bandera2=A~C
+	Si (bandera1 && bandera2):
+		Mostrar ("Las cadenas son semejantes")
+
+
+
+!!Funcion calcular año para  expreciones matematicas:
+!!A=5, B=4, C=2
+Int AnioActual(Int A, Int B, Int C):
+	Int anio=((((((Elevar(A,B))*B)+500-1990)/C)*B)+(7%A))
+	Retorno anio
+
+
+
+
+
